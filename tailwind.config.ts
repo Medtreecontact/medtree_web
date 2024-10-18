@@ -10,29 +10,38 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
-  			// background: 'var(--background)',
   			foreground: 'var(--foreground)',
-			primary: '#1786A3',
-			secondary: '#939393',
-			error: '#f24f1e',
-			background: '#fbfdff',
-			// example of a color with multiple shades
-			// 'tahiti': {
-			// 	100: '#cffafe',
-			// 	200: '#a5f3fc',
-			// 	300: '#67e8f9',
-			// 	400: '#22d3ee',
-			// 	500: '#06b6d4',
-			// 	600: '#0891b2',
-			// 	700: '#0e7490',
-			// 	800: '#155e75',
-			// 	900: '#164e63',
-			// },
+  			primary: '#1786A3',
+  			secondary: '#939393',
+  			error: '#f24f1e',
+  			background: '#fbfdff'
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },

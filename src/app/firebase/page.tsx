@@ -1,34 +1,16 @@
-"use client";
+import { getMenuItemsController } from "@/interface_adapters/controllers/firebase/get_menu_items_controller"
+import { getFirstAssetImageUrlController } from "@/interface_adapters/controllers/firebase/get_first_asset_image_url_controller"
 
-import { useEffect, useState } from 'react';
-import { db, storage } from '@/lib/firebase/config';
-import { collection, getDocs } from 'firebase/firestore';
-import { ref, getDownloadURL } from 'firebase/storage';
+export default async function FirebasePage() {
+    let menuItems: any[] = [];
+    let imageUrl: string | null = null;
 
-export default function FirebasePage() {
-    const [menuItems, setMenuItems] = useState<any[]>([]);
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-    useEffect(() => {
-        const fetchMenuItems = async () => {
-            const querySnapshort = await getDocs(collection(db, 'menu'));
-            const items = querySnapshort.docs.map(doc => doc.data());
-            setMenuItems(items);
-        };
-
-        const fetchFirstAssetDoc = async () => {
-            const querySnapshort = await getDocs(collection(db, 'assets'));
-            const doc = querySnapshort.docs[0];
-            const path = doc.data().path;
-            
-            const storageRef = ref(storage, path);
-            const url = await getDownloadURL(storageRef);
-            setImageUrl(url);
-        }
-
-        fetchFirstAssetDoc();
-        fetchMenuItems();
-    }, []);
+    try {
+        menuItems = await getMenuItemsController();
+        imageUrl = await getFirstAssetImageUrlController();
+    } catch (error) {
+        console.error(error);
+    }
     
     return <>
         <p>Firebase</p>
