@@ -3,11 +3,15 @@ import Link from "next/link";
 import { Button } from "@/app/_shadcn/components/ui/button";
 
 export default function Home() {
+  const nodeEnv = process.env.TARGET_ENVIRONMENT;
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <Link href="/firebase">
         <Button className="bg-primary">Click me</Button>
       </Link>
+      <div className="text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+          Current NODE_ENV: <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">{nodeEnv}</code>
+       </div>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"

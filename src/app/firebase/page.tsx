@@ -11,7 +11,7 @@ export default async function FirebasePage() {
     } catch (error) {
         console.error(error);
     }
-    
+
     return <>
         <p>Firebase</p>
         <br/>
