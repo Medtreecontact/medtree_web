@@ -6,10 +6,13 @@ import Image from "next/image";
 
 export default function LoginPage() {
     return <>
-        <div className="flex min-h-screen">
+        <div className="flex flex-grow">
             <div className="w-1/2 flex items-center justify-end mr-20">
                 <div className="flex flex-col items-center space-y-4">
-                    <p>Bon retour sur MedTree</p>
+                    <div className="text-5xl font-bold">
+                        <p className="mb-4">Bon retour sur</p>
+                        <span className="text-primary">MedTree</span>
+                    </div>
                     <Image
                         src="/sign_in_illustration.png"
                         alt="Sign In illustration"

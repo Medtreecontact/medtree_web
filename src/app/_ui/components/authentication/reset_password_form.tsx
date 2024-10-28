@@ -2,31 +2,31 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { z } from "zod";
 
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import { Input } from "@/app/_ui/shadcn/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
-import Link from 'next/link';
 
 const formSchema = z.object({
-    email: z.string().email({message: "Invalid email address"}),
-    password: z.string().min(2, {
-        message: "Password must be at least 2 characters long",
-    }).max(50, {message: "Password must be at most 50 characters long"}),
+    email: z.string().email({message: "Adresse e-mail invalide"}),
 });
 
-export function LoginForm() {
+export function ResetPasswordForm() {
+    const [messageSent, setMessageSent] = useState(false);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
-            password: "",
         },
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
+        setMessageSent(true);
+        form.reset();
     }
 
     return (
@@ -37,7 +37,7 @@ export function LoginForm() {
                     name="email"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel>E-mail</FormLabel>
+                            <FormLabel>E-mail de votre compte</FormLabel>
                             <FormControl>
                                 <Input type="email" placeholder="exemple@medtree.fr" {...field} />
                             </FormControl>
@@ -45,21 +45,8 @@ export function LoginForm() {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Mot de passe</FormLabel>
-                            <FormControl>
-                                <Input type="password" placeholder="••••••" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit">Se connecter</Button>
-                <Link href="/reset-password" className="text-primary ml-32">Mot de passe oublié ?</Link>
+                <Button type="submit">Envoyer</Button>
+                {messageSent && <p className="text-green-600">Un email de réinitialisation de mot de passe vous a été envoyé. Si vous ne le trouvez pas vérifiez votre dossier spam.</p>}
             </form>
         </Form>
     );

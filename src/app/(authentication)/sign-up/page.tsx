@@ -6,10 +6,13 @@ import Image from "next/image";
 
 export default function SignUpPage() {
     return (
-        <div className="flex min-h-screen">
+        <div className="flex flex-grow">
             <div className="w-1/2 flex items-center justify-end mr-20">
                 <div className="flex flex-col items-center space-y-4">
-                    <p>Création de votre compte</p>
+                    <div className="text-5xl font-bold">
+                        <p className="mb-4">Bienvenue sur</p>
+                        <span className="text-primary">MedTree</span>
+                    </div>
                     <Image
                         src="/sign_up_illustration.png"
                         alt="Sign Up illustration"
