@@ -2,6 +2,7 @@
 
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import Image from 'next/image';
+import { signIn } from 'next-auth/react';
 
 export function ButtonsColumn() {
     return (
@@ -12,26 +13,31 @@ export function ButtonsColumn() {
     );
 }
 
-export function GoogleSignInButton(){
-    const handleClick = () => {
-        console.log("google");
-    }
+export function GoogleSignInButton() {
+    const handleSignIn = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectTo = urlParams.get('callbackUrl') || '/';
+      await signIn("google", { redirectTo });
+    };
+  
     return (
-    <Button className="w-full" variant="outline" onClick={handleClick}>
+      <Button className="w-full" variant="outline" onClick={handleSignIn}>
         <Image
-            src="/google-logo.png"
-            alt="Google logo"
-            width={40}
-            height={40}
+          src="/google-logo.png"
+          alt="Google logo"
+          width={40}
+          height={40}
         />
         Google
-    </Button>
+      </Button>
     );
-}
+  }
 
 export function AppleSignInButton(){
-    const handleClick = () => {
-        console.log("apple");
+    const handleClick = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectTo = urlParams.get('callbackUrl') || '/';
+        await signIn("apple", { redirectTo });
     }
     return (
     <Button className="w-full" variant="outline" onClick={handleClick}>
