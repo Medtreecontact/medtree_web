@@ -9,6 +9,9 @@ import { Input } from "@/app/_ui/shadcn/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
 import Link from 'next/link';
 
+import { useActionState } from 'react';
+import { authenticate } from "@/app/actions";
+
 const formSchema = z.object({
     email: z.string().email({message: "Invalid email address"}),
     password: z.string().min(2, {
@@ -17,6 +20,11 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
+    // const [errorMessage, formAction, isPending] = useActionState(
+    //     authenticate,
+    //     undefined,
+    //   );
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -26,6 +34,12 @@ export function LoginForm() {
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        const formData = new FormData();
+        Object.entries(values).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+        // formAction(formData);
+        
         console.log(values);
     }
 
@@ -60,6 +74,7 @@ export function LoginForm() {
                 />
                 <Button type="submit">Se connecter</Button>
                 <Link href="/reset-password" className="text-primary ml-32">Mot de passe oublié ?</Link>
+                {/* {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>} */}
             </form>
         </Form>
     );

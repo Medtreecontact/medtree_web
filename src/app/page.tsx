@@ -1,14 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
+import { auth, signOut } from "@/../auth";
 
-export default function Home() {
+
+export default async function Home()  {
   const TARGET_ENVIRONMENT = process.env.TARGET_ENVIRONMENT;
+  const session = await auth();
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <Link href="/firebase">
-        <Button className="bg-primary">Click me</Button>
-      </Link>
+      <div className="space-x-8">
+        <Link href="/firebase">
+          <Button className="bg-primary">Firebase</Button>
+        </Link>
+        <Link href="/login">
+          <Button className="bg-primary">Login</Button>
+        </Link>
+        <Link href="/sign-up">
+          <Button className="bg-primary">Sign up</Button>
+        </Link>
+        <p>Auth status : {session ? JSON.stringify(session.user?.name) : "no session"}</p>
+        {session && (
+          <form
+              action={async () => {
+              "use server"
+              await signOut();
+              }}
+          >
+            <Button className="bg-primary" type="submit">Sign out</Button>
+          </form>
+        )}
+      </div>
+      
       <div className="text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           Current TARGET_ENVIRONMENT: <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">{TARGET_ENVIRONMENT}</code>
        </div>

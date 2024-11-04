@@ -6,7 +6,8 @@ import { z } from "zod";
 
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import { Input } from "@/app/_ui/shadcn/components/ui/input";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
     firstName : z.string().min(2, {
@@ -39,39 +40,44 @@ export function SignUpForm() {
         },
     });
 
+    const router = useRouter()
+
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
+        router.push('/onboarding');
     }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {/* <FormField
-                    control={form.control}
-                    name="firstName"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Prénom</FormLabel>
-                            <FormControl>
-                                <Input type="text" placeholder="Jean" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="lastName"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Nom de famille</FormLabel>
-                            <FormControl>
-                                <Input type="text" placeholder="Dupont" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> */}
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7">
+                <div className="flex space-x-8 w-full">
+                    <FormField
+                        control={form.control}
+                        name="firstName"
+                        render={({field}) => (
+                            <FormItem className="flex-1">
+                                <FormLabel>Prénom</FormLabel>
+                                <FormControl>
+                                    <Input type="text" placeholder="Jean" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="lastName"
+                        render={({field}) => (
+                            <FormItem className="flex-1">
+                                <FormLabel>Nom</FormLabel>
+                                <FormControl>
+                                    <Input type="text" placeholder="Dupont" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <FormField
                     control={form.control}
                     name="email"
