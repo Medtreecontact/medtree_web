@@ -1,6 +1,6 @@
 import { Container } from "inversify";
 
-import { FirebaseModule } from "./modules/firebase.module";
+import { AuthenticationModule } from "./modules/authentication.module";
 import { DI_RETURN_TYPES, DI_SYMBOLS } from "./types";
 
 const ApplicationContainer = new Container({
@@ -8,18 +8,19 @@ const ApplicationContainer = new Container({
 });
 
 export const initializeContainer = () => {
-  ApplicationContainer.load(FirebaseModule);
+  ApplicationContainer.load(AuthenticationModule);
 };
 
 export const destroyContainer = () => {
-  ApplicationContainer.unload(FirebaseModule);
+  ApplicationContainer.unload(AuthenticationModule);
 };
+
 
 if (process.env.NODE_ENV !== "test") {
   initializeContainer();
 }
 
-export function getInjection<K extends keyof typeof DI_SYMBOLS>(
+export function getClientInjection<K extends keyof typeof DI_SYMBOLS>(
   symbol: K,
 ): DI_RETURN_TYPES[K] {
   return ApplicationContainer.get(DI_SYMBOLS[symbol]);

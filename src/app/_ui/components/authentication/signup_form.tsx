@@ -7,7 +7,8 @@ import { z } from "zod";
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import { Input } from "@/app/_ui/shadcn/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
-import { useRouter } from 'next/navigation'
+
+import { signUpWithEmailAndPasswordController } from "@/interface_adapters/controllers/authentication/sign_up_controller";
 
 const formSchema = z.object({
     firstName : z.string().min(2, {
@@ -40,11 +41,9 @@ export function SignUpForm() {
         },
     });
 
-    const router = useRouter()
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        router.push('/onboarding');
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        await signUpWithEmailAndPasswordController(values.firstName, values.lastName, values.email, values.password);
     }
 
     return (

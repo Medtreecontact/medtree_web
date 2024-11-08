@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { nunito } from "@/app/_ui/fonts"
+import { AuthProvider } from "@/app/_ui/authContext";
 
 export const metadata: Metadata = {
   title: "MedTree",
@@ -17,7 +18,9 @@ export default function RootLayout({
       <body
         className={`${nunito.className} antialiased`}
       >
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

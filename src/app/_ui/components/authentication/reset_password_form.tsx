@@ -8,46 +8,81 @@ import { z } from "zod";
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import { Input } from "@/app/_ui/shadcn/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
+import { confirmPasswordResetController } from '@/interface_adapters/controllers/authentication/reset_password_controller';
+import Link from 'next/link';
 
 const formSchema = z.object({
-    email: z.string().email({message: "Adresse e-mail invalide"}),
+    password: z.string().min(2, {
+        message: "Le mot de passe doit contenir au moins 2 caractères",
+    }).max(50, {message: "Le mot de passe ne doit pas contenir plus de 50 caractères"}),
+    confirmPassword: z.string().min(2, {
+        message: "Le mot de passe doit contenir au moins 2 caractères",
+    }).max(50, {message: "Le mot de passe ne doit pas contenir plus de 50 caractères"}),
+    }).refine(data => data.password === data.confirmPassword, {
+        message: "Les mots de passe ne correspondent pas",
+        path: ["confirmPassword"], // This will show the error message at the confirmPassword field
 });
 
-export function ResetPasswordForm() {
-    const [messageSent, setMessageSent] = useState(false);
-
+export function ResetPasswordForm({oobCode}: {oobCode: string}) {
+    const [passwordReset, setPasswordReset] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: "",
+            password: "",
+            confirmPassword: "",
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        setMessageSent(true);
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        await confirmPasswordResetController(oobCode, values.password);
+        setPasswordReset(true);
         form.reset();
     }
 
     return (
+        <>
+        {!passwordReset && <>
+        <p>Remplissez le formulaire suivant pour modifier votre mot de passe.</p>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full max-w-md mx-auto">
                 <FormField
                     control={form.control}
-                    name="email"
+                    name="password"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel>E-mail de votre compte</FormLabel>
+                            <FormLabel>Nouveau mot de passe</FormLabel>
                             <FormControl>
-                                <Input type="email" placeholder="exemple@medtree.fr" {...field} />
+                                <Input type="password" placeholder="••••••" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>Confirmation nouveau mot de passe</FormLabel>
+                            <FormControl>
+                                <Input type="password" placeholder="••••••" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
                 <Button type="submit">Envoyer</Button>
-                {messageSent && <p className="text-green-600">Un email de réinitialisation de mot de passe vous a été envoyé. Si vous ne le trouvez pas vérifiez votre dossier spam.</p>}
             </form>
         </Form>
+        </>
+        }
+        {passwordReset && <>
+            <p className="text-green-600">Votre mot de passe à été modifié. Vous pouvez maintenant vous connecter</p>
+            
+            <Link href="/login">
+                <Button>Se connecter</Button>
+            </Link>
+        </>}
+        </>
     );
 }

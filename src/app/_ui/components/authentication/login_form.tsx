@@ -4,13 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from "zod";
 
+import { useState } from "react";
+
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import { Input } from "@/app/_ui/shadcn/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
 import Link from 'next/link';
-
-import { useActionState } from 'react';
-import { authenticate } from "@/app/actions";
+import { signInWithEmailAndPasswordController } from '@/interface_adapters/controllers/authentication/sign_in_controller';
 
 const formSchema = z.object({
     email: z.string().email({message: "Invalid email address"}),
@@ -20,10 +20,7 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
-    // const [errorMessage, formAction, isPending] = useActionState(
-    //     authenticate,
-    //     undefined,
-    //   );
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -33,14 +30,16 @@ export function LoginForm() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>)  {
         const formData = new FormData();
         Object.entries(values).forEach(([key, value]) => {
             formData.append(key, value);
         });
-        // formAction(formData);
-        
-        console.log(values);
+
+        const error = await signInWithEmailAndPasswordController(values.email, values.password);
+        if (error && typeof error === "string") {
+            setErrorMessage(error);
+        }
     }
 
     return (
@@ -74,7 +73,7 @@ export function LoginForm() {
                 />
                 <Button type="submit">Se connecter</Button>
                 <Link href="/reset-password" className="text-primary ml-32">Mot de passe oublié ?</Link>
-                {/* {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>} */}
+                {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
             </form>
         </Form>
     );

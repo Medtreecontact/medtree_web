@@ -30,6 +30,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/app/_ui/shadcn/components/ui/popover"
+import { updateUserAccount } from "@/app/actions";
+import { useAuth } from "@/app/_ui/authContext";
 
 const universities = [
     { label: "Université d'Amiens", value: "universite-d-amiens" },
@@ -96,9 +98,15 @@ export function OnboardingForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
+  const { user } = useAuth();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data)
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (!user) return
+    const error = await updateUserAccount(user.uid, data)
+    // if (error && typeof error === "string") {
+      // setErrorMessage(error);
+    // } 
   }
 
   return (

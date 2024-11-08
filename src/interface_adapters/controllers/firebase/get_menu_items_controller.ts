@@ -1,4 +1,4 @@
-import { getMenuItemsUseCase } from '@/domain/use_cases/get_menu_items_use_case';
+import { getMenuItemsUseCase } from '@/domain/use_cases/firebase/get_menu_items_use_case';
 import { MenuItems } from '@/entities/models/menuItem';
 
 function presenter(menuItems: MenuItems[]) {

@@ -1,4 +1,5 @@
 import { IFirebaseRepository } from "@/domain/repositories/firebase_repository_interface";
+import { IAuthenticationRepository } from "@/domain/repositories/authentication_repository_interface";
 
 export const DI_SYMBOLS = {
   // Services
@@ -7,6 +8,7 @@ export const DI_SYMBOLS = {
 
   // Repositories
   IFirebaseRepository: Symbol.for("IFirebaseRepository"),
+  IAuthenticationRepository: Symbol.for("IAuthenticationRepository"),
 };
 
 export interface DI_RETURN_TYPES {
@@ -16,4 +18,5 @@ export interface DI_RETURN_TYPES {
 
   // Repositories
   IFirebaseRepository: IFirebaseRepository;
+  IAuthenticationRepository: IAuthenticationRepository;
 }

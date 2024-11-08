@@ -1,8 +1,11 @@
 "use client";
 
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
+import { signInWithAppleController, signInWithGoogleController } from "@/interface_adapters/controllers/authentication/sign_in_controller";
 import Image from 'next/image';
-import { signIn } from 'next-auth/react';
+
+import { signOutController } from "@/interface_adapters/controllers/authentication/sign_out_controller";
+
 
 export function ButtonsColumn() {
     return (
@@ -15,9 +18,7 @@ export function ButtonsColumn() {
 
 export function GoogleSignInButton() {
     const handleSignIn = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectTo = urlParams.get('callbackUrl') || '/';
-      await signIn("google", { redirectTo });
+      await signInWithGoogleController();
     };
   
     return (
@@ -35,9 +36,7 @@ export function GoogleSignInButton() {
 
 export function AppleSignInButton(){
     const handleClick = async () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const redirectTo = urlParams.get('callbackUrl') || '/';
-        await signIn("apple", { redirectTo });
+      await signInWithAppleController();
     }
     return (
     <Button className="w-full" variant="outline" onClick={handleClick}>
@@ -49,5 +48,16 @@ export function AppleSignInButton(){
         />
         Apple
     </Button>
+    );
+}
+
+export function SignOutButton(){
+    const handleSignOut = async () => {
+      await signOutController();
+    }
+    return (
+        <Button className="bg-primary" onClick={handleSignOut}>
+            Sign Out
+        </Button>
     );
 }

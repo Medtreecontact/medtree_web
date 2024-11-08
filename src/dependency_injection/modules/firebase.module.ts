@@ -1,7 +1,7 @@
 import { ContainerModule, interfaces } from "inversify";
 
 import { IFirebaseRepository } from "@/domain/repositories/firebase_repository_interface";
-import { FirebaseReposiory } from "@/infrastructure/repositories/firebase_repository";
+import { FirebaseRepository } from "@/infrastructure/repositories/firebase_repository";
 
 import { DI_SYMBOLS } from "../types";
 
@@ -12,7 +12,7 @@ const initializeModule = (bind: interfaces.Bind) => {
   //   );
   // } else {
     bind<IFirebaseRepository>(DI_SYMBOLS.IFirebaseRepository).to(
-      FirebaseReposiory,
+      FirebaseRepository,
     );
   // }
 };
