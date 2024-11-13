@@ -6,5 +6,9 @@ export async function createUserAccountController(userAccount: UserAccount) {
 }
 
 export async function updateUserAccountController(uid: string, updatedAccount: UserAccount) {
-    return await updateUserAccountUseCase(uid, updatedAccount);
+    try {   
+        return await updateUserAccountUseCase(uid, updatedAccount);
+    } catch (error) {
+        return "Erreur lors de la finalisation de votre inscription. Vérifiez votre connexion internet et veuillez réessayer.";
+    }
 }

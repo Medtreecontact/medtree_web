@@ -25,7 +25,6 @@ export class AuthenticationRepository implements IAuthenticationRepository {
         try {
             const provider = new GoogleAuthProvider();
             const result = await signInWithPopup(firebaseAuth, provider);
-            console.log("result", result);
             if (!result || !result.user) {
                 throw new Error('Google sign in failed');
             }
@@ -40,7 +39,6 @@ export class AuthenticationRepository implements IAuthenticationRepository {
         const provider = new OAuthProvider('apple.com');
         try {
             const result = await signInWithPopup(firebaseAuth, provider);
-            console.log("result", result);
             if (!result || !result.user) {
                 throw new Error('Apple sign in failed');
             }
@@ -59,7 +57,6 @@ export class AuthenticationRepository implements IAuthenticationRepository {
             }
             return result;
         } catch (error) {
-            console.error('Error signing in with email and password', error);
             throw error;
         }
     }

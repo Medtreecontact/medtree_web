@@ -1,5 +1,6 @@
 import { signInWithGoogleUseCase, signInWithAppleUseCase, signInWithEmailAndPasswordUseCase } from '@/domain/use_cases/authentication/sign_in_use_case';
 import { createSession } from '@/app/actions';
+import { FirebaseError } from 'firebase/app';
 
 export async function signInWithGoogleController() {
     const userAccount = await signInWithGoogleUseCase();
@@ -18,6 +19,10 @@ export async function signInWithEmailAndPasswordController(email: string, passwo
         const userAccount = await signInWithEmailAndPasswordUseCase(email, password);
         await createSession(userAccount);
     } catch (error) {
-            return "Erreur lors de votre connexion";
+        // check if error is a firebase error
+        if (error instanceof FirebaseError && error.code == "auth/invalid-credential") {
+            return "Votre adresse email ou mot de passe est incorrect.";
+        }
+        return "Erreur lors de votre connexion. Vérifiez votre connexion internet et réessayez.";
     }
 }

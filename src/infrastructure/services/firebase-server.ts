@@ -2,8 +2,6 @@ import admin, { ServiceAccount } from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 
-// import { cookies } from 'next/headers';
-// import { SESSION_COOKIE_NAME } from '@/core/constants';
 
 if (!admin.apps.length) {
     admin.initializeApp({

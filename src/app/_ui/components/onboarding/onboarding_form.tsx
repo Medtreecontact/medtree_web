@@ -87,7 +87,7 @@ const universities = [
 
 const FormSchema = z.object({
     university: z.string({
-        required_error: "Selectionnez votre université",
+        required_error: "Selectionnez votre campus",
     }),
     promo: z.string({
         required_error: "Selectionnez votre promotion",
@@ -99,14 +99,14 @@ export function OnboardingForm() {
     resolver: zodResolver(FormSchema),
   })
   const { user } = useAuth();
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!user) return
-    const error = await updateUserAccount(user.uid, data)
-    // if (error && typeof error === "string") {
-      // setErrorMessage(error);
-    // } 
+    const error = await updateUserAccount(user.uid, data);
+    if (error && typeof error === "string") {
+      setErrorMessage(error);
+    } 
   }
 
   return (
@@ -117,8 +117,8 @@ export function OnboardingForm() {
           name="university"
           formLabel="Votre campus"
           valuesList={universities}
-          buttonText="Choisissez votre université"
-          commandPlaceholder="Chercher une université..."
+          buttonText="Choisissez votre campus"
+          commandPlaceholder="Chercher une campus..."
           formValueName="university"
           formDescription="Vous pourrez modifier votre campus dans votre profil"
         />
@@ -134,6 +134,7 @@ export function OnboardingForm() {
           width="w-[220px]"
         />
         <Button type="submit" className="w-full">Accéder à MedTree</Button>
+        {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
       </form>
     </Form>
   )

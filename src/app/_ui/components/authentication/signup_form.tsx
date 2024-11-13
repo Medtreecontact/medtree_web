@@ -9,27 +9,30 @@ import { Input } from "@/app/_ui/shadcn/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
 
 import { signUpWithEmailAndPasswordController } from "@/interface_adapters/controllers/authentication/sign_up_controller";
+import { useState } from 'react';
 
 const formSchema = z.object({
     firstName : z.string().min(2, {
-        message: "firstName must be at least 2 characters long",
-    }).max(50, {message: "firstName must be at most 50 characters long"}),
+        message: "Le prénom doit contenir au moins 2 caractères",
+    }).max(50, {message: "Le prénom ne doit pas contenir plus de 50 caractères"}),
     lastName : z.string().min(2, {
-        message: "lastName must be at least 2 characters long",
-    }).max(50, {message: "lastName must be at most 50 characters long"}),
+        message: "Le nom doit contenir au moins 2 caractères",
+    }).max(50, {message: "Le nom ne doit pas contenir plus de 50 caractères"}),
     email: z.string().email({message: "Invalid email address"}),
     password: z.string().min(2, {
-        message: "Password must be at least 2 characters long",
-    }).max(50, {message: "Password must be at most 50 characters long"}),
+        message: "Le mot de passe doit contenir au moins 2 caractères",
+    }).max(50, {message: "Le mot de passe ne doit pas contenir plus de 50 caractères"}),
     confirmPassword: z.string().min(2, {
-        message: "Password must be at least 2 characters long",
-    }).max(50, {message: "Password must be at most 50 characters long"}),
+        message: "Le mot de passe doit contenir au moins 2 caractères",
+    }).max(50, {message: "Le mot de passe ne doit pas contenir plus de 50 caractères"}),
     }).refine(data => data.password === data.confirmPassword, {
-        message: "Passwords do not match",
+        message: "Les mots de passe ne correspondent pas",
         path: ["confirmPassword"], // This will show the error message at the confirmPassword field
     });
 
 export function SignUpForm() {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -43,7 +46,10 @@ export function SignUpForm() {
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        await signUpWithEmailAndPasswordController(values.firstName, values.lastName, values.email, values.password);
+        const error = await signUpWithEmailAndPasswordController(values.firstName, values.lastName, values.email, values.password);
+        if (error && typeof error === "string") {
+            setErrorMessage(error);
+        }
     }
 
     return (
