@@ -1,7 +1,7 @@
 import { getMenuItemsUseCase } from '@/domain/use_cases/firebase/get_menu_items_use_case';
-import { MenuItems } from '@/entities/models/menuItem';
+import { MenuItem } from '@/entities/models/menu_item';
 
-function presenter(menuItems: MenuItems[]) {
+function presenter(menuItems: MenuItem[]) {
     return menuItems.map((item) => ({
         title: item.title,
     }));
