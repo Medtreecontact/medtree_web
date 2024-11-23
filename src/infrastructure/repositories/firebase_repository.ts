@@ -2,6 +2,7 @@ import { IFirebaseRepository } from "@/domain/repositories/firebase_repository_i
 import { DatabaseError } from "@/entities/errors/database";
 import { Exam } from "@/entities/models/exam";
 import { Step } from "@/entities/models/step";
+import { Substep } from "@/entities/models/substep";
 import { Synthese } from "@/entities/models/synthese";
 import { UserAccount } from "@/entities/models/user_account";
 
@@ -49,6 +50,40 @@ export class FirebaseRepository implements IFirebaseRepository {
         }
     }
 
+    async getStepFromId(stepId: string): Promise<Step> {
+        try {
+            const firebaseStep = await db.collection('steps').doc(stepId).get();
+            const step = firebaseStep.data();
+            if (!step) {
+                throw new Error('Step not found');
+            }
+            return { stepTitle: step.stepTitle,
+                id: step.id,
+                substepsRef: step.substeps
+            } as Step;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch step ' + error);
+        }
+    }
+
+    async getSubstepFromId(substepId: string): Promise<Substep> {
+        try {
+            const firebaseSubstep = await db.collection('substeps').doc(substepId).get();
+            const substep = firebaseSubstep.data();
+            if (!substep) {
+                throw new Error('Substep not found');
+            }
+            return {
+                subTitle: substep.subTitle,
+                id: substep.id,
+                information: substep.information,
+                category: substep.update ?? null,
+            };
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch substep ' + error);
+        }
+    }
+
     async getStepFromRef(stepRef: DocumentReference): Promise<Step> {
         try {
             const firebaseStep = await db.doc(stepRef.path).get();
@@ -62,6 +97,24 @@ export class FirebaseRepository implements IFirebaseRepository {
             } as Step;
         } catch (error) {
             throw new DatabaseError('Failed to fetch step ' + error);
+        }
+    }
+
+    async getSubstepFromRef(substepRef: DocumentReference): Promise<Substep> {
+        try {
+            const firebaseSubstep = await db.doc(substepRef.path).get();
+            const substep = firebaseSubstep.data();
+            if (!substep) {
+                throw new Error('Substep not found');
+            }
+            return {
+                subTitle: substep.subTitle,
+                id: substep.id,
+                information: substep.information,
+                category: substep.update ?? null,
+            };
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch substep ' + error);
         }
     }
 

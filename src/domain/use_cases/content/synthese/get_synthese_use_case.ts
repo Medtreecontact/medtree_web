@@ -1,7 +1,8 @@
 import { getServerInjection } from "@/dependency_injection/server_container";
 
-export async function getSyntheseUsecase(SyntheseId: string) {
+export async function getExamSyntheseUsecase(examId: string, syntheseId: string) {
     const firebaseReposiory = getServerInjection("IFirebaseRepository");
-    const synthese = await firebaseReposiory.getSyntheseFromId(SyntheseId);
-    return synthese;
+    const exam = await firebaseReposiory.getExamFromId(examId);
+    const synthese = await firebaseReposiory.getSyntheseFromId(syntheseId);
+    return {exam, synthese };
 }

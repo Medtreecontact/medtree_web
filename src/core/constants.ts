@@ -1,7 +1,7 @@
 export const ROOT_ROUTE = '/';
 export const FIREBASE_ROUTE = '/firebase';
 export const ONBOARDING_ROUTE = '/onboarding';
-export const SECRET_ROUTE = '/secret';
+export const EXAM_ROUTE = '/exam';
 export const LOGIN_ROUTE = '/login';
 export const SIGNUP_ROUTE = '/sign-up';
 

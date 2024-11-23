@@ -1,32 +1,14 @@
 /** @type {import('next').NextConfig} */
 
-import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 
-function loadTargetEnv(target) {
-    // Constructs a path such as env/.env.development
-    const envPath = path.join('env', `.env.${target}`);
-    return dotenv.parse(fs.readFileSync(envPath));
-}
+// Copy .env file from /env/.env.dev to the root of the project
+const source = path.join(process.cwd(), 'env', `.env.${process.env.TARGET_ENVIRONMENT}`);
+const destination = path.join(process.cwd(), '.env');
 
-const nextConfig = {
-    // webpack: (config, { isServer }) => {
-    //     if (isServer) {
-    //       config.plugins.push(
-    //         new webpack.BannerPlugin({
-    //           banner: 'require("reflect-metadata");',
-    //           raw: true,
-    //           entryOnly: true,
-    //         }),
-    //       );
-    //     }
-    //     return config;
-    // },
+fs.copyFileSync(source, destination);
 
-    // Attention ces variables sont accessibles côté client
-    // pour des donnés sensibles utiliser : .env
-    env: loadTargetEnv(process.env.TARGET_ENVIRONMENT)
-};
+const nextConfig = {};
 
 export default nextConfig;

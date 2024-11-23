@@ -1,5 +1,6 @@
 import { Exam } from "@/entities/models/exam";
 import { Step } from "@/entities/models/step";
+import { Substep } from "@/entities/models/substep";
 import { Synthese } from "@/entities/models/synthese";
 import { UserAccount } from "@/entities/models/user_account";
 import { DocumentReference } from "firebase-admin/firestore";
@@ -12,6 +13,9 @@ export interface IFirebaseRepository {
     getFirstAssetImageUrl(): Promise<string>;
     getExamFromId(examId: string): Promise<Exam>;
     getSyntheseFromId(syntheseId: string): Promise<Synthese>;
+    getStepFromId(stepId: string): Promise<Step>;
+    getSubstepFromId(substepId: string): Promise<Substep>;
     getStepFromRef(stepRef: DocumentReference): Promise<Step>;
+    getSubstepFromRef(substepRef: DocumentReference): Promise<Substep>;
     getSyntheseFromRef(syntheseRef: DocumentReference): Promise<Synthese>;
 }

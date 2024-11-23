@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { FIREBASE_ROUTE, SECRET_ROUTE, LOGIN_ROUTE, SESSION_COOKIE_NAME, ROOT_ROUTE, SIGNUP_ROUTE, ONBOARDING_ROUTE } from '@/core/constants';
+import { FIREBASE_ROUTE, LOGIN_ROUTE, SESSION_COOKIE_NAME, ROOT_ROUTE, SIGNUP_ROUTE, ONBOARDING_ROUTE } from '@/core/constants';
 
-const protectedRoutes = [FIREBASE_ROUTE, SECRET_ROUTE];
-const purchasedRoutes = [SECRET_ROUTE];
+const protectedRoutes = [FIREBASE_ROUTE];
+const purchasedRoutes = ["paid"];
 const authRoutes = [LOGIN_ROUTE, SIGNUP_ROUTE];
 
 export const config = {

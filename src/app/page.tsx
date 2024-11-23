@@ -12,6 +12,9 @@ export default async function Home()  {
         <Link href="/firebase">
           <Button className="bg-primary">Firebase</Button>
         </Link>
+        <Link href="/exam/9VBK0wFPlTRD27yd10n9">
+          <Button className="bg-primary">Exam Uro-néphro</Button>
+        </Link>
         <Link href="/login">
           <Button className="bg-primary">Login</Button>
         </Link>
