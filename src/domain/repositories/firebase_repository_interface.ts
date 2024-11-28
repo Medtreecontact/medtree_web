@@ -1,4 +1,5 @@
 import { Exam } from "@/entities/models/exam";
+import { MenuItem } from "@/entities/models/menu_item";
 import { Step } from "@/entities/models/step";
 import { Substep } from "@/entities/models/substep";
 import { Synthese } from "@/entities/models/synthese";
@@ -9,8 +10,8 @@ export interface IFirebaseRepository {
     getUserAccount(uid :string): Promise<any>;
     createUserAccount(userAccount: UserAccount): Promise<any>;
     updateUserAccount(uid: string, updatedAccount: UserAccount): Promise<void>;
-    getMenuItems(): Promise<any[]>;
-    getFirstAssetImageUrl(): Promise<string>;
+    getMenuItems(): Promise<MenuItem[]>;
+    getUrlFromDocumentPath(path: string): Promise<string>;
     getExamFromId(examId: string): Promise<Exam>;
     getSyntheseFromId(syntheseId: string): Promise<Synthese>;
     getStepFromId(stepId: string): Promise<Step>;

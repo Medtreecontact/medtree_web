@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const menuItemSchema = z.object({
     access: z.string(),
-    examRef: z.array(z.custom<DocumentReference>()),
+    examRef: z.custom<DocumentReference>(),
     iconPath: z.string(),
     id: z.string(),
     priority: z.number(),

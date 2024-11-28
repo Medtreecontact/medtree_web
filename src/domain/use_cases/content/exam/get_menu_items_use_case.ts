@@ -4,5 +4,11 @@ export async function getMenuItemsUseCase() {
 
     const firebaseReposiory = getServerInjection("IFirebaseRepository");
     const menuItems = await firebaseReposiory.getMenuItems();
-    return menuItems;
+    const updatedMenuItems = await Promise.all(
+        menuItems.map(async (item) => {
+          item.iconPath = await firebaseReposiory.getUrlFromDocumentPath(item.iconPath);
+          return item;
+        })
+      );
+    return updatedMenuItems;
 }

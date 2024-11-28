@@ -1,6 +1,7 @@
 import { IFirebaseRepository } from "@/domain/repositories/firebase_repository_interface";
 import { DatabaseError } from "@/entities/errors/database";
 import { Exam } from "@/entities/models/exam";
+import { MenuItem } from "@/entities/models/menu_item";
 import { Step } from "@/entities/models/step";
 import { Substep } from "@/entities/models/substep";
 import { Synthese } from "@/entities/models/synthese";
@@ -176,26 +177,34 @@ export class FirebaseRepository implements IFirebaseRepository {
         }
     }
     
-    async getMenuItems() : Promise<any[]> {
+    async getMenuItems() : Promise<MenuItem[]> {
         try {
             const querySnapshot = await db.collection('menu').get();
-            const menuItems = querySnapshot.docs.map(doc => doc.data());
+            const menuItems = querySnapshot.docs.map(doc => {
+                const data = doc.data()
+                return {
+                    access: data.access,
+                    examRef: data.examRef,
+                    iconPath: data.iconPath,
+                    id: data.id,
+                    priority: data.priority,
+                    title: data.title,
+                    update: data.update,
+                  } as MenuItem;
+            });
             return menuItems;
         } catch (error) {
             throw new DatabaseError('Failed to fetch menu items ' + error);
         }
     }
 
-    async getFirstAssetImageUrl(): Promise<string> {
+    async getUrlFromDocumentPath(path: string): Promise<string> {
         try {
-            const querySnapshort = await db.collection('assets').get();
-            const doc = querySnapshort.docs[0];
-            const path = doc.data().path;
             const file = storage.bucket().file(path);
             const url = await getDownloadURL(file);
             return url;
         } catch (error) {
-            throw new DatabaseError('Failed to fetch asset image ' + error);
+            throw new DatabaseError('Failed to fetch asset ' + error);
         }
     }
 }

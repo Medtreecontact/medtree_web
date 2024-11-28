@@ -1,4 +1,4 @@
-import { getMenuItemsUseCase } from '@/domain/use_cases/firebase/get_menu_items_use_case';
+import { getMenuItemsUseCase } from '@/domain/use_cases/content/exam/get_menu_items_use_case';
 import { MenuItem } from '@/entities/models/menu_item';
 
 function presenter(menuItems: MenuItem[]) {
@@ -8,6 +8,6 @@ function presenter(menuItems: MenuItem[]) {
 }
 
 export async function getMenuItemsController() {
-    const menuItems = await getMenuItemsUseCase();
-    return presenter(menuItems);
+    return await getMenuItemsUseCase();
+    // return presenter(menuItems);
 }

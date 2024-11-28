@@ -3,13 +3,37 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/app/_ui/shadcn/components/ui/avatar';
+
 import { usePathname } from 'next/navigation'
+
+import {
+  Calculator,
+  Calendar,
+  CreditCard,
+  Settings,
+  Smile,
+  User,
+} from "lucide-react"
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/app/_ui/shadcn/components/ui/command"
+
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   const getFontSize = (path: string) => {
-    return pathname.startsWith(path) ? 'text-2xl' : 'text-lg';
+    return pathname.startsWith(path) ? 'text-xl' : 'text-lg';
   };
 
   return (
@@ -19,15 +43,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Image src="/logo_no_bg.png" alt="Company Logo" width={40} height={40} />
           <span className="text-2xl font-bold">MedTree</span>
         </Link>
-        <p>Search Bar</p>
-        <nav className="flex space-x-8">
-          <Link href="/login">
-            <p className="text-lg font-bold">Se connecter</p>
-          </Link>
-          <Link href="/sign-up">
-            <p className="text-lg font-bold">S'inscrire</p>
-          </Link>
-        </nav>
+        <SearchBar />
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
       </header>
       <div className="flex flex-1">
         <aside className="w-48 bg-primary text-white flex flex-col p-4 fixed h-full">
@@ -38,8 +58,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Link href="/station">
               <p className={`font-bold ${getFontSize('/station')}`}>Stations ECOS</p>
             </Link>
-            <Link href="/settings">
-              <p className={`font-bold ${getFontSize('/settings')}`}>Settings</p>
+            <Link href="/flashcard">
+              <p className={`font-bold ${getFontSize('/flashcard')}`}>Flashcards</p>
             </Link>
           </nav>
         </aside>
@@ -50,3 +70,46 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
+function SearchBar() {  
+    return (
+      <Command className="rounded-lg border shadow-md md:max-w-[450px]">
+        <CommandInput placeholder="Rechercher dans Medtree" />
+        <CommandList>
+          {/* <CommandEmpty>No results found.</CommandEmpty> */}
+          {/* <CommandGroup heading="Suggestions">
+            <CommandItem>
+              <Calendar />
+              <span>Calendar</span>
+            </CommandItem>
+            <CommandItem>
+              <Smile />
+              <span>Search Emoji</span>
+            </CommandItem>
+            <CommandItem disabled>
+              <Calculator />
+              <span>Calculator</span>
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Settings">
+            <CommandItem>
+              <User />
+              <span>Profile</span>
+              <CommandShortcut>⌘P</CommandShortcut>
+            </CommandItem>
+            <CommandItem>
+              <CreditCard />
+              <span>Billing</span>
+              <CommandShortcut>⌘B</CommandShortcut>
+            </CommandItem>
+            <CommandItem>
+              <Settings />
+              <span>Settings</span>
+              <CommandShortcut>⌘S</CommandShortcut>
+            </CommandItem>
+          </CommandGroup> */}
+        </CommandList>
+      </Command>
+    )
+  }  
