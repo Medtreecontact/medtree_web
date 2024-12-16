@@ -26,7 +26,7 @@ export class FirebaseRepository implements IFirebaseRepository {
             return { examTitle: exam.examTitle,
                 id: exam.id,
                 stepsRef: exam.steps,
-                synthesesRef: exam.syntheses
+                synthesesRef: exam.syntheses ? exam.syntheses : [],
             } as Exam;
         } catch (error) {
             throw new DatabaseError('Failed to fetch exam ' + error);
@@ -45,6 +45,7 @@ export class FirebaseRepository implements IFirebaseRepository {
                 id: synthese.id,
                 content: synthese.content,
                 update: synthese.update,
+                duration: synthese.duration,
             } as Synthese;
         } catch (error) {
             throw new DatabaseError('Failed to fetch synthese ' + error);
@@ -131,6 +132,7 @@ export class FirebaseRepository implements IFirebaseRepository {
                 id: synthese.id,
                 content: synthese.content,
                 update: synthese.update,
+                duration: synthese.duration,
             } as Synthese;
         } catch (error) {
             throw new DatabaseError('Failed to fetch synthese ' + error);

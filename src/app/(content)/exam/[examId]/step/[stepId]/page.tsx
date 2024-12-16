@@ -2,26 +2,64 @@ import { getExamStepSubstepsController } from "@/interface_adapters/controllers/
 import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
 
+import { Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator } from "@/app/_ui/shadcn/components/ui/breadcrumb";
+
 export default async function StepPage({params} : {params: { examId: string, stepId: string }}) {
-    const { exam, step, substeps } = await getExamStepSubstepsController(params.examId, params.stepId);
-    console.log("examId : ", params.examId);
+    const { exam, steps, currentStep, substeps } = await getExamStepSubstepsController(params.examId, params.stepId);
     return <>
-        <div className="mx-40 my-2 flex flex-col w-full">
-            <Link href={"/exam/" + params.examId}>
-              <h1 className="text-2xl font-bold">&lt;-- {exam.examTitle}</h1>
-            </Link>
-            <div className="my-8 flex flex-col border border-gray-300 p-10 rounded">
-                <h3 className="text-xl font-bold">{step.stepTitle}</h3>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink>
+                <Link href="/exam">Cours</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink>
+                <Link href={"/exam/" + params.examId}>{exam.examTitle}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{currentStep.stepTitle}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="px-10 space-x-6 flex w-full justify-center">
+            <div className="my-4 flex flex-col border border-gray-300 p-10 rounded w-full">
+                <h3 className="text-xl font-bold">Sémiologie complète</h3>
                 <Separator className="my-4 border-t border-gray-300"/>
                 <ul>
-                {substeps.map(substep => 
+                {steps.map(step =>
+                    <li key={step.id} className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      {step.id == currentStep.id ? <span className="text-lg font-bold">{step.stepTitle}</span> :
+                      <Link href={"/exam/" + params.examId + "/step/" + step.id} className="text-lg hover:underline">
+                        {step.stepTitle}
+                      </Link>
+                      }
+                    </div>
+                  </li>
+                )}
+                </ul>
+            </div>
+            <div className="my-4 flex flex-col border border-gray-300 p-10 rounded w-full">
+                <h3 className="text-xl font-bold">{currentStep.stepTitle}</h3>
+                <Separator className="my-4 border-t border-gray-300"/>
+                <ul>
+                {substeps.map(substep =>
                     <li key={substep.id} className="mt-4 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <Link href={"/exam/" + params.examId + "/step/" + step.id + "/substep/" + substep.id} className="text-lg">
+                      <Link href={"/exam/" + params.examId + "/step/" + currentStep.id + "/substep/" + substep.id} className="text-lg hover:underline">
                         {substep.subTitle}
                       </Link>
                     </div>
-                    <p>Non consultée</p>
                   </li>
                 )}
                 </ul>

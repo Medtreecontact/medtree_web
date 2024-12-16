@@ -63,7 +63,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Link>
           </nav>
         </aside>
-        <main className="flex-grow flex p-4 ml-48">
+        <main className="flex-grow p-4 ml-48">
           {children}
         </main>
       </div>
