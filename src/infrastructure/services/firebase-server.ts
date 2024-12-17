@@ -17,7 +17,7 @@ if (!admin.apps.length) {
           auth_provider_x509_cert_url: process.env.FIREBASE_ADMIN_CONFIG_AUTH_PROVIDER_X509_CERT_URL,
           client_x509_cert_url: process.env.FIREBASE_ADMIN_CONFIG_CLIENT_X509_CERT_URL,
         } as ServiceAccount),
-        storageBucket: process.env.FIREBASE_ADMIN_CONFIG_storage_bucket,
+        storageBucket: process.env.FIREBASE_ADMIN_CONFIG_STORAGE_BUCKET,
     }
 );
 }

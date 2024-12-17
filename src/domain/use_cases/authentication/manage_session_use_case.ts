@@ -1,12 +1,12 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { FIREBASE_ROUTE, ONBOARDING_ROUTE, ROOT_ROUTE, SESSION_COOKIE_NAME } from '@/core/constants';
+import { EXAM_ROUTE, ONBOARDING_ROUTE, ROOT_ROUTE, SESSION_COOKIE_NAME } from '@/core/constants';
 import { getServerInjection } from '@/dependency_injection/server_container';
 import { UserAccount } from "@/entities/models/user_account";
 
 export async function createSessionUseCase(userAccount: UserAccount) {
-    let redirectUrl :string = FIREBASE_ROUTE;
+    let redirectUrl :string = EXAM_ROUTE;
 
     const firebaseReposiory = getServerInjection("IFirebaseRepository");
     let user;
