@@ -9,21 +9,24 @@ import { Breadcrumb,
   BreadcrumbPage,
   BreadcrumbSeparator } from "@/app/_ui/shadcn/components/ui/breadcrumb";
 
+  import {
+    TableOfContents,
+    Check,
+  } from "lucide-react"
+
+import { Progress } from "@/app/_ui/shadcn/components/ui/progress";
+
 export default async function StepPage({params} : {params: { examId: string, stepId: string }}) {
     const { exam, steps, currentStep, substeps } = await getExamStepSubstepsController(params.examId, params.stepId);
-    return <>
+    return <div className="p-8">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink>
-                <Link href="/exam">Cours</Link>
-              </BreadcrumbLink>
+                <BreadcrumbLink href="/exam">Cours</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink>
-                <Link href={"/exam/" + params.examId}>{exam.examTitle}</Link>
-              </BreadcrumbLink>
+                <BreadcrumbLink href={"/exam/" + params.examId}>{exam.examTitle}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -31,10 +34,17 @@ export default async function StepPage({params} : {params: { examId: string, ste
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="px-10 space-x-6 flex w-full justify-center">
-            <div className="my-4 flex flex-col border border-gray-300 p-10 rounded w-full">
-                <h3 className="text-xl font-bold">Sémiologie complète</h3>
-                <Separator className="my-4 border-t border-gray-300"/>
+        <div className="border border-gray-600 rounded flex w-full justify-center mt-4">
+            <div className="flex flex-col p-10 w-full">
+                <div className="flex items-center space-x-4 justify-between">
+                  <div className="flex items-center space-x-4">
+                    <TableOfContents />
+                    <h3 className="text-xl font-bold">Sémiologie complète</h3>
+                    <p>Chapitres détaillés</p>
+                  </div>
+                  <p>Avancement</p>
+                </div>
+                <Separator className="my-4 border-t border-gray-600"/>
                 <ul>
                 {steps.map(step =>
                     <li key={step.id} className="mt-4 flex items-center justify-between">
@@ -45,13 +55,19 @@ export default async function StepPage({params} : {params: { examId: string, ste
                       </Link>
                       }
                     </div>
+                    <Progress value={Math.floor(Math.random() * 101)} className="w-1/4"/>
                   </li>
                 )}
                 </ul>
             </div>
-            <div className="my-4 flex flex-col border border-gray-300 p-10 rounded w-full">
-                <h3 className="text-xl font-bold">{currentStep.stepTitle}</h3>
-                <Separator className="my-4 border-t border-gray-300"/>
+            <div className="flex flex-col p-10 w-full">
+                <div className="flex items-center space-x-4 justify-between">
+                  <div className="flex items-center space-x-4">
+                    <h3 className="text-xl font-bold">{currentStep.stepTitle}</h3>
+                  </div>
+                    <p>Consulté</p>
+                </div>
+                <Separator className="my-4 border-t border-gray-600"/>
                 <ul>
                 {substeps.map(substep =>
                     <li key={substep.id} className="mt-4 flex items-center justify-between">
@@ -60,10 +76,11 @@ export default async function StepPage({params} : {params: { examId: string, ste
                         {substep.subTitle}
                       </Link>
                     </div>
+                    <Check className={Math.random() < 0.5 ? "text-gray-400" : "text-green-700"}/>
                   </li>
                 )}
                 </ul>
             </div>
         </div>
-    </>
+    </div>
 }

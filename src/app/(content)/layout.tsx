@@ -8,12 +8,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/app/_ui/shadcn/components
 import { usePathname } from 'next/navigation'
 
 import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
+  BookText,
+  Speech,
+  Zap,
 } from "lucide-react"
 
 import {
@@ -27,43 +24,71 @@ import {
   CommandShortcut,
 } from "@/app/_ui/shadcn/components/ui/command"
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/app/_ui/shadcn/components/ui/dropdown-menu"
 
+import { signOutController } from "@/interface_adapters/controllers/authentication/sign_out_controller";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
-  const getFontSize = (path: string) => {
-    return pathname.startsWith(path) ? 'text-xl' : 'text-lg';
+  const getFontColor = (path: string) => {
+    return pathname.startsWith(path) ? 'text-black' : 'text-gray-500';
   };
+
+  const handleSignOut = async () => {
+        await signOutController();
+      }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-primary text-white p-4 flex justify-between items-center w-full sticky top-0 z-10">
-        <Link className="flex items-center space-x-4" href="/">
+      <header className="bg-white text-black p-4 flex justify-between items-center w-full sticky top-0 z-10 border-b">
+        <Link className="flex items-center space-x-4" href="/home">
           <Image src="/logo_no_bg.png" alt="Company Logo" width={40} height={40} />
           <span className="text-2xl font-bold">MedTree</span>
         </Link>
         <SearchBar />
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+          <Avatar className="cursor-pointer">
+            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel>Nom utilisateur</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+                Se déconnecter
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        
       </header>
       <div className="flex flex-1">
-        <aside className="w-48 bg-primary text-white flex flex-col p-4 fixed h-full">
-          <nav className="flex flex-col space-y-4">
-          <Link href="/exam">
-              <p className={`font-bold ${getFontSize('/exam')}`}>Cours</p>
+        <aside className="w-28 bg-white text-black flex flex-col p-4 fixed h-full border-r">
+          <nav className="flex text-center items-center flex-col space-y-8">
+            <Link href="/exam" className={`flex items-center flex-col space-y-2 ${getFontColor('/exam')}`}>
+              <BookText />
+              <p className="font-bold text-lg">Cours</p>
             </Link>
-            <Link href="/station">
-              <p className={`font-bold ${getFontSize('/station')}`}>Stations ECOS</p>
+            <Link href="/station" className={`flex items-center flex-col space-y-2 ${getFontColor('/station')}`}>
+              <Speech />
+              <p className="font-bold text-lg">Stations ECOS</p>
             </Link>
-            <Link href="/flashcard">
-              <p className={`font-bold ${getFontSize('/flashcard')}`}>Flashcards</p>
+            <Link href="/flashcard" className={`flex items-center flex-col space-y-2 ${getFontColor('/flashcard')}`}>
+              <Zap />
+              <p className="font-bold text-lg">Flashcards</p>
             </Link>
           </nav>
         </aside>
-        <main className="flex-grow p-4 ml-48">
+        <main className="flex-grow ml-28 bg-gray-50">
           {children}
         </main>
       </div>
@@ -73,7 +98,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 function SearchBar() {  
     return (
-      <Command className="rounded-lg border shadow-md md:max-w-[450px]">
+      <Command className="rounded-xl border shadow-md md:max-w-[450px]">
         <CommandInput placeholder="Rechercher dans Medtree" />
         <CommandList>
           {/* <CommandEmpty>No results found.</CommandEmpty> */}

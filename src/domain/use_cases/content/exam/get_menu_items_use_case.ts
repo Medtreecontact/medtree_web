@@ -7,8 +7,12 @@ export async function getMenuItemsUseCase() {
     const updatedMenuItems = await Promise.all(
         menuItems.map(async (item) => {
           item.iconPath = await firebaseReposiory.getUrlFromDocumentPath(item.iconPath);
+          const exam = await firebaseReposiory.getExamFromId(item.examRef.id);
+          item.stepCount = exam.stepsRef.length;
+          item.synthesesCount = exam.synthesesRef.length;
           return item;
         })
       );
-    return updatedMenuItems;
+    const sortedMenuItems =  updatedMenuItems.sort((a, b) => a.priority - b.priority);
+    return sortedMenuItems;
 }

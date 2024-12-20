@@ -7,6 +7,8 @@ export const menuItemSchema = z.object({
     iconPath: z.string(),
     id: z.string(),
     priority: z.number(),
+    stepCount: z.number().optional(),
+    synthesesCount: z.number().optional(),
     title: z.string(),
     update: z.date(),
 });

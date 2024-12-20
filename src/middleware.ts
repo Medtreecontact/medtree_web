@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { LOGIN_ROUTE, SESSION_COOKIE_NAME, ROOT_ROUTE, SIGNUP_ROUTE, ONBOARDING_ROUTE, EXAM_ROUTE } from '@/core/constants';
+import { STATION_ROUTE, FLASHCARD_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SESSION_COOKIE_NAME, ROOT_ROUTE, SIGNUP_ROUTE, ONBOARDING_ROUTE, EXAM_ROUTE } from '@/core/constants';
 
-const protectedPages = [ONBOARDING_ROUTE];
+const protectedPages = [ONBOARDING_ROUTE, HOME_ROUTE, STATION_ROUTE, FLASHCARD_ROUTE];
 const protectedRoutes = [EXAM_ROUTE];
 const purchasedRoutes = [""];
 const authRoutes = [LOGIN_ROUTE, SIGNUP_ROUTE];
@@ -18,7 +18,7 @@ export default async function middleware(request: NextRequest) {
   const session = request.cookies.get(SESSION_COOKIE_NAME)?.value || '';
 
   if (request.nextUrl.pathname == ROOT_ROUTE) {
-    const absoluteURL = new URL(EXAM_ROUTE, request.nextUrl.origin);
+    const absoluteURL = new URL(HOME_ROUTE, request.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());
   }
 

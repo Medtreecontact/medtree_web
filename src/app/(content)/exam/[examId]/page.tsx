@@ -10,18 +10,20 @@ import { Breadcrumb,
   BreadcrumbSeparator } from "@/app/_ui/shadcn/components/ui/breadcrumb";
 
 import {
-  Clock
+  Clock,
+  TableOfContents,
+  NotebookText,
+  SquareCheckBig
 } from "lucide-react"
+import { Progress } from "@/app/_ui/shadcn/components/ui/progress";
 
 export default async function ExamPage({params} : {params: { examId: string }}) {
     const {exam, steps, syntheses } = await getExamStepsSynthesesController(params.examId);
-    return <>
+    return <div className="p-8">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink>
-                <Link href="/exam">Cours</Link>
-              </BreadcrumbLink>
+                <BreadcrumbLink href="/exam">Cours</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -29,11 +31,18 @@ export default async function ExamPage({params} : {params: { examId: string }}) 
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="px-10 space-x-6 flex w-full justify-center">
+        <div className="border border-gray-600 rounded flex w-full justify-center mt-4">
         <div className="flex w-full">
-            <div className="my-4 flex flex-col border border-gray-300 p-10 rounded w-full">
-                <h3 className="text-xl font-bold">Sémiologie complète</h3>
-                <Separator className="my-4 border-t border-gray-300"/>
+            <div className="flex flex-col p-10 w-full">
+                <div className="flex items-center space-x-4 justify-between">
+                  <div className="flex items-center space-x-4">
+                    <TableOfContents />
+                    <h3 className="text-xl font-bold">Sémiologie complète</h3>
+                    <p>Chapitres détaillés</p>
+                  </div>
+                  <p>Avancement</p>
+                </div>
+                <Separator className="my-4 border-t border-gray-600"/>
                 <ul>
                 {steps.map(step =>
                     <li key={step.id} className="mt-4 flex items-center justify-between">
@@ -42,15 +51,20 @@ export default async function ExamPage({params} : {params: { examId: string }}) 
                         {step.stepTitle}
                       </Link>
                     </div>
+                    <Progress value={Math.floor(Math.random() * 101)} className="w-1/4"/>
                   </li>
                 )}
                 </ul>
             </div>
             </div>
             <div className="flex flex-col w-full">
-              <div className="my-4 flex flex-col border border-gray-300 p-10 rounded">
-                <h3 className="text-xl font-bold">Fiches synthèses</h3>
-                <Separator className="my-4 border-t border-gray-300"/>
+              <div className="flex flex-col p-10">
+                <div className="flex items-center space-x-4">
+                  <NotebookText />
+                  <h3 className="text-xl font-bold">Fiches synthèses</h3>
+                  <p>Révisions rapides</p>
+                </div>
+                <Separator className="my-4 border-t border-gray-600"/>
                 <ul>
                 {syntheses.map(synthese => 
                     <li key={synthese.id} className="mt-4 flex items-center justify-between">
@@ -61,29 +75,50 @@ export default async function ExamPage({params} : {params: { examId: string }}) 
                     </div>
                       <div className="flex items-center space-x-2">
                         <Clock className="text-primary" size={18}/>
-                        <p className="text-primary">{synthese.duration + (synthese.duration > 1 ? " minutes" : " minute")}</p>
+                        <p className="text-primary">{(synthese.duration ? synthese.duration : "4") + (synthese.duration == 1 ? " minute" : " minutes")}</p>
                       </div>
                   </li>
                 )}
                 </ul>
               </div>
-              <div className="my-4 flex flex-col border border-gray-300 p-10 rounded">
-                <h3 className="text-xl font-bold">Quizz</h3>
-                <Separator className="my-4 border-t border-gray-300"/>
+              <div className="flex flex-col p-10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <SquareCheckBig />
+                    <h3 className="text-xl font-bold">Quizz</h3>
+                    <p>Évaluez vos connaissances</p>
+                  </div>
+                  <p>Résultats</p>
+                </div>
+                <Separator className="my-4 border-t border-gray-600"/>
                 <ul>
-                {syntheses.map(synthese => 
-                    <li key={synthese.id} className="mt-4 flex items-center justify-between">
+                    <li className="mt-4 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <Link href={"/exam/" + params.examId + "/synthese/" + synthese.id} className="text-lg hover:underline">
-                        {synthese.title}
-                      </Link>
+                      <p className="text-lg">
+                        Quizz Facile
+                      </p>
                     </div>
-                    <p>Score : ?</p>
+                    <p>Aucun essai</p>
                   </li>
-                )}
+                  <li className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <p className="text-lg">
+                        Quizz Normal
+                      </p>
+                    </div>
+                    <p>Aucun essai</p>
+                  </li>
+                  <li className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <p className="text-lg">
+                        Quizz Difficile
+                      </p>
+                    </div>
+                    <p>Aucun essai</p>
+                  </li>
                 </ul>
               </div>
             </div>
         </div>
-    </>
+    </div>
 }
