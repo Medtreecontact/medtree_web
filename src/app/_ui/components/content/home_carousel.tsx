@@ -32,7 +32,7 @@ export async function HomeCarousel() {
     const menuItems = await getMenuItemsController();
     
     let paidUser = false;
-    const session = cookies().get(SESSION_COOKIE_NAME);
+    const session = (await cookies()).get(SESSION_COOKIE_NAME);
     if (session)
     {
             const user = JSON.parse(session.value);

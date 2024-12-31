@@ -5,6 +5,6 @@ export async function createSessionController(userAccount: UserAccount) {
     return await createSessionUseCase(userAccount);
 }
 
-export function removeSessionController() {
-    removeSessionUseCase();
+export async function removeSessionController() {
+    await removeSessionUseCase();
 }

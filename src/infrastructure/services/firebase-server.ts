@@ -25,29 +25,3 @@ if (!admin.apps.length) {
 export const app = admin.apps[0];
 export const db = getFirestore();
 export const storage = getStorage();
-
-
-// export async function getExam(menuId: string) {
-//     let querySnapshot;
-//     querySnapshot = await db.collection('menu').doc(menuId).get();
-//     const menuItem = querySnapshot.data();
-
-//     if (!menuItem) return "No menu item";
-
-//     const uid = cookies().get(SESSION_COOKIE_NAME);
-//     if (!uid) return "No user session";
-
-//     querySnapshot = await db.collection('medtree_app_users').where('uid', '==', uid.value).get();
-//     const user = querySnapshot.docs[0].data();
-
-//     if (menuItem.access == "purchased" && user.purchased != true) return "Not purchased";
-
-//     const examRef = menuItem.examRef
-//     const examDocSnapshot = await examRef.get();
-//     const examData = examDocSnapshot.data();
-
-//     if (!examData) return "No exam data";
-//     const { examTitle, id, steps, syntheses } = examData;
-
-//     return { examTitle, id, steps, syntheses };
-// }

@@ -23,7 +23,7 @@ export async function createSessionUseCase(userAccount: UserAccount) {
 
     const cookie = JSON.stringify(user);
 
-    cookies().set(SESSION_COOKIE_NAME, cookie, {
+    (await cookies()).set(SESSION_COOKIE_NAME, cookie, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 60 * 24, // One day
@@ -33,8 +33,8 @@ export async function createSessionUseCase(userAccount: UserAccount) {
     redirect(redirectUrl);
 }
 
-export function removeSessionUseCase() {
-  cookies().delete(SESSION_COOKIE_NAME);
+export async function removeSessionUseCase() {
+  (await cookies()).delete(SESSION_COOKIE_NAME);
 
   redirect(ROOT_ROUTE);
 }
