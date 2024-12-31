@@ -4,9 +4,6 @@ import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import { signInWithAppleController, signInWithGoogleController } from "@/interface_adapters/controllers/authentication/sign_in_controller";
 import Image from 'next/image';
 
-import { signOutController } from "@/interface_adapters/controllers/authentication/sign_out_controller";
-
-
 export function ButtonsColumn() {
     return (
         <div className="flex-col space-y-3">
@@ -48,16 +45,5 @@ export function AppleSignInButton(){
         />
         Apple
     </Button>
-    );
-}
-
-export function SignOutButton(){
-    const handleSignOut = async () => {
-      await signOutController();
-    }
-    return (
-        <Button className="bg-primary" onClick={handleSignOut}>
-            Sign Out
-        </Button>
     );
 }

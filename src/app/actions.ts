@@ -5,7 +5,7 @@ import { createUserAccountController, updateUserAccountController } from "@/inte
 import { createSessionController, removeSessionController } from "@/interface_adapters/controllers/authentication/session_management_controller";
 
 import { redirect } from 'next/navigation';
-import { FIREBASE_ROUTE } from '@/core/constants';
+import { EXAM_ROUTE, HOME_ROUTE } from '@/core/constants';
 
 export async function createSession(userAccount: UserAccount) {
     return await createSessionController(userAccount);
@@ -28,5 +28,5 @@ export async function updateUserAccount(uid: string, data: any) {
     if (typeof res === "string") {
         return res;
     }
-    redirect(FIREBASE_ROUTE);
+    redirect(HOME_ROUTE);
 }

@@ -9,6 +9,15 @@ const destination = path.join(process.cwd(), '.env');
 
 fs.copyFileSync(source, destination);
 
-const nextConfig = {};
+const nextConfig = {
+    images: {
+        remotePatterns: [
+          {
+            protocol: 'https',
+            hostname: 'firebasestorage.googleapis.com',
+          },
+        ],
+      },
+};
 
 export default nextConfig;

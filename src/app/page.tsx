@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
 
-import { SignOutButton } from "./_ui/components/authentication/third_party_buttons";
 
 export default async function Home()  {
   const TARGET_ENVIRONMENT = process.env.TARGET_ENVIRONMENT;
@@ -12,13 +11,15 @@ export default async function Home()  {
         <Link href="/firebase">
           <Button className="bg-primary">Firebase</Button>
         </Link>
+        <Link href="/exam/">
+          <Button className="bg-primary">Exam</Button>
+        </Link>
         <Link href="/login">
           <Button className="bg-primary">Login</Button>
         </Link>
         <Link href="/sign-up">
           <Button className="bg-primary">Sign up</Button>
         </Link>
-        <SignOutButton/>
       </div>
       <div className="text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           Current TARGET_ENVIRONMENT: <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">{TARGET_ENVIRONMENT}</code>
@@ -32,7 +33,7 @@ export default async function Home()  {
           height={38}
           priority
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+        <ol className="list-inside list-disc text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
             Get started by editing{" "}
             <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
