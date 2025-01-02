@@ -18,6 +18,13 @@ const nextConfig = {
           },
         ],
       },
+    // staleTimes is an experimental feature that enables caching of page segments in the client-side router cache.
+    experimental: {
+      staleTimes: {
+        dynamic: 300,
+        static: 300,
+      },
+    },
 };
 
 export default nextConfig;

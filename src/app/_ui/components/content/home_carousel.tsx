@@ -87,7 +87,7 @@ export async function HomeCarousel() {
                                 
                             </CardContent>
                         </Card>
-                    : <Link key={item.id} href={"/exam/" + item.examRef.id}>
+                    : <Link key={item.id} href={"/exam/" + item.examId}>
                     <Card key={item.id} className={`text-xl flex flex-col items-center justify-center `}>
                         <CardHeader className="w-full">
                             <CardTitle className="flex items-center space-x-4">

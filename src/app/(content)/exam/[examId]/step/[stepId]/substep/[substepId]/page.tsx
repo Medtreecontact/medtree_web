@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import { Breadcrumb,
     BreadcrumbItem,
-    BreadcrumbLink,
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator } from "@/app/_ui/shadcn/components/ui/breadcrumb";
@@ -29,15 +28,15 @@ export default async function SubstepPage(
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-              <BreadcrumbLink href="/exam">Cours</BreadcrumbLink>
+              <Link href="/exam">Cours</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-              <BreadcrumbLink href={"/exam/" + params.examId}>{exam.examTitle}</BreadcrumbLink>
+              <Link href={"/exam/" + params.examId}>{exam.examTitle}</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href={"/exam/" + params.examId + "/step/" + params.stepId}> {step.stepTitle} </BreadcrumbLink> 
+            <Link href={"/exam/" + params.examId + "/step/" + params.stepId}> {step.stepTitle} </Link> 
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

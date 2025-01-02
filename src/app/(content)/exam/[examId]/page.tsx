@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator } from "@/app/_ui/shadcn/components/ui/breadcrumb";
@@ -24,7 +23,7 @@ export default async function ExamPage(props: {params: Promise<{ examId: string 
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-              <BreadcrumbLink href="/exam">Cours</BreadcrumbLink>
+              <Link href="/exam">Cours</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

@@ -19,8 +19,6 @@ import { cookies } from "next/headers";
 import { SESSION_COOKIE_NAME } from '@/core/constants';
 import ShopButton from "@/app/_ui/components/content/shop_button";
 
-
-
 export default async function ExamHomePage() {
     const menuItems = await getMenuItemsController();
 
@@ -61,7 +59,7 @@ export default async function ExamHomePage() {
                                 </ul>
                             </CardContent>
                         </Card> :
-                    <Link key={item.id} href={"/exam/" + item.examRef.id}>
+                    <Link key={item.id} href={"/exam/" + item.examId}>
                         <Card key={item.id} className={`text-xl flex flex-col items-center justify-center `}>
                             <CardHeader className="w-full">
                                 <CardTitle className="flex items-center space-x-4">
