@@ -20,6 +20,14 @@ export async function GET(request: Request) {
     });
   }
 
+  // Check for MIDDLEWARE_PRIVATE_KEY header
+  if (request.headers.get('x-middleware-auth') !== process.env.MIDDLEWARE_PRIVATE_KEY) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      headers: { "Content-Type": "application/json" },
+      status: 401,
+    });
+  }
+
   try {
     const menuItem = await getMenuItemFromExamId(examId);
     return new Response(JSON.stringify(menuItem), {

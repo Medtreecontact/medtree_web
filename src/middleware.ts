@@ -82,19 +82,26 @@ async function manageFreeUserRequest(request: NextRequest) {
     if (examId)
     {
       try {
-        const response = await fetch(`http://${request.nextUrl.host}/api/getMenuItem?examId=${examId}`);
+        const response = await fetch(`http://${request.nextUrl.host}/api/getMenuItem?examId=${examId}`,
+          {
+            headers: {
+              'x-middleware-auth': process.env.MIDDLEWARE_PRIVATE_KEY ?? '',
+            }
+          }
+        );
         if (!response.ok) {
           throw new Error('Failed to fetch menu item');
         }
         const data = await response.json();
         const access = data.access;
-        if (access !== "free") {
-          const absoluteURL = new URL(ROOT_ROUTE, request.nextUrl.origin);
-          return NextResponse.redirect(absoluteURL.toString());
+        if (access == "free") {
+          return ;
         }
       } catch (error) {
         console.error(error);
       }
+      const absoluteURL = new URL(ROOT_ROUTE, request.nextUrl.origin);
+      return NextResponse.redirect(absoluteURL.toString());
     }
   }
 }
