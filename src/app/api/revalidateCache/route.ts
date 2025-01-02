@@ -2,6 +2,9 @@ import { revalidateTag } from "next/cache";
 
 
 // curl -X POST http://localhost:3000/api/revalidateCache?cacheTag=exampleTag
+
+// curl -X POST https://medtree-283318355476.europe-west3.run.app/api/revalidateCache?cacheTag=getExamStepsSynthesesController -H "Content-Length: 0"
+
 export async function POST(request: Request) {
     const url = new URL(request.url);
     const cacheTag = url.searchParams.get("cacheTag");
