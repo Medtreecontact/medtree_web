@@ -51,7 +51,7 @@ export default async function ExamPage(props: {params: Promise<{ examId: string 
                       {step.stepTitle}
                     </Link>
                   </div>
-                  <Progress value={Math.floor(Math.random() * 101)} className="w-1/4"/>
+                  <Progress value={step.stepAdvancement} className="w-1/4"/>
                 </li>
               )}
               </ul>

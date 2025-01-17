@@ -5,6 +5,7 @@ export const substepSchema = z.object({
     id: z.string(),
     information: z.string(),
     category: z.string().nullable(),
+    readSubstep: z.boolean().optional(),
 });
 
 export type Substep = z.infer<typeof substepSchema>;

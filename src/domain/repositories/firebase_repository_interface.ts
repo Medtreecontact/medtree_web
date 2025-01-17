@@ -1,3 +1,4 @@
+import { CoursesAdvancement } from "@/entities/models/courses_advancement";
 import { Exam } from "@/entities/models/exam";
 import { MenuItem } from "@/entities/models/menu_item";
 import { Step } from "@/entities/models/step";
@@ -19,4 +20,6 @@ export interface IFirebaseRepository {
     getStepFromRef(stepRef: DocumentReference): Promise<Step>;
     getSubstepFromRef(substepRef: DocumentReference): Promise<Substep>;
     getSyntheseFromRef(syntheseRef: DocumentReference): Promise<Synthese>;
+    getUserCoursesAdvancement(userId: string): Promise<CoursesAdvancement>;
+    updateUserAdvancement(userId: string, advancement: CoursesAdvancement): Promise<void>;
 }

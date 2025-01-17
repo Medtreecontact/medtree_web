@@ -58,14 +58,14 @@ export default async function SubstepPage(
                     </Link>
                     }
                   </div>
-                  <Check className={Math.random() < 0.5 ? "text-gray-400" : "text-green-700"}/>
+                  <Check className={substep.readSubstep ? "text-green-700" : "text-gray-400"}/>
                 </li>
               )}
               </ul>
         </div>
         <div className="flex flex-col items-center w-full mx-20">
             <div dangerouslySetInnerHTML={{ __html: parsed }} />
-            <CourseEndButton />
+            <CourseEndButton examId={exam.id} stepId={step.id} substepId={currentSubstep.id} readSubstep={currentSubstep.readSubstep || false} />
         </div>
       </div>
   </div>;

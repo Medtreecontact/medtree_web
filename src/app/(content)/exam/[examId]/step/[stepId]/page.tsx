@@ -55,7 +55,7 @@ export default async function StepPage(props: {params: Promise<{ examId: string,
                     </Link>
                     }
                   </div>
-                  <Progress value={Math.floor(Math.random() * 101)} className="w-1/4"/>
+                  <Progress value={step.stepAdvancement} className="w-1/4"/>
                 </li>
               )}
               </ul>
@@ -76,7 +76,7 @@ export default async function StepPage(props: {params: Promise<{ examId: string,
                       {substep.subTitle}
                     </Link>
                   </div>
-                  <Check className={Math.random() < 0.5 ? "text-gray-400" : "text-green-700"}/>
+                  <Check className={substep.readSubstep ? "text-green-700" : "text-gray-400"}/>
                 </li>
               )}
               </ul>

@@ -1,5 +1,6 @@
 import { IFirebaseRepository } from "@/domain/repositories/firebase_repository_interface";
 import { DatabaseError } from "@/entities/errors/database";
+import { CoursesAdvancement } from "@/entities/models/courses_advancement";
 import { Exam } from "@/entities/models/exam";
 import { MenuItem } from "@/entities/models/menu_item";
 import { Step } from "@/entities/models/step";
@@ -207,6 +208,47 @@ export class FirebaseRepository implements IFirebaseRepository {
             return url;
         } catch (error) {
             throw new DatabaseError('Failed to fetch asset ' + error);
+        }
+    }
+
+    async createUserCoursesAdvancement(userId: string): Promise<void> {
+        try {
+            const docRef = db.collection('users_courses_advancement').doc();
+            const advancement = {
+                userId: userId,
+                readSubsteps: [],
+                examsAdvancement: {},
+                stepsAdvancement: {},
+            };
+            await docRef.set(advancement);
+        } catch (error) {
+            throw new DatabaseError('Failed to create user advancement ' + error);
+        }
+    }
+
+    async getUserCoursesAdvancement(userId: string): Promise<CoursesAdvancement> {
+        let querySnapshot = await db.collection('users_courses_advancement').where('userId', '==', userId).get();
+        if (querySnapshot.docs.length == 0) {
+            await this.createUserCoursesAdvancement(userId);
+            querySnapshot = await db.collection('users_courses_advancement').where('userId', '==', userId).get();
+            if (querySnapshot.docs.length == 0) throw new Error('User advancement not found');
+        }
+        const advancement = querySnapshot.docs[0].data();
+        return {
+            userId: advancement.userId,
+            readSubsteps: advancement.readSubsteps,
+            examsAdvancement: advancement.examsAdvancement,
+            stepsAdvancement: advancement.stepsAdvancement,
+        } as CoursesAdvancement;
+    }
+
+    async updateUserAdvancement(userId: string, advancement: CoursesAdvancement): Promise<void> {
+        try {
+            const querySnapshot = await db.collection('users_courses_advancement').where('userId', '==', userId).get();
+            const doc = querySnapshot.docs[0];
+            await doc.ref.update(advancement);
+        } catch (error) {
+            throw new DatabaseError('Failed to update user advancement ' + error);
         }
     }
 }

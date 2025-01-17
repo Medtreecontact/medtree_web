@@ -18,6 +18,8 @@ import {
 import { cookies } from "next/headers";
 import { SESSION_COOKIE_NAME } from '@/core/constants';
 import ShopButton from "@/app/_ui/components/content/shop_button";
+import { Progress } from "@/app/_ui/shadcn/components/ui/progress";
+
 
 export default async function ExamHomePage() {
     const menuItems = await getMenuItemsController();
@@ -77,6 +79,7 @@ export default async function ExamHomePage() {
                                     <li className="flex items-center space-x-4">
                                         <TableOfContents />
                                         <p>{item.stepCount} Chapitres</p>
+                                        <Progress value={item.examAdvancement} className="w-1/4"/>
                                     </li>
                                     <li className="flex items-center space-x-4">
                                         <NotebookText/>

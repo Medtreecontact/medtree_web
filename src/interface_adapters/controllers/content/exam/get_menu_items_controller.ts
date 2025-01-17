@@ -14,19 +14,20 @@ function presenter(menuItems: MenuItem[]) {
         synthesesCount: item.synthesesCount,
         title: item.title,
         update: item.update,
+        examAdvancement: item.examAdvancement
     }));
 }
 
-async function getMenuItemsControllerImpl() {
+export async function getMenuItemsController() {
     const menuItems = await getMenuItemsUseCase();
     return presenter(menuItems);
 }
 
-export const getMenuItemsController = cache(
-    /* fetch function */ getMenuItemsControllerImpl,
-    /* unique key     */ ["getMenuItemsController"],
-    /* options        */ {
-      tags: ["getExamStepsSynthesesController"],
-      revalidate: 60 * 60 * 24 /* same as fetch.revalidate */
-    }
-  )
+// export const getMenuItemsController = cache(
+//     /* fetch function */ getMenuItemsControllerImpl,
+//     /* unique key     */ ["getMenuItemsController"],
+//     /* options        */ {
+//       tags: ["getExamStepsSynthesesController"],
+//       revalidate: 60 * 60 * 24 /* same as fetch.revalidate */
+//     }
+//   )
