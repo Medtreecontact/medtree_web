@@ -9,9 +9,10 @@ interface CourseEndButtonProps {
     stepId: string;
     substepId: string;
     readSubstep: boolean;
+    anonymousSession: boolean;
   }
 
-export default function CourseEndButton({examId, stepId, substepId, readSubstep}: CourseEndButtonProps) {    
+export default function CourseEndButton({examId, stepId, substepId, readSubstep, anonymousSession}: CourseEndButtonProps) {    
   const handleOnClick = async () => {
         if (readSubstep) {
           await removeSubstepAdvancement(examId, stepId, substepId)
@@ -34,5 +35,5 @@ export default function CourseEndButton({examId, stepId, substepId, readSubstep}
         }
     };
 
- return   <Button className="mt-8 w-36" onClick={handleOnClick}>{readSubstep ? "Marquer comme non lu" : "Marquer comme lu"}</Button>
+ return   <Button className="mt-8 w-36" onClick={handleOnClick} disabled={anonymousSession}>{readSubstep ? "Marquer comme non lu" : "Marquer comme lu"}</Button>
 }

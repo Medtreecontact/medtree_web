@@ -51,7 +51,9 @@ export class AuthenticationRepository implements IAuthenticationRepository {
 
     async signInWithEmailAndPassword(email: string, password: string): Promise<UserCredential> {
         try {
+            console.log("signing in with email and password Repository", email, password);
             const result = await firebaseSignInWithEmailAndPassword(firebaseAuth, email, password);
+            console.log("result", result);
             if (!result || !result.user) {
                 throw new Error('Email and password sign in failed');
             }

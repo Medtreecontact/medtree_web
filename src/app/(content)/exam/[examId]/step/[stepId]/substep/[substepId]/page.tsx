@@ -14,6 +14,9 @@ import {
   Check,
 } from "lucide-react"
 
+import { cookies } from "next/headers";
+import { SESSION_COOKIE_NAME } from '@/core/constants';
+
 export default async function SubstepPage(
   props: {params: Promise<{ examId: string, stepId: string, substepId: string }>}
 ) {
@@ -23,6 +26,13 @@ export default async function SubstepPage(
   const parsed = decoded.replaceAll('<ul>', '<ul class="list-inside list-disc">')
   .replaceAll('<h1>', '<h1 class="text-2xl font-bold">')
   .replaceAll('ql-align-center', 'flex justify-center');
+
+  let user = null;
+  const session = (await cookies()).get(SESSION_COOKIE_NAME);
+  if (session)
+  {
+    user = JSON.parse(session.value); 
+  }
 
   return <div className="p-8">
       <Breadcrumb>
@@ -65,7 +75,7 @@ export default async function SubstepPage(
         </div>
         <div className="flex flex-col items-center w-full mx-20">
             <div dangerouslySetInnerHTML={{ __html: parsed }} />
-            <CourseEndButton examId={exam.id} stepId={step.id} substepId={currentSubstep.id} readSubstep={currentSubstep.readSubstep || false} />
+            <CourseEndButton examId={exam.id} stepId={step.id} substepId={currentSubstep.id} readSubstep={currentSubstep.readSubstep || false} anonymousSession={user ? false : true} />
         </div>
       </div>
   </div>;

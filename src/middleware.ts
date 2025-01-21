@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { STATION_ROUTE, FLASHCARD_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SESSION_COOKIE_NAME, ROOT_ROUTE, SIGNUP_ROUTE, ONBOARDING_ROUTE, EXAM_ROUTE } from '@/core/constants';
 
-const protectedPages = [ONBOARDING_ROUTE, HOME_ROUTE, STATION_ROUTE, FLASHCARD_ROUTE];
-const protectedRoutes = [EXAM_ROUTE];
-const purchasedRoutes = [""];
+const protectedPages = [ONBOARDING_ROUTE];
+const protectedRoutes = ["none"];
+const purchasedRoutes = ["none"];
 const authRoutes = [LOGIN_ROUTE, SIGNUP_ROUTE];
 
 export const config = {
@@ -17,10 +17,8 @@ export const config = {
 export default async function middleware(request: NextRequest) {
   const session = request.cookies.get(SESSION_COOKIE_NAME)?.value || '';
 
-  if (request.nextUrl.pathname == ROOT_ROUTE) {
-    const absoluteURL = new URL(HOME_ROUTE, request.nextUrl.origin);
-    return NextResponse.redirect(absoluteURL.toString());
-  }
+  console.log("session : ", session);
+  console.log("request.nextUrl : ", request.nextUrl);
 
   if (!session)
   {
@@ -107,6 +105,12 @@ async function manageFreeUserRequest(request: NextRequest) {
 }
 
 function manageCommonRequest(request: NextRequest, user: any) {
+  // Redirect to home if user is logged in and tries to access the root
+  if (request.nextUrl.pathname == ROOT_ROUTE) {
+    const absoluteURL = new URL(HOME_ROUTE, request.nextUrl.origin);
+    return NextResponse.redirect(absoluteURL.toString());
+  }
+
   // Redirect to root if user is logged in and tries to access an auth route
   if (user && authRoutes.includes(request.nextUrl.pathname)) {
     const absoluteURL = new URL(ROOT_ROUTE, request.nextUrl.origin);

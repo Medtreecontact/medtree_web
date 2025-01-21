@@ -17,6 +17,7 @@ export async function signInWithAppleUseCase() {
 }
 
 export async function signInWithEmailAndPasswordUseCase(email: string, password: string) {
+    console.log("signing in with email and password UseCase", email, password);
     const authenticationReposiory = getClientInjection("IAuthenticationRepository");
     const userCredentials = await authenticationReposiory.signInWithEmailAndPassword(email, password);
     const userAccount = extractUserFromCredentials(userCredentials);

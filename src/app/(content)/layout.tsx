@@ -1,17 +1,5 @@
-"use client";
-
 import Image from 'next/image';
 import Link from 'next/link';
-
-import { Avatar, AvatarFallback, AvatarImage } from '@/app/_ui/shadcn/components/ui/avatar';
-
-import { usePathname } from 'next/navigation'
-
-import {
-  BookText,
-  Speech,
-  Zap,
-} from "lucide-react"
 
 import {
   Command,
@@ -24,27 +12,20 @@ import {
   CommandShortcut,
 } from "@/app/_ui/shadcn/components/ui/command"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/app/_ui/shadcn/components/ui/dropdown-menu"
+import NavigationLinks from '../_ui/components/content/navigation_links';
 
-import { signOutController } from "@/interface_adapters/controllers/authentication/sign_out_controller";
+import { cookies } from "next/headers";
+import { SESSION_COOKIE_NAME } from '@/core/constants';
+import UserDropdown from '../_ui/components/content/user_dropdown';
+import { Button } from '../_ui/shadcn/components/ui/button';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-
-  const getFontColor = (path: string) => {
-    return pathname.startsWith(path) ? 'text-black' : 'text-gray-500';
-  };
-
-  const handleSignOut = async () => {
-        await signOutController();
-      }
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  let user = null;
+  const session = (await cookies()).get(SESSION_COOKIE_NAME);
+  if (session)
+  {
+    user = JSON.parse(session.value); 
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -54,38 +35,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <span className="text-2xl font-bold">MedTree</span>
         </Link>
         <SearchBar />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-          <Avatar className="cursor-pointer">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Nom utilisateur</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-                Se déconnecter
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {user ? 
+          <UserDropdown />
+          :
+          <Link href="/sign-up">
+            <Button className='bg-primary mr-8 font-semibold text-lg'>Créer un compte</Button>
+          </Link>
+        }
+        
         
       </header>
       <div className="flex flex-1">
         <aside className="w-28 bg-white text-black flex flex-col p-4 fixed h-full border-r">
           <nav className="flex text-center items-center flex-col space-y-8">
-            <Link href="/exam" className={`flex items-center flex-col space-y-2 ${getFontColor('/exam')}`}>
-              <BookText />
-              <p className="font-bold text-lg">Cours</p>
-            </Link>
-            <Link href="/station" className={`flex items-center flex-col space-y-2 ${getFontColor('/station')}`}>
-              <Speech />
-              <p className="font-bold text-lg">Stations ECOS</p>
-            </Link>
-            <Link href="/flashcard" className={`flex items-center flex-col space-y-2 ${getFontColor('/flashcard')}`}>
-              <Zap />
-              <p className="font-bold text-lg">Flashcards</p>
-            </Link>
+           <NavigationLinks />
           </nav>
         </aside>
         <main className="flex-grow ml-28 bg-gray-50">

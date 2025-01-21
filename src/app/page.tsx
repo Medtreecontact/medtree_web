@@ -1,123 +1,66 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/app/_ui/shadcn/components/ui/button";
 
+import { userAgent } from "next/server";
+import { headers } from "next/headers";
+import Image from "next/image";
+import logoNoBg from '@/public/logo_no_bg.png';
+import { Button } from "@/app/_ui/shadcn/components/ui/button";
+import {
+  MoveRight,
+} from "lucide-react"
 
 export default async function Home()  {
-  const TARGET_ENVIRONMENT = process.env.TARGET_ENVIRONMENT;
+  const headersList = await headers();
+  const { device } = userAgent({ headers: headersList });
+  const deviceType = device?.type === "mobile" ? "mobile" : "desktop";
+  
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className="space-x-8">
-        <Link href="/firebase">
-          <Button className="bg-primary">Firebase</Button>
-        </Link>
-        <Link href="/exam/">
-          <Button className="bg-primary">Exam</Button>
-        </Link>
-        <Link href="/login">
-          <Button className="bg-primary">Login</Button>
-        </Link>
-        <Link href="/sign-up">
-          <Button className="bg-primary">Sign up</Button>
-        </Link>
-      </div>
-      <div className="text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          Current TARGET_ENVIRONMENT: <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">{TARGET_ENVIRONMENT}</code>
-       </div>
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-disc text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="mb-2">Save and see your changes instantly.</li>
-          <li className="mb-2">Hello MedTree.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    <>
+      {
+        deviceType === "desktop" ?
+        <>
+          <header className="bg-white text-black p-4 flex justify-between items-center mx-8">
+            <Link className="flex items-center space-x-4" href="/">
+              <Image src={logoNoBg} alt="Company Logo" width={50} height={50} />
+              <span className="text-2xl font-bold">MedTree</span>
+            </Link>
+            <nav className="flex space-x-8">
+              <Link href="/login">
+                <p className="text-lg font-bold">Se connecter</p>
+              </Link>
+              <Link href="/sign-up">
+                <p className="text-lg font-bold">S'inscrire</p>
+              </Link>
+            </nav>
+          </header>
+        {/* calc pour avoir la taille de la page moins la taille du header */}
+          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-86.66px)] relative">
+            <Image src="/landing_hero2.png" alt="Landing hero" width={1024} height={648} className="absolute right-32 top-4"/>
+            <div className="absolute left-32 top-24 text-5xl font-semibold">
+              <p className="mb-2">Toute la sémiologie médicale</p>
+              <p>réunis sur une plateforme</p>
+            </div>
+            <div className="absolute left-32 top-60 text-2xl font-semibold">
+              <p>Plus besoins de chercher dans les collèges pour</p>
+              <p>savoir comment réaliser un examen clinique.</p>
+              <p>MedTree regroupe tous les outils dont</p>
+              <p>vous avez besoins.</p>
+              <Link href="/sign-up"><Button className="mt-8 bg-white text-base text-black outline outline-1 hover:text-gray-50">Créer un compte</Button></Link>
+              <Link href="/home"><Button className="ml-8 bg-primary text-base">Essayer sans inscription <MoveRight/> </Button> </Link>
+            </div>
+          </div>
+          {/* <div className="flex items-center justify-center">
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet commodi quo, nulla exercitationem alias repudiandae aliquam odit possimus quod quos magni accusamus debitis aut sed pariatur facere ducimus non distinctio.</p>
+          </div> */}
+        </>
+        :
+          <div className="flex flex-col items-center justify-center h-dvh mx-8">
+            <Image src="/no-smartphones.png" alt="No smartphone Logo" width={100} height={100} />
+            <p className="mt-4 text-center">
+              MedTree n'est pas encore disponible sur mobile. Veuillez utiliser un ordinateur pour accéder à la plateforme.
+            </p>
+          </div >
+      }
+    </>
   );
 }
