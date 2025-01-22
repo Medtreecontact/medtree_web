@@ -17,9 +17,6 @@ export const config = {
 export default async function middleware(request: NextRequest) {
   const session = request.cookies.get(SESSION_COOKIE_NAME)?.value || '';
 
-  console.log("session : ", session);
-  console.log("request.nextUrl : ", request.nextUrl);
-
   if (!session)
   {
     const response = manageNoSessionRequest(request);

@@ -2,7 +2,6 @@ import { createSessionUseCase, removeSessionUseCase } from '@/domain/use_cases/a
 import { UserAccount } from "@/entities/models/user_account";
 
 export async function createSessionController(userAccount: UserAccount) {
-    console.log("createSessionController", userAccount);
     return await createSessionUseCase(userAccount);
 }
 

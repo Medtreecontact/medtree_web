@@ -11,7 +11,6 @@ import { removeSubstepAdvancementController } from "@/interface_adapters/control
 import { revalidatePath } from "next/cache";
 
 export async function createSession(userAccount: UserAccount) {
-    console.log("createSession", userAccount);
     return await createSessionController(userAccount);
 }
 

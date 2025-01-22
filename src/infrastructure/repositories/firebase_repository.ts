@@ -141,7 +141,6 @@ export class FirebaseRepository implements IFirebaseRepository {
     }
 
     async getUserAccount(uid :string): Promise<any> {
-        console.log("getUserAccount", uid);
         const querySnapshot = await db.collection('medtree_app_users').where('uid', '==', uid).get();
         if (querySnapshot.docs.length == 0) {
             throw new Error('User not found');
@@ -151,7 +150,6 @@ export class FirebaseRepository implements IFirebaseRepository {
     }
 
     async createUserAccount(userAccount: UserAccount): Promise<any> {
-        console.log("createUserAccount", userAccount);
         try {
             const docRef = db.collection('medtree_app_users').doc();
             const user = {

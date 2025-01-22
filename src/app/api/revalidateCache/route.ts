@@ -20,7 +20,6 @@ export async function POST(request: Request) {
 
     // Check for REFRESH_WEB_CACHE_PRIVATE_KEY header
     if (request.headers.get('x-caller-auth') !== process.env.REFRESH_WEB_CACHE_PRIVATE_KEY) {
-        console.log(request.headers)
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             headers: { 
                 "Content-Type": "application/json",

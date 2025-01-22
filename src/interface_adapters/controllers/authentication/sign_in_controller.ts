@@ -15,10 +15,8 @@ export async function signInWithAppleController() {
 }
 
 export async function signInWithEmailAndPasswordController(email: string, password: string) {
-    console.log("signing in with email and password Controller");
     try {
         const userAccount = await signInWithEmailAndPasswordUseCase(email, password);
-        console.log("j'ai user account", userAccount);
         await createSession(userAccount);
     } catch (error) {
         // check if error is a firebase error

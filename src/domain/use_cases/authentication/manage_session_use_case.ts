@@ -6,7 +6,6 @@ import { getServerInjection } from '@/dependency_injection/server_container';
 import { UserAccount } from "@/entities/models/user_account";
 
 export async function createSessionUseCase(userAccount: UserAccount) {
-  console.log("createSessionUseCase", userAccount);
     let redirectUrl :string = HOME_ROUTE;
 
     const firebaseReposiory = getServerInjection("IFirebaseRepository");
@@ -30,7 +29,6 @@ export async function createSessionUseCase(userAccount: UserAccount) {
         maxAge: 60 * 60 * 24, // One day
         path: '/',
     });
-    console.log("redirectUrl", redirectUrl);
     redirect(redirectUrl);
 }
 

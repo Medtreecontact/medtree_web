@@ -9,9 +9,6 @@ const config: Config = {
   ],
   theme: {
   	extend: {
-		backgroundImage: {
-			'office': "url('/landing_hero.jpg')",
-		  },
   		colors: {
   			foreground: 'var(--foreground)',
   			primary: '#1786A3',
