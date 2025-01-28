@@ -9,7 +9,12 @@ import {
     createUserWithEmailAndPassword as firebaseCreateUserWithEmailAndPassword,
     sendPasswordResetEmail as firebaseSendPasswordResetEmail,
     confirmPasswordReset as firebaseConfirmPasswordReset,
+    sendEmailVerification as firebaseSendEmailVerification,
+    applyActionCode as firebaseApplyActionCode,
     UserCredential,
+    updatePassword,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
 } from 'firebase/auth';
 
 import { firebaseAuth } from '@/infrastructure/services/firebase-client';
@@ -100,6 +105,44 @@ export class AuthenticationRepository implements IAuthenticationRepository {
             await firebaseConfirmPasswordReset(firebaseAuth, oobCode, newPassword);
         } catch (error) {
             console.error('Error sending password reset email', error);
+            throw error;
+        }
+    }
+    
+    async sendEmailVerification(): Promise<void> {
+        console.log('sendEmailVerification');
+        try {
+            await firebaseSendEmailVerification(firebaseAuth.currentUser!, null);
+        } catch (error) {
+            console.error('Error sending email verification', error);
+            throw error;
+        }
+    }
+
+    async applyActionCode(oobCode: string): Promise<void> {
+        console.log('applyActionCode', oobCode);
+        try {
+            await firebaseApplyActionCode(firebaseAuth, oobCode);
+            console.log('applyActionCode done');
+        } catch (error) {
+            console.error('Error applying action code', error);
+            throw error;
+        }
+    }
+
+    async updateUserPassword(newPassword: string, oldPassword: string): Promise<void> {
+        try {
+            const user = firebaseAuth.currentUser;
+            if (!user)
+                throw new Error('No user found');
+            const providers = user.providerData.map(provider => provider.providerId);
+            if (!providers.includes('password'))
+                throw new Error('User signed in with a provider other than email and password');
+            const credential = EmailAuthProvider.credential(user.email!, oldPassword);
+            await reauthenticateWithCredential(user, credential);
+            await updatePassword(user, newPassword);
+        } catch (error) {
+            // console.error('Error updating user password', error);
             throw error;
         }
     }

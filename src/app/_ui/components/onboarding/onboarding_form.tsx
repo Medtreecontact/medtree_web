@@ -30,7 +30,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/app/_ui/shadcn/components/ui/popover"
-import { updateUserAccount } from "@/app/actions";
+import { onboardingUpdateUserAccount } from "@/app/actions";
 import { useAuth } from "@/app/_ui/authContext";
 
 const universities = [
@@ -103,7 +103,7 @@ export function OnboardingForm() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!user) return
-    const error = await updateUserAccount(user.uid, data);
+    const error = await onboardingUpdateUserAccount(user.uid, data);
     if (error && typeof error === "string") {
       setErrorMessage(error);
     } 

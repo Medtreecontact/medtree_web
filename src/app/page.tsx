@@ -38,13 +38,13 @@ export default async function Home()  {
             <Image src="/landing_hero2.png" alt="Landing hero" width={1024} height={648} className="absolute right-32 top-4"/>
             <div className="absolute left-32 top-24 text-5xl font-semibold">
               <p className="mb-2">Toute la sémiologie médicale</p>
-              <p>réunis sur une plateforme</p>
+              <p>réunie sur une plateforme</p>
             </div>
             <div className="absolute left-32 top-60 text-2xl font-semibold">
-              <p>Plus besoins de chercher dans les collèges pour</p>
+              <p>Plus besoin de chercher dans les collèges pour</p>
               <p>savoir comment réaliser un examen clinique.</p>
-              <p>MedTree regroupe tous les outils dont</p>
-              <p>vous avez besoins.</p>
+              <p>MedTree regroupe tous les outils qui</p>
+              <p>vous sont utiles.</p>
               <Link href="/sign-up"><Button className="mt-8 bg-white text-base text-black outline outline-1 hover:text-gray-50">Créer un compte</Button></Link>
               <Link href="/home"><Button className="ml-8 bg-primary text-base">Essayer sans inscription <MoveRight/> </Button> </Link>
             </div>

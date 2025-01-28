@@ -11,12 +11,38 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/app/_ui/shadcn/components/ui/avatar';
 
 import { signOutController } from "@/interface_adapters/controllers/authentication/sign_out_controller";
+import { toast } from "sonner"
 
+import {
+  CircleUserRound,
+  Settings,
+  ShoppingCart,
+  LogOut,
+} from "lucide-react";
+import Link from "next/link";
 
 export default function UserDropdown() {
+    const handleProfile = async () => {
+        // Redirect to profile page
+    }
+
+    const handleSettings = async () => {
+        // Redirect to settings page
+    }
+    
+    const handleShop = () => {
+      toast("La boutique n'est pas encore ouverte", {
+        description: "Revenez plus tard",
+        action: {
+          label: "D'accord",
+          onClick: () => {},
+        },
+      })
+    }
+
     const handleSignOut = async () => {
         await signOutController();
-      }
+    }
 
     return <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -25,11 +51,23 @@ export default function UserDropdown() {
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>Nom utilisateur</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                <DropdownMenuContent className="w-56 mr-6">
+                  {/* <DropdownMenuLabel>Nom utilisateur</DropdownMenuLabel>
+                  <DropdownMenuSeparator /> */}
+                  <DropdownMenuItem className="cursor-pointer flex" onClick={handleProfile}>
+                  <Link href="/profile" className="flex items-center space-x-2">
+                    <CircleUserRound width={16} height={16} />
+                    <span>Mon compte</span>
+                  </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSettings} className="cursor-pointer">
+                    <Settings/>Paramètres
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleShop} className="cursor-pointer">
+                    <ShoppingCart/>Boutique
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-                      Se déconnecter
+                    <LogOut/>Se déconnecter
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

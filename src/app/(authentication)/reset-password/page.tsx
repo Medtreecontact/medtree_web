@@ -10,7 +10,6 @@ export default async function ResetPasswordPage(
 
   const oobCode = searchParams.oobCode?.toString()
 
-
   return <div className="flex flex-col space-y-8 mt-16">
       {oobCode ? <ResetPasswordForm oobCode={oobCode}/> : <SendResetPasswordEmailForm/>}
   </div>

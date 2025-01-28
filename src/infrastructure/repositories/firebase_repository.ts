@@ -211,6 +211,17 @@ export class FirebaseRepository implements IFirebaseRepository {
         }
     }
 
+    async uploadFile(path: string, file: File): Promise<void> {
+        try {
+            const bucket = storage.bucket();
+            const fileRef = bucket.file(path);
+            const buffer = Buffer.from(await file.arrayBuffer());
+            await fileRef.save(buffer);
+        } catch (error) {
+            throw new DatabaseError('Failed to upload file ' + error);
+        }
+    }
+
     async createUserCoursesAdvancement(userId: string): Promise<void> {
         try {
             const docRef = db.collection('users_courses_advancement').doc();

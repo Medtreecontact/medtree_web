@@ -13,6 +13,7 @@ export interface IFirebaseRepository {
     updateUserAccount(uid: string, updatedAccount: UserAccount): Promise<void>;
     getMenuItems(): Promise<MenuItem[]>;
     getUrlFromDocumentPath(path: string): Promise<string>;
+    uploadFile(path: string, file: File): Promise<void>;
     getExamFromId(examId: string): Promise<Exam>;
     getSyntheseFromId(syntheseId: string): Promise<Synthese>;
     getStepFromId(stepId: string): Promise<Step>;

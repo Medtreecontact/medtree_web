@@ -9,6 +9,7 @@ import { HOME_ROUTE } from '@/core/constants';
 import { addSubstepAdvancementController } from "@/interface_adapters/controllers/content/substep/add_substep_advancement_controller";
 import { removeSubstepAdvancementController } from "@/interface_adapters/controllers/content/substep/remove_substep_advancement_controller";
 import { revalidatePath } from "next/cache";
+import { updateProfilePictureController } from "@/interface_adapters/controllers/profile/user_profile_picture_controller";
 
 export async function createSession(userAccount: UserAccount) {
     return await createSessionController(userAccount);
@@ -22,7 +23,7 @@ export async function createUserAccount(userAccount: UserAccount) {
     await createUserAccountController(userAccount);
 }
 
-export async function updateUserAccount(uid: string, data: any) {
+export async function onboardingUpdateUserAccount(uid: string, data: any) {
     const updatedAccount : UserAccount = {
         promo: data.promo,
         university: data.university,
@@ -34,6 +35,20 @@ export async function updateUserAccount(uid: string, data: any) {
     redirect(HOME_ROUTE);
 }
 
+export async function updateUserAccount(uid: string, data: any) {
+    const updatedAccount : UserAccount = {
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        promo: data.promo,
+        university: data.university,
+    };
+    const res = await updateUserAccountController(uid, updatedAccount);
+    if (typeof res === "string") {
+        return res;
+    }
+}
+
 export async function addSubstepAdvancement(examId: string, stepId:string , substepId: string) {
     await addSubstepAdvancementController(examId, stepId, substepId);
     revalidatePath(`exam/${examId}/step/${stepId}/substep/${substepId}`);
@@ -42,4 +57,18 @@ export async function addSubstepAdvancement(examId: string, stepId:string , subs
 export async function removeSubstepAdvancement(examId: string, stepId:string , substepId: string) {
     await removeSubstepAdvancementController(examId, stepId, substepId);
     revalidatePath(`exam/${examId}/step/${stepId}/substep/${substepId}`);
+}
+
+export async function verifyFirebaseUserEmail(uid: string) {
+    const res = await updateUserAccountController(uid, { emailVerified: true });
+    if (typeof res === "string") {
+        return res;
+    }
+}
+
+export async function updateProfilePicture(uid: string, file: File) {
+    const res = await updateProfilePictureController(uid, file );
+    if (typeof res === "string") {
+        return res;
+    }
 }

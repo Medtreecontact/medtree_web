@@ -8,4 +8,7 @@ export interface IAuthenticationRepository {
     signOut(): Promise<void>;
     sendPasswordResetEmail(email: string): Promise<void>;
     confirmPasswordReset(oobCode: string, newPassword: string): Promise<void>;
+    updateUserPassword(newPassword: string, oldPassword: string): Promise<void>;
+    sendEmailVerification(): Promise<void>;
+    applyActionCode(oobCode: string): Promise<void>;
 }
