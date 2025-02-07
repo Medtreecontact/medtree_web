@@ -22,14 +22,6 @@ import {
 import Link from "next/link";
 
 export default function UserDropdown() {
-    const handleProfile = async () => {
-        // Redirect to profile page
-    }
-
-    const handleSettings = async () => {
-        // Redirect to settings page
-    }
-    
     const handleShop = () => {
       toast("La boutique n'est pas encore ouverte", {
         description: "Revenez plus tard",
@@ -54,14 +46,17 @@ export default function UserDropdown() {
                 <DropdownMenuContent className="w-56 mr-6">
                   {/* <DropdownMenuLabel>Nom utilisateur</DropdownMenuLabel>
                   <DropdownMenuSeparator /> */}
-                  <DropdownMenuItem className="cursor-pointer flex" onClick={handleProfile}>
-                  <Link href="/profile" className="flex items-center space-x-2">
-                    <CircleUserRound width={16} height={16} />
-                    <span>Mon compte</span>
-                  </Link>
+                  <DropdownMenuItem className="cursor-pointer flex">
+                    <Link href="/profile" className="flex items-center space-x-2">
+                      <CircleUserRound width={16} height={16} />
+                      <span>Mon compte</span>
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleSettings} className="cursor-pointer">
-                    <Settings/>Paramètres
+                  <DropdownMenuItem className="cursor-pointer flex">
+                    <Link href="/settings" className="flex items-center space-x-2">
+                      <Settings width={16} height={16} />
+                      <span>Paramètres</span>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleShop} className="cursor-pointer">
                     <ShoppingCart/>Boutique

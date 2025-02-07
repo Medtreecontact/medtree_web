@@ -23,4 +23,7 @@ export interface IFirebaseRepository {
     getSyntheseFromRef(syntheseRef: DocumentReference): Promise<Synthese>;
     getUserCoursesAdvancement(userId: string): Promise<CoursesAdvancement>;
     updateUserAdvancement(userId: string, advancement: CoursesAdvancement): Promise<void>;
+    sendMessage(message: string, userId: string): Promise<void>;
+    requestAccountData(userId: string): Promise<void>;
+    requestAccountDeletion(userId: string): Promise<void>;
 }

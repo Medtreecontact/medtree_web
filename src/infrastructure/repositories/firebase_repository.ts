@@ -262,4 +262,46 @@ export class FirebaseRepository implements IFirebaseRepository {
             throw new DatabaseError('Failed to update user advancement ' + error);
         }
     }
+
+    async sendMessage(message: string, userId: string): Promise<void> {
+        try {
+            const docRef = db.collection('feedbacks').doc();
+            const messageData = {
+                message: message,
+                date: new Date(),
+                userId: userId,
+            };
+            await docRef.set(messageData);
+        } catch (error) {
+            throw new DatabaseError('Failed to send message ' + error);
+        }
+    }
+
+    async requestAccountData(userId: string): Promise<void> {
+        try {
+            const docRef = db.collection('account_data_requests').doc();
+            const requestData = {
+                userId: userId,
+                date: new Date(),
+                answered: false,
+            };
+            await docRef.set(requestData);
+        } catch (error) {
+            throw new DatabaseError('Failed to request account data ' + error);
+        }
+    }
+
+    async requestAccountDeletion(userId: string): Promise<void> {
+        try {
+            const docRef = db.collection('account_deletion_requests').doc();
+            const requestData = {
+                userId: userId,
+                date: new Date(),
+                answered: false,
+            };
+            await docRef.set(requestData);
+        } catch (error) {
+            throw new DatabaseError('Failed to request account deletion ' + error);
+        }
+    }
 }
