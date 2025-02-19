@@ -1,17 +1,16 @@
 import { getProfilePictureUseCase, updateProfilePictureUseCase } from "@/domain/use_cases/profile/user_profile_picture_use_case";
 
-export async function getProfilePictureController(userId: string) {
+export async function getProfilePictureController(uid: string, userId: string) {
     try {   
-        return await getProfilePictureUseCase(userId);
+        return await getProfilePictureUseCase(uid, userId);
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
 
-export async function updateProfilePictureController(userId: string, file: File) {
+export async function updateProfilePictureController(uid: string, userId: string, file: File) {
     try {
-        await updateProfilePictureUseCase(userId, file);
+        await updateProfilePictureUseCase(uid, userId, file);
     } catch (error) {
         console.error(error);
         throw error;

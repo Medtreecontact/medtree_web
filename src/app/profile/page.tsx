@@ -20,9 +20,9 @@ export default async function ProfilePage() {
     let profilePicture = "https://github.com/shadcn.png";
       
     try {
-        profilePicture = await getProfilePictureController(user.id);
+        profilePicture = await getProfilePictureController(user.uid, user.id);
     } catch (error) {
-        console.error(error);
+        console.log("using default profile picture");
     }
 
     return <div className="m-8">
@@ -35,7 +35,7 @@ export default async function ProfilePage() {
                 <ProfileForm user={user}/>
             </div>
             <div className="w-1/2 flex items-center justify-start">
-                <ProfilePicture userId={user.id} profilePicture={profilePicture}/>
+                <ProfilePicture uid={user.uid} userId={user.id} profilePicture={profilePicture}/>
             </div>
         </div>
         <h2 className="mt-8 text-2xl font-semibold">Mot de passe</h2>

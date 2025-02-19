@@ -6,6 +6,7 @@ import NavigationLinks from '../_ui/components/content/navigation_links';
 import { cookies } from "next/headers";
 import { SESSION_COOKIE_NAME } from '@/core/constants';
 import UserDropdown from '../_ui/components/content/user_dropdown';
+import { getProfilePictureController } from '@/interface_adapters/controllers/profile/user_profile_picture_controller';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   let user = null;
@@ -15,6 +16,14 @@ export default async function Layout({ children }: { children: React.ReactNode }
     user = JSON.parse(session.value); 
   }
 
+  let profilePicture = "https://github.com/shadcn.png";
+          
+    try {
+      profilePicture = await getProfilePictureController(user.uid, user.id);
+    } catch (error) {
+      console.log("using default profile picture");
+    }
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white text-black p-4 flex justify-between items-center w-full sticky top-0 z-10 border-b">
@@ -23,7 +32,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
           <span className="text-2xl font-bold">MedTree</span>
         </Link>
         <p className='text-lg font-bold'>Informations de votre compte</p>
-        <UserDropdown />
+        <UserDropdown profilePicture={profilePicture}/>
       </header>
       <div className="flex flex-1">
         <aside className="w-28 bg-white text-black flex flex-col p-4 fixed h-full border-r">

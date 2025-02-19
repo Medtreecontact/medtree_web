@@ -4,15 +4,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/app/_ui/shadcn/components
 import { Pencil } from 'lucide-react'; 
 import { updateProfilePicture } from "@/app/actions";
 
-export function ProfilePicture({ userId, profilePicture }: {userId: string, profilePicture: string }) {
+export function ProfilePicture({uid,  userId, profilePicture }: {uid:string, userId: string, profilePicture: string }) {
     const fileInputRef = useRef<HTMLInputElement>(null);
   
     const handleUpload = async (file: File) => {
       try {
-        await updateProfilePicture(userId, file);
+        await updateProfilePicture(uid, userId, file);
         // Optionally, you can update the source state here to reflect the new profile picture
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
   

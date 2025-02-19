@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function UserDropdown() {
+export default function UserDropdown({ profilePicture }: { profilePicture: string }) {
     const handleShop = () => {
       toast("La boutique n'est pas encore ouverte", {
         description: "Revenez plus tard",
@@ -39,7 +39,7 @@ export default function UserDropdown() {
     return <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer">
-                  <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                  <AvatarImage src={profilePicture} alt="@shadcn" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 </DropdownMenuTrigger>

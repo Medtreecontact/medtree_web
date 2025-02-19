@@ -4,6 +4,7 @@ import { nunito } from "@/app/_ui/fonts"
 import { AuthProvider } from "@/app/_ui/authContext";
 import { Toaster } from "@/app/_ui/shadcn/components/ui/sonner";
 import { ThemeProvider } from "./_ui/components/core/theme-provider";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
   title: "MedTree",
@@ -17,6 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID ?? ""}/>
       <body
         className={`${nunito.className} antialiased`}
       >

@@ -13,6 +13,7 @@ import { updateProfilePictureController } from "@/interface_adapters/controllers
 import { sendMessageController } from "@/interface_adapters/controllers/settings/send_message_controller";
 import { requestAccountDataController } from "@/interface_adapters/controllers/settings/request_account_data_controller";
 import { requestAccountDeletionController } from "@/interface_adapters/controllers/settings/request_account_deletion_controller";
+import { updateCommunicationsPreferencesController } from "@/interface_adapters/controllers/settings/update_communications_preferences_controller";
 
 export async function createSession(userAccount: UserAccount) {
     return await createSessionController(userAccount);
@@ -69,11 +70,12 @@ export async function verifyFirebaseUserEmail(uid: string) {
     }
 }
 
-export async function updateProfilePicture(uid: string, file: File) {
-    const res = await updateProfilePictureController(uid, file );
+export async function updateProfilePicture(uid: string, userId:string, file: File) {
+    const res = await updateProfilePictureController(uid, userId, file );
     if (typeof res === "string") {
         return res;
     }
+    revalidatePath(`profile`);
 }
 
 export async function sendMessage(message: string) {
@@ -86,4 +88,8 @@ export async function requestAccountData() {
 
 export async function requestAccountDeletion() {
     return await requestAccountDeletionController();
+}
+
+export async function updateCommunicationsPreferences(type: string, value: boolean) {
+    return await updateCommunicationsPreferencesController(type, value);
 }

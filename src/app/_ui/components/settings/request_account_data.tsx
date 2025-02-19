@@ -17,7 +17,7 @@ export function RequestAccountData() {
     }
 
     return (
-        <div>
+        <div className="space-y-4">
             <h3 className="text-xl font-semibold">Demander ses données</h3>
             <p>
                 Vous pouvez demander une copie de toutes les données concernant votre compte.

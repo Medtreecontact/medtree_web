@@ -26,4 +26,5 @@ export interface IFirebaseRepository {
     sendMessage(message: string, userId: string): Promise<void>;
     requestAccountData(userId: string): Promise<void>;
     requestAccountDeletion(userId: string): Promise<void>;
+    updateCommunicationsPreferences(type: string, value: boolean, userId: string): Promise<void>;
 }

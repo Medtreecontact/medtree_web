@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { STATION_ROUTE, FLASHCARD_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SESSION_COOKIE_NAME, ROOT_ROUTE, SIGNUP_ROUTE, ONBOARDING_ROUTE, EXAM_ROUTE } from '@/core/constants';
 
 const protectedPages = [ONBOARDING_ROUTE];
-const protectedRoutes = ["none"];
+const protectedRoutes = ["/profile", "/settings"];
 const purchasedRoutes = ["none"];
 const authRoutes = [LOGIN_ROUTE, SIGNUP_ROUTE];
 

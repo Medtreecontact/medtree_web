@@ -304,4 +304,14 @@ export class FirebaseRepository implements IFirebaseRepository {
             throw new DatabaseError('Failed to request account deletion ' + error);
         }
     }
+
+    async updateCommunicationsPreferences(type: string, value: boolean, userId: string): Promise<void> {
+        try {
+            const querySnapshot = await db.collection('medtree_app_users').where('uid', '==', userId).get();
+            const doc = querySnapshot.docs[0];
+            await doc.ref.update({ [type]: value });
+        } catch (error) {
+            throw new DatabaseError('Failed to update communications preferences ' + error);
+        }
+    }
 }

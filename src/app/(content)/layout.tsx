@@ -18,6 +18,7 @@ import { cookies } from "next/headers";
 import { SESSION_COOKIE_NAME } from '@/core/constants';
 import UserDropdown from '../_ui/components/content/user_dropdown';
 import { Button } from '../_ui/shadcn/components/ui/button';
+import { getProfilePictureController } from '@/interface_adapters/controllers/profile/user_profile_picture_controller';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   let user = null;
@@ -26,6 +27,14 @@ export default async function Layout({ children }: { children: React.ReactNode }
   {
     user = JSON.parse(session.value); 
   }
+
+  let profilePicture = "https://github.com/shadcn.png";
+          
+    try {
+      profilePicture = await getProfilePictureController(user.uid, user.id);
+    } catch (error) {
+      console.log("using default profile picture");
+    }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -36,7 +45,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         </Link>
         <SearchBar />
         {user ? 
-          <UserDropdown />
+          <UserDropdown profilePicture={profilePicture}/>
           :
           <Link href="/sign-up">
             <Button className='bg-primary mr-8 font-semibold text-lg'>Créer un compte</Button>

@@ -18,7 +18,7 @@ export function RequestAccountDeletion () {
     }
 
     return (
-        <div>
+        <div className="space-y-4">
             <h3 className="text-xl font-semibold">Supprimer son compte</h3>
             <p>
                 Vous pouvez demander la suppression de votre compte.
