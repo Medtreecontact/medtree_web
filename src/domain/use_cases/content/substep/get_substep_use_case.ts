@@ -16,8 +16,8 @@ export async function getStepSubstepUsecase(examId: string, stepId: string, subs
         readSubsteps = advancement.readSubsteps;
     }
     const substeps = await Promise.all(
-        step.substepsRef.map(async (substepRef) => {
-            const tempSubstep = await firebaseReposiory.getSubstepFromRef(substepRef);
+        step.substepsIds.map(async (substepId) => {
+            const tempSubstep = await firebaseReposiory.getSubstepFromId(substepId);
             tempSubstep.readSubstep = readSubsteps.includes(tempSubstep.id) || false;
             return tempSubstep;
         })

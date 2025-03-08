@@ -16,8 +16,8 @@ export async function getExamStepSubstepsUsecase(examId: string, stepId: string)
         readSubsteps = advancement.readSubsteps;
     }
     const steps = await Promise.all(
-        exam.stepsRef.map(async (stepRef) => {
-            const tempStep = await firebaseReposiory.getStepFromRef(stepRef);
+        exam.stepsIds.map(async (stepId) => {
+            const tempStep = await firebaseReposiory.getStepFromId(stepId);
             tempStep.stepAdvancement = stepsAdvancement[tempStep.id] || 0;
             return tempStep;
         })
@@ -27,8 +27,8 @@ export async function getExamStepSubstepsUsecase(examId: string, stepId: string)
         throw new Error("Step not found");
     }
     const substeps = await Promise.all(
-        currentStep.substepsRef.map(async (substepRef) => {
-            const tempSubstep = await firebaseReposiory.getSubstepFromRef(substepRef);
+        currentStep.substepsIds.map(async (substepId) => {
+            const tempSubstep = await firebaseReposiory.getSubstepFromId(substepId);
             tempSubstep.readSubstep = readSubsteps.includes(tempSubstep.id) || false;
             return tempSubstep;
         })

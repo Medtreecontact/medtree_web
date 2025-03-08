@@ -16,10 +16,10 @@ export async function getMenuItemsUseCase() {
     const updatedMenuItems = await Promise.all(
         menuItems.map(async (item) => {
           item.iconPath = await firebaseReposiory.getUrlFromDocumentPath(item.iconPath);
-          const exam = await firebaseReposiory.getExamFromId(item.examRef.id);
-          item.stepCount = exam.stepsRef.length;
-          item.synthesesCount = exam.synthesesRef.length;
-          item.examAdvancement = examsAdvancement[item.examRef.id] || 0;
+          const exam = await firebaseReposiory.getExamFromId(item.examId);
+          item.stepCount = exam.stepsIds.length;
+          item.synthesesCount = exam.synthesesIds.length;
+          item.examAdvancement = examsAdvancement[item.examId] || 0;
           return item;
         })
       );

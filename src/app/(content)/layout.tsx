@@ -1,16 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from "@/app/_ui/shadcn/components/ui/command"
+import { SearchBar } from '../_ui/components/content/search_bar';
 
 import NavigationLinks from '../_ui/components/content/navigation_links';
 
@@ -51,8 +41,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
             <Button className='bg-primary mr-8 font-semibold text-lg'>Créer un compte</Button>
           </Link>
         }
-        
-        
       </header>
       <div className="flex flex-1">
         <aside className="w-28 bg-white text-black flex flex-col p-4 fixed h-full border-r">
@@ -67,46 +55,3 @@ export default async function Layout({ children }: { children: React.ReactNode }
     </div>
   );
 }
-
-function SearchBar() {  
-    return (
-      <Command className="rounded-xl border shadow-md md:max-w-[450px]">
-        <CommandInput placeholder="Rechercher dans Medtree" />
-        <CommandList>
-          {/* <CommandEmpty>No results found.</CommandEmpty> */}
-          {/* <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem disabled>
-              <Calculator />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <User />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
-          </CommandGroup> */}
-        </CommandList>
-      </Command>
-    )
-  }  

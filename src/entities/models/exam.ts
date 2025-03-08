@@ -1,11 +1,10 @@
-import type { DocumentReference } from "firebase-admin/firestore";
 import { z } from "zod";
 
 export const examSchema = z.object({
     examTitle: z.string(),
     id: z.string(),
-    stepsRef: z.array(z.custom<DocumentReference>()),
-    synthesesRef: z.array(z.custom<DocumentReference>()),
+    stepsIds: z.array(z.string()),
+    synthesesIds: z.array(z.string()),
 });
 
 export type Exam = z.infer<typeof examSchema>;

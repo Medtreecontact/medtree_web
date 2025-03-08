@@ -5,8 +5,8 @@ export async function getExamSyntheseUsecase(examId: string, syntheseId: string)
     const exam = await firebaseReposiory.getExamFromId(examId);
     const currentSynthese = await firebaseReposiory.getSyntheseFromId(syntheseId);
     const syntheses = await Promise.all(
-        exam.synthesesRef.map(async (syntheseRef) => {
-            return await firebaseReposiory.getSyntheseFromRef(syntheseRef);
+        exam.synthesesIds.map(async (syntheseId) => {
+            return await firebaseReposiory.getSyntheseFromId(syntheseId);
         })
     );
     return {exam, currentSynthese, syntheses };

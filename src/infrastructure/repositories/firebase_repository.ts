@@ -17,6 +17,99 @@ import "reflect-metadata";
 
 @injectable()
 export class FirebaseRepository implements IFirebaseRepository {
+    async getMenuItems() : Promise<MenuItem[]> {
+        try {
+            const querySnapshot = await db.collection('menu').get();
+            const menuItems = querySnapshot.docs.map(doc => {
+                const data = doc.data()
+                return {
+                    access: data.access,
+                    examId: data.examRef.id,
+                    iconPath: data.iconPath,
+                    id: data.id,
+                    priority: data.priority,
+                    title: data.title,
+                    update: data.update,
+                  } as MenuItem;
+            });
+            return menuItems;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch menu items ' + error);
+        }
+    }
+
+    async getExams(): Promise<Exam[]> {
+        try {
+            const querySnapshot = await db.collection('exams').get();
+            const exams = querySnapshot.docs.map(doc => {
+                const data = doc.data()
+                return {
+                    examTitle: data.examTitle,
+                    id: data.id,
+                    stepsIds: data.steps.map((step: DocumentReference) => step.id),
+                    synthesesIds: data.syntheses ? data.syntheses.map((synthese: DocumentReference) => synthese.id) : [],
+                } as Exam;
+            });
+            return exams;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch exams ' + error);
+        }
+    }
+
+    async getSteps(): Promise<Step[]> {
+        try {
+            const querySnapshot = await db.collection('steps').get();
+            const steps = querySnapshot.docs.map(doc => {
+                const data = doc.data()
+                return {
+                    stepTitle: data.stepTitle,
+                    id: data.id,
+                    substepsIds: data.substeps.map((substep: DocumentReference) => substep.id),
+                } as Step;
+            });
+            return steps;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch steps ' + error);
+        }
+    }
+
+    async getSubsteps(): Promise<Substep[]> {
+        try {
+            const querySnapshot = await db.collection('substeps').get();
+            const substeps = querySnapshot.docs.map(doc => {
+                const data = doc.data()
+                return {
+                    subTitle: data.subTitle,
+                    id: data.id,
+                    information: data.information,
+                    category: data.update ?? null,
+                } as Substep;
+            });
+            return substeps;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch substeps ' + error);
+        }
+    }
+
+    async getSyntheses(): Promise<Synthese[]> {
+        try {
+            const querySnapshot = await db.collection('fiches_syntheses').get();
+            const syntheses = querySnapshot.docs.map(doc => {
+                const data = doc.data()
+                return {
+                    title: data.title,
+                    id: data.id,
+                    content: data.content,
+                    update: data.update,
+                    duration: data.duration,
+                } as Synthese;
+            });
+            return syntheses;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch syntheses ' + error);
+        }
+    }
+
     async getExamFromId(examId: string): Promise<Exam> {
         try {
             const firebaseExam = await db.collection('exams').doc(examId).get();
@@ -26,8 +119,8 @@ export class FirebaseRepository implements IFirebaseRepository {
             }
             return { examTitle: exam.examTitle,
                 id: exam.id,
-                stepsRef: exam.steps,
-                synthesesRef: exam.syntheses ? exam.syntheses : [],
+                stepsIds: exam.steps.map((step: DocumentReference) => step.id),
+                synthesesIds: exam.syntheses ? exam.syntheses.map((synthese: DocumentReference) => synthese.id) : [],
             } as Exam;
         } catch (error) {
             throw new DatabaseError('Failed to fetch exam ' + error);
@@ -62,7 +155,7 @@ export class FirebaseRepository implements IFirebaseRepository {
             }
             return { stepTitle: step.stepTitle,
                 id: step.id,
-                substepsRef: step.substeps
+                substepsIds: step.substeps.map((substep: DocumentReference) => substep.id),
             } as Step;
         } catch (error) {
             throw new DatabaseError('Failed to fetch step ' + error);
@@ -96,7 +189,7 @@ export class FirebaseRepository implements IFirebaseRepository {
             }
             return { stepTitle: step.stepTitle,
                 id: step.id,
-                substepsRef: step.substeps
+                substepsIds: step.substeps.map((substep: DocumentReference) => substep.id),
             } as Step;
         } catch (error) {
             throw new DatabaseError('Failed to fetch step ' + error);
@@ -177,27 +270,6 @@ export class FirebaseRepository implements IFirebaseRepository {
             await doc.ref.update(updatedAccount);
         } catch (error) {
             throw new DatabaseError('Failed to update user account ' + error);
-        }
-    }
-    
-    async getMenuItems() : Promise<MenuItem[]> {
-        try {
-            const querySnapshot = await db.collection('menu').get();
-            const menuItems = querySnapshot.docs.map(doc => {
-                const data = doc.data()
-                return {
-                    access: data.access,
-                    examRef: data.examRef,
-                    iconPath: data.iconPath,
-                    id: data.id,
-                    priority: data.priority,
-                    title: data.title,
-                    update: data.update,
-                  } as MenuItem;
-            });
-            return menuItems;
-        } catch (error) {
-            throw new DatabaseError('Failed to fetch menu items ' + error);
         }
     }
 

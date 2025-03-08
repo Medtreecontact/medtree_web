@@ -14,15 +14,15 @@ export async function getExamStepsSynthesesUsecase(examId: string) {
         stepsAdvancement = advancement.stepsAdvancement;
     }
     const steps = await Promise.all(
-        exam.stepsRef.map(async (stepRef) => {
-            const tempStep = await firebaseReposiory.getStepFromRef(stepRef);
-            tempStep.stepAdvancement = stepsAdvancement[stepRef.id] || 0;
+        exam.stepsIds.map(async (stepId) => {
+            const tempStep = await firebaseReposiory.getStepFromId(stepId);
+            tempStep.stepAdvancement = stepsAdvancement[stepId] || 0;
             return tempStep;
         })
     );
     const syntheses = await Promise.all(
-        exam.synthesesRef.map(async (syntheseRef) => {
-            return await firebaseReposiory.getSyntheseFromRef(syntheseRef);
+        exam.synthesesIds.map(async (syntheseId) => {
+            return await firebaseReposiory.getSyntheseFromId(syntheseId);
         })
     );
 

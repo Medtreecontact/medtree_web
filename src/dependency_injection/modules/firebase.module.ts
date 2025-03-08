@@ -2,6 +2,7 @@ import { ContainerModule, interfaces } from "inversify";
 
 import { IFirebaseRepository } from "@/domain/repositories/firebase_repository_interface";
 import { FirebaseRepository } from "@/infrastructure/repositories/firebase_repository";
+import { CachedFirebaseRepository } from "@/infrastructure/repositories/cached_firebase_repository";
 
 import { DI_SYMBOLS } from "../types";
 
@@ -11,9 +12,15 @@ const initializeModule = (bind: interfaces.Bind) => {
   //     MockTransactionManagerService,
   //   );
   // } else {
+
+    // Bind the original repository (needed for injection into CachedFirebaseRepository)
+    bind<FirebaseRepository>(FirebaseRepository).toSelf();
+  
+    // Bind the interface to the cached implementation
     bind<IFirebaseRepository>(DI_SYMBOLS.IFirebaseRepository).to(
-      FirebaseRepository,
+      CachedFirebaseRepository
     );
+    
   // }
 };
 

@@ -6,7 +6,7 @@ import { unstable_cache as cache } from "next/cache";
 function presenter(menuItems: MenuItem[]) {
     return menuItems.map((item) => ({
         access: item.access,
-        examId: item.examRef.id,
+        examId: item.examId,
         iconPath: item.iconPath,
         id: item.id,
         priority: item.priority,
@@ -20,7 +20,8 @@ function presenter(menuItems: MenuItem[]) {
 
 export async function getMenuItemsController() {
     const menuItems = await getMenuItemsUseCase();
-    return presenter(menuItems);
+    // return presenter(menuItems);
+    return menuItems;
 }
 
 // export const getMenuItemsController = cache(

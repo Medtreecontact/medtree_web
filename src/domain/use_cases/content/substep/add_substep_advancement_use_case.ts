@@ -14,7 +14,7 @@ export async function addSubstepAdvancementUsecase(examId: string, stepId: strin
 
         // update stepsAdvancement
         const step = await firebaseReposiory.getStepFromId(stepId);
-        const substeps = step.substepsRef.map(substepRef => substepRef.id);
+        const substeps = step.substepsIds;
         const stepLength = substeps.length;
 
         const readSubstepsInStep = substeps.filter(substep => advancement.readSubsteps.includes(substep)).length;
@@ -23,7 +23,7 @@ export async function addSubstepAdvancementUsecase(examId: string, stepId: strin
         
         // update examAdvancement
         const exam = await firebaseReposiory.getExamFromId(examId);
-        const steps = exam.stepsRef.map(stepRef => stepRef.id);
+        const steps = exam.stepsIds;
         const examLength = steps.length;
 
         const stepsAdvancementSum = steps.reduce((sum, stepId) => {
