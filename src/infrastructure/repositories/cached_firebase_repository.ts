@@ -118,6 +118,17 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
         )(substepId);
     }
 
+    async getQuizFromId(quizId: string): Promise<any> {
+        return cache(
+            async (id: string) => await this.repository.getQuizFromId(id),
+            [`getQuizFromId-${quizId}`],
+            {
+                tags: ["quiz", `quiz-${quizId}`],
+                revalidate: 10 // 24 hours
+            }
+        )(quizId);
+    }
+
     async getStepFromRef(stepRef: DocumentReference): Promise<Step> {
         return cache(
             async () => await this.repository.getStepFromRef(stepRef),

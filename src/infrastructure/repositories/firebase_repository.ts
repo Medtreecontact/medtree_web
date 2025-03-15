@@ -3,6 +3,7 @@ import { DatabaseError } from "@/entities/errors/database";
 import { CoursesAdvancement } from "@/entities/models/courses_advancement";
 import { Exam } from "@/entities/models/exam";
 import { MenuItem } from "@/entities/models/menu_item";
+import { Quiz } from "@/entities/models/quiz";
 import { Step } from "@/entities/models/step";
 import { Substep } from "@/entities/models/substep";
 import { Synthese } from "@/entities/models/synthese";
@@ -48,6 +49,7 @@ export class FirebaseRepository implements IFirebaseRepository {
                     id: data.id,
                     stepsIds: data.steps.map((step: DocumentReference) => step.id),
                     synthesesIds: data.syntheses ? data.syntheses.map((synthese: DocumentReference) => synthese.id) : [],
+                    quizzesIds: data.quizzes ? data.quizzes.map((quiz: DocumentReference) => quiz.id) : [],
                 } as Exam;
             });
             return exams;
@@ -121,6 +123,7 @@ export class FirebaseRepository implements IFirebaseRepository {
                 id: exam.id,
                 stepsIds: exam.steps.map((step: DocumentReference) => step.id),
                 synthesesIds: exam.syntheses ? exam.syntheses.map((synthese: DocumentReference) => synthese.id) : [],
+                quizzesIds: exam.quizzes ? exam.quizzes.map((quiz: DocumentReference) => quiz.id) : [],
             } as Exam;
         } catch (error) {
             throw new DatabaseError('Failed to fetch exam ' + error);
@@ -177,6 +180,41 @@ export class FirebaseRepository implements IFirebaseRepository {
             };
         } catch (error) {
             throw new DatabaseError('Failed to fetch substep ' + error);
+        }
+    }
+
+    async getQuizFromId(quizId: string): Promise<Quiz> {
+        try {
+            const firebaseQuiz = await db.collection('quizzes').doc(quizId).get();
+            const quizData = firebaseQuiz.data();
+            if (!quizData) {
+                throw new Error('Quiz not found');
+            }
+
+            const questionsSnapshot = await firebaseQuiz.ref.collection('questions').get();
+            const questions = questionsSnapshot.docs.map(doc => {
+                const questionData = doc.data();
+                return {
+                    id: doc.id,
+                    title: questionData.title,
+                    correctAnswers: questionData.correctAnswers || [],
+                    wrongAnswers: questionData.wrongAnswers || [],
+                    explanation: questionData.explanation || '',
+                };
+            });
+
+            return {
+                id: firebaseQuiz.id,
+                title: quizData.title,
+                description: quizData.description,
+                difficulty: quizData.difficulty,
+                duration: quizData.duration,
+                lastUpdate: quizData.lastUpdate?.toDate(),
+                questions: questions,
+            };
+
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch quiz ' + error);
         }
     }
 
@@ -322,6 +360,7 @@ export class FirebaseRepository implements IFirebaseRepository {
             readSubsteps: advancement.readSubsteps,
             examsAdvancement: advancement.examsAdvancement,
             stepsAdvancement: advancement.stepsAdvancement,
+            quizzesAdvancement: advancement.quizzesAdvancement ?? {},
         } as CoursesAdvancement;
     }
 

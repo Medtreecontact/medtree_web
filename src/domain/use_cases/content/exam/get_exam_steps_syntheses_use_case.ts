@@ -6,12 +6,14 @@ export async function getExamStepsSynthesesUsecase(examId: string) {
     const firebaseReposiory = getServerInjection("IFirebaseRepository");
     const exam = await firebaseReposiory.getExamFromId(examId);
     let stepsAdvancement: { [key: string]: number }  = {};
+    let quizzesAdvancement: { [key: string]: number }  = {};
     const session = (await cookies()).get(SESSION_COOKIE_NAME);
     if (session)
     {
         const user = JSON.parse(session.value);
         const advancement = await firebaseReposiory.getUserCoursesAdvancement(user.id);
         stepsAdvancement = advancement.stepsAdvancement;
+        quizzesAdvancement = advancement.quizzesAdvancement;
     }
     const steps = await Promise.all(
         exam.stepsIds.map(async (stepId) => {
@@ -26,5 +28,15 @@ export async function getExamStepsSynthesesUsecase(examId: string) {
         })
     );
 
-    return { exam, steps, syntheses };
+    const quizzes = await Promise.all(
+        exam.quizzesIds.map(async (quizId) => {
+            const tempQuiz = await firebaseReposiory.getQuizFromId(quizId);
+            tempQuiz.quizzAdvancement = quizzesAdvancement[quizId] || 0;
+            return tempQuiz;
+        })
+    );
+
+    console.log(quizzes)
+
+    return { exam, steps, syntheses, quizzes };
 }

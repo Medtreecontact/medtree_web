@@ -1,6 +1,7 @@
 import { CoursesAdvancement } from "@/entities/models/courses_advancement";
 import { Exam } from "@/entities/models/exam";
 import { MenuItem } from "@/entities/models/menu_item";
+import { Quiz } from "@/entities/models/quiz";
 import { Step } from "@/entities/models/step";
 import { Substep } from "@/entities/models/substep";
 import { Synthese } from "@/entities/models/synthese";
@@ -21,6 +22,7 @@ export interface IFirebaseRepository {
     getSyntheseFromId(syntheseId: string): Promise<Synthese>;
     getStepFromId(stepId: string): Promise<Step>;
     getSubstepFromId(substepId: string): Promise<Substep>;
+    getQuizFromId(quizId: string): Promise<Quiz>;
     getUserCoursesAdvancement(userId: string): Promise<CoursesAdvancement>;
     updateUserAdvancement(userId: string, advancement: CoursesAdvancement): Promise<void>;
     sendMessage(message: string, userId: string): Promise<void>;

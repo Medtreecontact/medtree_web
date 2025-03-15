@@ -14,6 +14,7 @@ import { sendMessageController } from "@/interface_adapters/controllers/settings
 import { requestAccountDataController } from "@/interface_adapters/controllers/settings/request_account_data_controller";
 import { requestAccountDeletionController } from "@/interface_adapters/controllers/settings/request_account_deletion_controller";
 import { updateCommunicationsPreferencesController } from "@/interface_adapters/controllers/settings/update_communications_preferences_controller";
+import { updateQuizAdvancementController } from "@/interface_adapters/controllers/content/quiz/update_quizz_advancement_controller";
 
 export async function createSession(userAccount: UserAccount) {
     return await createSessionController(userAccount);
@@ -51,6 +52,11 @@ export async function updateUserAccount(uid: string, data: any) {
     if (typeof res === "string") {
         return res;
     }
+}
+
+export async function updateQuizAdvancement(examId: string, quizId: string, score: number) {
+    await updateQuizAdvancementController(quizId, score);
+    revalidatePath(`exam/${examId}/quiz/${quizId}`);
 }
 
 export async function addSubstepAdvancement(examId: string, stepId:string , substepId: string) {

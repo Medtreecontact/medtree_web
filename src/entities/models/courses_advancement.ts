@@ -5,6 +5,7 @@ export const coursesAdvancementSchema = z.object({
     examsAdvancement: z.record(z.string(), z.number()),
     stepsAdvancement: z.record(z.string(), z.number()),
     readSubsteps: z.array(z.string()),
+    quizzesAdvancement: z.record(z.string(), z.number()),
 });
 
 export type CoursesAdvancement = z.infer<typeof coursesAdvancementSchema>;
