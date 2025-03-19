@@ -10,7 +10,7 @@ import QuizSummary from "./QuizSummary";
 
 // Import the updateQuizAdvancement function
 // Assuming it's from a service file - you'll need to provide the correct import path
-import { updateQuizAdvancement } from "@/app/actions";
+import { updateQuizAdvancement } from "@/app/actions/actions";
 
 export default function QuizContainer({ exam, quiz }: { exam: Exam; quiz: Quiz }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

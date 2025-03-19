@@ -2,7 +2,7 @@
 
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import { toast } from "sonner"
-import { addSubstepAdvancement, removeSubstepAdvancement } from "@/app/actions";
+import { addSubstepAdvancement, removeSubstepAdvancement } from "@/app/actions/actions";
 
 interface CourseEndButtonProps {
     examId: string;

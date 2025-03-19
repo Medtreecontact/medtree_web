@@ -1,5 +1,5 @@
 import { signOutUseCase } from '@/domain/use_cases/authentication/sign_out_use_case';
-import { removeSession } from '@/app/actions';
+import { removeSession } from '@/app/actions/actions';
 
 export async function signOutController() {
     await signOutUseCase();

@@ -1,5 +1,5 @@
 "use client";
-import { requestAccountData } from "@/app/actions";
+import { requestAccountData } from "@/app/actions/actions";
 import { Button } from "../../shadcn/components/ui/button";
 import { useState } from "react";
 

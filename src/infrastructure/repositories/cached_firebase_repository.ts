@@ -11,6 +11,7 @@ import { injectable, inject } from "inversify";
 import { unstable_cache as cache } from "next/cache";
 import "reflect-metadata";
 import { FirebaseRepository } from "./firebase_repository";
+import { Station } from "@/entities/models/station";
 
 @injectable()
 export class CachedFirebaseRepository implements IFirebaseRepository {
@@ -25,7 +26,7 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getMenuItems"],
             {
                 tags: ["menuItems"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
             }
         )();
     }
@@ -36,7 +37,7 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getExams"],
             {
                 tags: ["exams"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
             }
         )();
     }
@@ -47,7 +48,7 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getSteps"],
             {
                 tags: ["steps"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
             }
         )();
     }
@@ -58,7 +59,7 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getSubsteps"],
             {
                 tags: ["substeps"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
             }
         )();
     }
@@ -69,7 +70,18 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getSyntheses"],
             {
                 tags: ["syntheses"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
+            }
+        )();
+    }
+
+    async getStations(): Promise<Station[]> {
+        return cache(
+            async () => await this.repository.getStations(),
+            ["getStations"],
+            {
+                tags: ["stations"],
+                revalidate: 10 // 24 hours
             }
         )();
     }
@@ -127,6 +139,17 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
                 revalidate: 10 // 24 hours
             }
         )(quizId);
+    }
+
+    async getStationFromId(stationId: string): Promise<Station> {
+        return cache(
+            async (id: string) => await this.repository.getStationFromId(id),
+            [`getStationFromId-${stationId}`],
+            {
+                tags: ["station", `station-${stationId}`],
+                revalidate: 10 // 24 hours
+            }
+        )(stationId);
     }
 
     async getStepFromRef(stepRef: DocumentReference): Promise<Step> {

@@ -6,6 +6,13 @@ export const coursesAdvancementSchema = z.object({
     stepsAdvancement: z.record(z.string(), z.number()),
     readSubsteps: z.array(z.string()),
     quizzesAdvancement: z.record(z.string(), z.number()),
+    stationsAdvancement: z.array(z.object({
+        soloDate: z.date(),
+        multiDate: z.date(),
+        soloScore: z.number(),
+        multiScore: z.number(),
+        stationId: z.string(),
+    }),),
 });
 
 export type CoursesAdvancement = z.infer<typeof coursesAdvancementSchema>;

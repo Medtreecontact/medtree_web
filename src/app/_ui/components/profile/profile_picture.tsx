@@ -2,7 +2,7 @@
 import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from '@/app/_ui/shadcn/components/ui/avatar';
 import { Pencil } from 'lucide-react'; 
-import { updateProfilePicture } from "@/app/actions";
+import { updateProfilePicture } from "@/app/actions/actions";
 
 export function ProfilePicture({uid,  userId, profilePicture }: {uid:string, userId: string, profilePicture: string }) {
     const fileInputRef = useRef<HTMLInputElement>(null);

@@ -1,5 +1,5 @@
 import { signUpWithEmailAndPasswordUseCase } from "@/domain/use_cases/authentication/sign_up_use_case";
-import { createSession, createUserAccount } from '@/app/actions';
+import { createSession, createUserAccount } from '@/app/actions/actions';
 import { FirebaseError } from "firebase/app";
 
 export async function signUpWithEmailAndPasswordController(firstName: string, lastName:string, email: string, password: string) {

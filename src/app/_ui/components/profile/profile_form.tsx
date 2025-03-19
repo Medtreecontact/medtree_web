@@ -30,7 +30,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/app/_ui/shadcn/components/ui/popover"
-import { updateUserAccount } from "@/app/actions";
+import { updateUserAccount } from "@/app/actions/actions";
 import { Input } from "../../shadcn/components/ui/input";
 import { useEffect } from "react";
 import { toast } from "sonner"

@@ -4,6 +4,7 @@ import { CoursesAdvancement } from "@/entities/models/courses_advancement";
 import { Exam } from "@/entities/models/exam";
 import { MenuItem } from "@/entities/models/menu_item";
 import { Quiz } from "@/entities/models/quiz";
+import { Station } from "@/entities/models/station";
 import { Step } from "@/entities/models/step";
 import { Substep } from "@/entities/models/substep";
 import { Synthese } from "@/entities/models/synthese";
@@ -112,6 +113,30 @@ export class FirebaseRepository implements IFirebaseRepository {
         }
     }
 
+    async getStations(): Promise<Station[]> {
+        try {
+            const querySnapshot = await db.collection('stations_ecos').get();
+            const stations = querySnapshot.docs.map(doc => {
+                const data = doc.data()
+                return {
+                    id: doc.id,
+                    title: data.title,
+                    sddNumber: data.sddNumber,
+                    tags: data.tags,
+                    lastUpdate: data.lastUpdate?.toDate(),
+                    doctorSheet: data.doctorSheet,
+                    patientSheet: data.patientSheet,
+                    gradingSheet: data.gradingSheet,
+                    annexes: data.annexes,
+                } as Station;
+            });
+            return stations;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch stations ' + error);
+        }
+    }
+
+
     async getExamFromId(examId: string): Promise<Exam> {
         try {
             const firebaseExam = await db.collection('exams').doc(examId).get();
@@ -215,6 +240,29 @@ export class FirebaseRepository implements IFirebaseRepository {
 
         } catch (error) {
             throw new DatabaseError('Failed to fetch quiz ' + error);
+        }
+    }
+
+    async getStationFromId(stationId: string): Promise<Station> {
+        try {
+            const firebaseStation = await db.collection('stations_ecos').doc(stationId).get();
+            const stationData = firebaseStation.data();
+            if (!stationData) {
+                throw new Error('Station not found');
+            }
+            return {
+                id: firebaseStation.id,
+                title: stationData.title,
+                sddNumber: stationData.sddNumber,
+                tags: stationData.tags,
+                lastUpdate: stationData.lastUpdate?.toDate(),
+                doctorSheet: stationData.doctorSheet,
+                patientSheet: stationData.patientSheet,
+                gradingSheet: stationData.gradingSheet,
+                annexes: stationData.annexes,
+            } as Station;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch station ' + error);
         }
     }
 
@@ -361,6 +409,15 @@ export class FirebaseRepository implements IFirebaseRepository {
             examsAdvancement: advancement.examsAdvancement,
             stepsAdvancement: advancement.stepsAdvancement,
             quizzesAdvancement: advancement.quizzesAdvancement ?? {},
+            stationsAdvancement: advancement.stationsAdvancement.map((stationAdvancement:any) => {
+                return {
+                    soloDate: stationAdvancement.soloDate.toDate(),
+                    multiDate: stationAdvancement.multiDate.toDate(),
+                    soloScore: stationAdvancement.soloScore,
+                    multiScore: stationAdvancement.multiScore,
+                    stationId: stationAdvancement.stationId,
+                };
+            }) ?? [],
         } as CoursesAdvancement;
     }
 

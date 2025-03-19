@@ -30,7 +30,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/app/_ui/shadcn/components/ui/popover"
-import { onboardingUpdateUserAccount } from "@/app/actions";
+import { onboardingUpdateUserAccount } from "@/app/actions/actions";
 import { useAuth } from "@/app/_ui/authContext";
 
 const universities = [
