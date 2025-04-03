@@ -1,5 +1,5 @@
 import { signInWithGoogleUseCase, signInWithAppleUseCase, signInWithEmailAndPasswordUseCase } from '@/domain/use_cases/authentication/sign_in_use_case';
-import { createSession } from '@/app/actions';
+import { createSession } from '@/app/actions/actions';
 import { FirebaseError } from 'firebase/app';
 
 export async function signInWithGoogleController() {

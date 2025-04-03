@@ -11,6 +11,8 @@ import { injectable, inject } from "inversify";
 import { unstable_cache as cache } from "next/cache";
 import "reflect-metadata";
 import { FirebaseRepository } from "./firebase_repository";
+import { Station } from "@/entities/models/station";
+import { AiEcosDiscussion } from "@/entities/models/ai_ecos_discussion";
 
 @injectable()
 export class CachedFirebaseRepository implements IFirebaseRepository {
@@ -25,7 +27,7 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getMenuItems"],
             {
                 tags: ["menuItems"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
             }
         )();
     }
@@ -36,7 +38,7 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getExams"],
             {
                 tags: ["exams"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
             }
         )();
     }
@@ -47,7 +49,7 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getSteps"],
             {
                 tags: ["steps"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
             }
         )();
     }
@@ -58,7 +60,7 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getSubsteps"],
             {
                 tags: ["substeps"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
             }
         )();
     }
@@ -69,7 +71,18 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
             ["getSyntheses"],
             {
                 tags: ["syntheses"],
-                revalidate: 10 // 2 hours
+                revalidate: 60 * 60 * 24 // 2 hours
+            }
+        )();
+    }
+
+    async getStations(): Promise<Station[]> {
+        return cache(
+            async () => await this.repository.getStations(),
+            ["getStations"],
+            {
+                tags: ["stations"],
+                revalidate: 10 // 24 hours
             }
         )();
     }
@@ -116,6 +129,39 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
                 revalidate: 60 * 60 * 24 // 24 hours
             }
         )(substepId);
+    }
+
+    async getQuizFromId(quizId: string): Promise<any> {
+        return cache(
+            async (id: string) => await this.repository.getQuizFromId(id),
+            [`getQuizFromId-${quizId}`],
+            {
+                tags: ["quiz", `quiz-${quizId}`],
+                revalidate: 10 // 24 hours
+            }
+        )(quizId);
+    }
+
+    async getStationFromId(stationId: string): Promise<Station> {
+        return cache(
+            async (id: string) => await this.repository.getStationFromId(id),
+            [`getStationFromId-${stationId}`],
+            {
+                tags: ["station", `station-${stationId}`],
+                revalidate: 10 // 24 hours
+            }
+        )(stationId);
+    }
+
+    async getAnalysisResultFromId(analysisId: string): Promise<AiEcosDiscussion> {
+        return cache(
+            async (id: string) => await this.repository.getAnalysisResultFromId(id),
+            [`getAnalysisResultFromId-${analysisId}`],
+            {
+                tags: ["analysis", `analysis-${analysisId}`],
+                revalidate: 10 // 24 hours
+            }
+        )(analysisId);
     }
 
     async getStepFromRef(stepRef: DocumentReference): Promise<Step> {
@@ -201,5 +247,9 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
 
     async updateCommunicationsPreferences(type: string, value: boolean, userId: string): Promise<void> {
         return this.repository.updateCommunicationsPreferences(type, value, userId);
+    }
+
+    async saveConsultationAnalysis(analysisResult: AiEcosDiscussion): Promise<string> {
+        return this.repository.saveConsultationAnalysis(analysisResult);
     }
 }

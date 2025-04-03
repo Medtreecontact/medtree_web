@@ -10,7 +10,7 @@ import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import { Textarea } from "@/app/_ui/shadcn/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_ui/shadcn/components/ui/form";
 
-import { sendMessage } from '@/app/actions';
+import { sendMessage } from '@/app/actions/actions';
 
 const formSchema = z.object({
     message: z.string().min(2, {

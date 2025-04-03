@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { applyVerificationCodeController } from '@/interface_adapters/controllers/authentication/apply_verification_code_controller';
 import { firebaseAuth } from '@/infrastructure/services/firebase-client';
 import { User } from 'firebase/auth';
-import { verifyFirebaseUserEmail } from '@/app/actions';
+import { verifyFirebaseUserEmail } from '@/app/actions/actions';
 
 
 export function VerifyEmailResult({oobCode}: {oobCode: string}) {

@@ -8,7 +8,6 @@ import { Button } from "@/app/_ui/shadcn/components/ui/button";
 import {
   MoveRight,
 } from "lucide-react"
-import { AnalyticsButton } from "./_ui/components/core/analytics_button";
 
 export default async function Home()  {
   const headersList = await headers();
@@ -48,7 +47,6 @@ export default async function Home()  {
               <p>vous sont utiles.</p>
               <Link href="/sign-up"><Button className="mt-8 bg-white text-base text-black outline outline-1 hover:text-gray-50">Créer un compte</Button></Link>
               <Link href="/home"><Button className="ml-8 bg-primary text-base">Essayer sans inscription <MoveRight/> </Button> </Link>
-              <AnalyticsButton />
             </div>
           </div>
           {/* <div className="flex items-center justify-center">

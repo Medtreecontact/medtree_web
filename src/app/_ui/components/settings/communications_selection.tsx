@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Switch } from "../../shadcn/components/ui/switch";
-import { updateCommunicationsPreferences } from "@/app/actions";
+import { updateCommunicationsPreferences } from "@/app/actions/actions";
 
 export function CommunicationsSelection({userNotifications, userEmailsCommunications}: {userNotifications: boolean, userEmailsCommunications: boolean}) {
   const [notificationSwitch, setNotificationSwitch] = useState(userNotifications);

@@ -18,7 +18,7 @@ import { Progress } from "@/app/_ui/shadcn/components/ui/progress";
 
 export default async function ExamPage(props: {params: Promise<{ examId: string }>}) {
   const params = await props.params;
-  const {exam, steps, syntheses } = await getExamStepsSynthesesController(params.examId);
+  const {exam, steps, syntheses, quizzes } = await getExamStepsSynthesesController(params.examId);
   return <div className="p-8">
       <Breadcrumb>
         <BreadcrumbList>
@@ -85,37 +85,25 @@ export default async function ExamPage(props: {params: Promise<{ examId: string 
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <SquareCheckBig />
-                  <h3 className="text-xl font-bold">Quizz</h3>
+                  <h3 className="text-xl font-bold">Quiz</h3>
                   <p>Évaluez vos connaissances</p>
                 </div>
                 <p>Résultats</p>
               </div>
               <Separator className="my-4 border-t border-gray-600"/>
               <ul>
-                  <li className="mt-4 flex items-center justify-between">
+              {quizzes.map(quiz => 
+                  <li key={quiz.id} className="mt-4 flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <p className="text-lg">
-                      Quizz Facile
-                    </p>
+                    <Link href={"/exam/" + params.examId + "/quiz/" + quiz.id} className="text-lg relative hover:underline">
+                      {quiz.title}
+                    </Link>
                   </div>
-                  <p>Aucun essai</p>
+                    <div className="flex items-center space-x-2">
+                      <p className="text-primary">{(quiz.quizzAdvancement ? quiz.quizzAdvancement.toString() + " / " + quiz.questions.length.toString() : "-") }</p>
+                    </div>
                 </li>
-                <li className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <p className="text-lg">
-                      Quizz Normal
-                    </p>
-                  </div>
-                  <p>Aucun essai</p>
-                </li>
-                <li className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <p className="text-lg">
-                      Quizz Difficile
-                    </p>
-                  </div>
-                  <p>Aucun essai</p>
-                </li>
+              )}
               </ul>
             </div>
           </div>

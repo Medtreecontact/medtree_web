@@ -1,8 +1,11 @@
 import { IFirebaseRepository } from "@/domain/repositories/firebase_repository_interface";
 import { DatabaseError } from "@/entities/errors/database";
+import { AiEcosDiscussion } from "@/entities/models/ai_ecos_discussion";
 import { CoursesAdvancement } from "@/entities/models/courses_advancement";
 import { Exam } from "@/entities/models/exam";
 import { MenuItem } from "@/entities/models/menu_item";
+import { Quiz } from "@/entities/models/quiz";
+import { Station } from "@/entities/models/station";
 import { Step } from "@/entities/models/step";
 import { Substep } from "@/entities/models/substep";
 import { Synthese } from "@/entities/models/synthese";
@@ -48,6 +51,7 @@ export class FirebaseRepository implements IFirebaseRepository {
                     id: data.id,
                     stepsIds: data.steps.map((step: DocumentReference) => step.id),
                     synthesesIds: data.syntheses ? data.syntheses.map((synthese: DocumentReference) => synthese.id) : [],
+                    quizzesIds: data.quizzes ? data.quizzes.map((quiz: DocumentReference) => quiz.id) : [],
                 } as Exam;
             });
             return exams;
@@ -110,6 +114,30 @@ export class FirebaseRepository implements IFirebaseRepository {
         }
     }
 
+    async getStations(): Promise<Station[]> {
+        try {
+            const querySnapshot = await db.collection('stations_ecos').get();
+            const stations = querySnapshot.docs.map(doc => {
+                const data = doc.data()
+                return {
+                    id: doc.id,
+                    title: data.title,
+                    sddNumber: data.sddNumber,
+                    tags: data.tags,
+                    lastUpdate: data.lastUpdate?.toDate(),
+                    doctorSheet: data.doctorSheet,
+                    patientSheet: data.patientSheet,
+                    gradingSheet: data.gradingSheet,
+                    annexes: data.annexes,
+                } as Station;
+            });
+            return stations;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch stations ' + error);
+        }
+    }
+
+
     async getExamFromId(examId: string): Promise<Exam> {
         try {
             const firebaseExam = await db.collection('exams').doc(examId).get();
@@ -121,6 +149,7 @@ export class FirebaseRepository implements IFirebaseRepository {
                 id: exam.id,
                 stepsIds: exam.steps.map((step: DocumentReference) => step.id),
                 synthesesIds: exam.syntheses ? exam.syntheses.map((synthese: DocumentReference) => synthese.id) : [],
+                quizzesIds: exam.quizzes ? exam.quizzes.map((quiz: DocumentReference) => quiz.id) : [],
             } as Exam;
         } catch (error) {
             throw new DatabaseError('Failed to fetch exam ' + error);
@@ -177,6 +206,88 @@ export class FirebaseRepository implements IFirebaseRepository {
             };
         } catch (error) {
             throw new DatabaseError('Failed to fetch substep ' + error);
+        }
+    }
+
+    async getQuizFromId(quizId: string): Promise<Quiz> {
+        try {
+            const firebaseQuiz = await db.collection('quizzes').doc(quizId).get();
+            const quizData = firebaseQuiz.data();
+            if (!quizData) {
+                throw new Error('Quiz not found');
+            }
+
+            const questionsSnapshot = await firebaseQuiz.ref.collection('questions').get();
+            const questions = questionsSnapshot.docs.map(doc => {
+                const questionData = doc.data();
+                return {
+                    id: doc.id,
+                    title: questionData.title,
+                    correctAnswers: questionData.correctAnswers || [],
+                    wrongAnswers: questionData.wrongAnswers || [],
+                    explanation: questionData.explanation || '',
+                };
+            });
+
+            return {
+                id: firebaseQuiz.id,
+                title: quizData.title,
+                description: quizData.description,
+                difficulty: quizData.difficulty,
+                duration: quizData.duration,
+                lastUpdate: quizData.lastUpdate?.toDate(),
+                questions: questions,
+            };
+
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch quiz ' + error);
+        }
+    }
+
+    async getStationFromId(stationId: string): Promise<Station> {
+        try {
+            const firebaseStation = await db.collection('stations_ecos').doc(stationId).get();
+            const stationData = firebaseStation.data();
+            if (!stationData) {
+                throw new Error('Station not found');
+            }
+            return {
+                id: firebaseStation.id,
+                title: stationData.title,
+                sddNumber: stationData.sddNumber,
+                tags: stationData.tags,
+                lastUpdate: stationData.lastUpdate?.toDate(),
+                doctorSheet: stationData.doctorSheet,
+                patientSheet: stationData.patientSheet,
+                gradingSheet: stationData.gradingSheet,
+                annexes: stationData.annexes,
+            } as Station;
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch station ' + error);
+        }
+    }
+
+    async getAnalysisResultFromId(analysisId: string): Promise<AiEcosDiscussion> {
+        try {
+            const firebaseDoc = await db.collection('ai_ecos_discussions').doc(analysisId).get();
+            const aiEcosDiscussionData = firebaseDoc.data();
+            if (!aiEcosDiscussionData) {
+                throw new Error('Document not found');
+            }
+
+            return {
+                id: firebaseDoc.id,
+                userId: aiEcosDiscussionData.userId,
+                stationId: aiEcosDiscussionData.stationId,
+                date: aiEcosDiscussionData.date.toDate(),
+                discussion: aiEcosDiscussionData.discussion,
+                chatHistory: aiEcosDiscussionData.chatHistory,
+                score: aiEcosDiscussionData.score,
+                evaluation: aiEcosDiscussionData.evaluation,
+            } as AiEcosDiscussion;
+           
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch station ' + error);
         }
     }
 
@@ -322,6 +433,16 @@ export class FirebaseRepository implements IFirebaseRepository {
             readSubsteps: advancement.readSubsteps,
             examsAdvancement: advancement.examsAdvancement,
             stepsAdvancement: advancement.stepsAdvancement,
+            quizzesAdvancement: advancement.quizzesAdvancement ?? {},
+            stationsAdvancement: advancement.stationsAdvancement?.map((stationAdvancement:any) => {
+                return {
+                    soloDate: stationAdvancement.soloDate.toDate(),
+                    multiDate: stationAdvancement.multiDate.toDate(),
+                    soloScore: stationAdvancement.soloScore,
+                    multiScore: stationAdvancement.multiScore,
+                    stationId: stationAdvancement.stationId,
+                };
+            }) ?? [],
         } as CoursesAdvancement;
     }
 
@@ -384,6 +505,17 @@ export class FirebaseRepository implements IFirebaseRepository {
             await doc.ref.update({ [type]: value });
         } catch (error) {
             throw new DatabaseError('Failed to update communications preferences ' + error);
+        }
+    }
+
+    async saveConsultationAnalysis(analysisResult: AiEcosDiscussion): Promise<string> {
+        try {
+            const docRef = db.collection('ai_ecos_discussions').doc();
+            analysisResult.id = docRef.id;
+            await docRef.set(analysisResult);
+            return docRef.id;
+        } catch (error) {
+            throw new DatabaseError('Failed to save consultation analysis ' + error);
         }
     }
 }
