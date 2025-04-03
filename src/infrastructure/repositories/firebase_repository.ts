@@ -1,5 +1,6 @@
 import { IFirebaseRepository } from "@/domain/repositories/firebase_repository_interface";
 import { DatabaseError } from "@/entities/errors/database";
+import { AiEcosDiscussion } from "@/entities/models/ai_ecos_discussion";
 import { CoursesAdvancement } from "@/entities/models/courses_advancement";
 import { Exam } from "@/entities/models/exam";
 import { MenuItem } from "@/entities/models/menu_item";
@@ -266,6 +267,30 @@ export class FirebaseRepository implements IFirebaseRepository {
         }
     }
 
+    async getAnalysisResultFromId(analysisId: string): Promise<AiEcosDiscussion> {
+        try {
+            const firebaseDoc = await db.collection('ai_ecos_discussions').doc(analysisId).get();
+            const aiEcosDiscussionData = firebaseDoc.data();
+            if (!aiEcosDiscussionData) {
+                throw new Error('Document not found');
+            }
+
+            return {
+                id: firebaseDoc.id,
+                userId: aiEcosDiscussionData.userId,
+                stationId: aiEcosDiscussionData.stationId,
+                date: aiEcosDiscussionData.date.toDate(),
+                discussion: aiEcosDiscussionData.discussion,
+                chatHistory: aiEcosDiscussionData.chatHistory,
+                score: aiEcosDiscussionData.score,
+                evaluation: aiEcosDiscussionData.evaluation,
+            } as AiEcosDiscussion;
+           
+        } catch (error) {
+            throw new DatabaseError('Failed to fetch station ' + error);
+        }
+    }
+
     async getStepFromRef(stepRef: DocumentReference): Promise<Step> {
         try {
             const firebaseStep = await db.doc(stepRef.path).get();
@@ -409,7 +434,7 @@ export class FirebaseRepository implements IFirebaseRepository {
             examsAdvancement: advancement.examsAdvancement,
             stepsAdvancement: advancement.stepsAdvancement,
             quizzesAdvancement: advancement.quizzesAdvancement ?? {},
-            stationsAdvancement: advancement.stationsAdvancement.map((stationAdvancement:any) => {
+            stationsAdvancement: advancement.stationsAdvancement?.map((stationAdvancement:any) => {
                 return {
                     soloDate: stationAdvancement.soloDate.toDate(),
                     multiDate: stationAdvancement.multiDate.toDate(),
@@ -480,6 +505,17 @@ export class FirebaseRepository implements IFirebaseRepository {
             await doc.ref.update({ [type]: value });
         } catch (error) {
             throw new DatabaseError('Failed to update communications preferences ' + error);
+        }
+    }
+
+    async saveConsultationAnalysis(analysisResult: AiEcosDiscussion): Promise<string> {
+        try {
+            const docRef = db.collection('ai_ecos_discussions').doc();
+            analysisResult.id = docRef.id;
+            await docRef.set(analysisResult);
+            return docRef.id;
+        } catch (error) {
+            throw new DatabaseError('Failed to save consultation analysis ' + error);
         }
     }
 }

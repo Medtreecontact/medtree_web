@@ -1,9 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { SearchBar } from '../_ui/components/content/search_bar';
-
 import NavigationLinks from '../_ui/components/content/navigation_links';
-
 import { cookies } from "next/headers";
 import { SESSION_COOKIE_NAME } from '@/core/constants';
 import UserDropdown from '../_ui/components/content/user_dropdown';

@@ -1,10 +1,10 @@
 import { getStationByIdController } from "@/interface_adapters/controllers/content/station/get_station_by_id_controller";
 import { notFound } from "next/navigation";
-import { DoctorPracticeClient } from "@/app/_ui/components/content/station/practice/doctor/DoctorPracticeClient";
+import { ResultClient } from "@/app/_ui/components/content/station/practice/result/ResultClient";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/app/_ui/shadcn/components/ui/breadcrumb";
 import Link from "next/link";
 
-export default async function PracticeDoctorPage(props: {params: Promise<{ stationId: string }>}) {
+export default async function ResultPage(props: {params: Promise<{ stationId: string }>}) {
   const params = await props.params;
   const station = await getStationByIdController(params.stationId);
       
@@ -26,13 +26,13 @@ export default async function PracticeDoctorPage(props: {params: Promise<{ stati
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Entrainement en duo</BreadcrumbPage>
+              <BreadcrumbPage>Évaluation</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </div>
       
-      <DoctorPracticeClient station={station} stationId={params.stationId} />
+      <ResultClient station={station} stationId={params.stationId} />
     </>
   );
 }

@@ -13,7 +13,7 @@ export default async function StationHomePage({
     const searchQuery = (await searchParams).q?.toLowerCase() || "";
 
     let stations: Station[] = [];
-    let searchResults: SearchResult[] = [];
+    // let searchResults: SearchResult[] = [];
 
     if (searchQuery) {
         // searchResults = await getStationSearchResultController(searchQuery);

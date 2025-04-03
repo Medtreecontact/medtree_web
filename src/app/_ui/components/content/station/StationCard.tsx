@@ -11,9 +11,8 @@ export default function StationCard({
     station: Station,
     isPaidUser: boolean
 }) {
-    const isLocked = false; // Replace with actual lock logic when needed
+    const isLocked = false;
     
-    // Format solo and multi dates
     const formatDate = (date: Date | undefined) => {
         return date ? date.toLocaleDateString('en-US', { 
             month: 'short', 
@@ -21,7 +20,6 @@ export default function StationCard({
         }) : "Never";
     };
     
-    // Format solo and multi scores with color coding
     const getScoreColor = (score: number | undefined) => {
         if (score === undefined) return "text-gray-400";
         if (score >= 80) return "text-green-600";
@@ -67,11 +65,10 @@ export default function StationCard({
                 </CardContent>
                 
                 <CardFooter className="border-t pt-3 mt-auto flex-col">
-                    {/* Solo Score */}
                     <div className="flex items-center justify-between w-full text-sm mb-2">
                         <div className="flex items-center gap-1.5">
                             <User className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span className="text-muted-foreground">Solo:</span>
+                            <span className="text-muted-foreground">Entrainement seul :</span>
                             <span className="text-xs">{formatDate(soloDate)}</span>
                         </div>
                         
@@ -80,11 +77,10 @@ export default function StationCard({
                         </div>
                     </div>
                     
-                    {/* Multi Score */}
                     <div className="flex items-center justify-between w-full text-sm">
                         <div className="flex items-center gap-1.5">
                             <Users className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span className="text-muted-foreground">Multi:</span>
+                            <span className="text-muted-foreground">Entrainement en duo :</span>
                             <span className="text-xs">{formatDate(multiDate)}</span>
                         </div>
                         

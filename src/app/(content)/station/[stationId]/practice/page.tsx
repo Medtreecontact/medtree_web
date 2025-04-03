@@ -32,7 +32,7 @@ export default async function PracticePage(props: {params: Promise<{ stationId: 
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Practice Mode</BreadcrumbPage>
+              <BreadcrumbPage>Entrainement en duo</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

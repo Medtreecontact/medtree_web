@@ -1,3 +1,4 @@
+import { AiEcosDiscussion } from "@/entities/models/ai_ecos_discussion";
 import { CoursesAdvancement } from "@/entities/models/courses_advancement";
 import { Exam } from "@/entities/models/exam";
 import { MenuItem } from "@/entities/models/menu_item";
@@ -26,10 +27,12 @@ export interface IFirebaseRepository {
     getSubstepFromId(substepId: string): Promise<Substep>;
     getQuizFromId(quizId: string): Promise<Quiz>;
     getStationFromId(stationId: string): Promise<Station>;
+    getAnalysisResultFromId(analysisId: string): Promise<AiEcosDiscussion>;
     getUserCoursesAdvancement(userId: string): Promise<CoursesAdvancement>;
     updateUserAdvancement(userId: string, advancement: CoursesAdvancement): Promise<void>;
     sendMessage(message: string, userId: string): Promise<void>;
     requestAccountData(userId: string): Promise<void>;
     requestAccountDeletion(userId: string): Promise<void>;
     updateCommunicationsPreferences(type: string, value: boolean, userId: string): Promise<void>;
+    saveConsultationAnalysis(analysisResult: AiEcosDiscussion): Promise<string>;
 }

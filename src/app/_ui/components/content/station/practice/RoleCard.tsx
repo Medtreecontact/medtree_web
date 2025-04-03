@@ -38,7 +38,7 @@ export function RoleCard({ role, icon: Icon, title, description, features, onSel
         </ul>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Select {title} Role</Button>
+        <Button className="w-full">Selectionner le rôle de {title.toLowerCase()}</Button>
       </CardFooter>
     </Card>
   );

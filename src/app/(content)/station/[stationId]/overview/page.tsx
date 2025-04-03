@@ -29,11 +29,11 @@ export default async function StationStudyPage(props: {params: Promise<{ station
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                    <BreadcrumbPage>Study Mode</BreadcrumbPage>
+                    <BreadcrumbPage>Lecture Libre</BreadcrumbPage>
                 </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <h1 className="text-2xl font-bold mb-6">{station.title} - Study Mode</h1>
+            <h1 className="text-2xl font-bold mb-6">{station.title} - Lecture Libre</h1>
             <StationStudyTabs station={station} />
         </div>
     );

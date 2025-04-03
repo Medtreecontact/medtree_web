@@ -7,7 +7,6 @@ interface TimeWarningProps {
 }
 
 export function TimeWarning({ timeLeft }: TimeWarningProps) {
-  // Format time to MM:SS
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;

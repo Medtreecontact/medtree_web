@@ -12,6 +12,7 @@ import { unstable_cache as cache } from "next/cache";
 import "reflect-metadata";
 import { FirebaseRepository } from "./firebase_repository";
 import { Station } from "@/entities/models/station";
+import { AiEcosDiscussion } from "@/entities/models/ai_ecos_discussion";
 
 @injectable()
 export class CachedFirebaseRepository implements IFirebaseRepository {
@@ -152,6 +153,17 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
         )(stationId);
     }
 
+    async getAnalysisResultFromId(analysisId: string): Promise<AiEcosDiscussion> {
+        return cache(
+            async (id: string) => await this.repository.getAnalysisResultFromId(id),
+            [`getAnalysisResultFromId-${analysisId}`],
+            {
+                tags: ["analysis", `analysis-${analysisId}`],
+                revalidate: 10 // 24 hours
+            }
+        )(analysisId);
+    }
+
     async getStepFromRef(stepRef: DocumentReference): Promise<Step> {
         return cache(
             async () => await this.repository.getStepFromRef(stepRef),
@@ -235,5 +247,9 @@ export class CachedFirebaseRepository implements IFirebaseRepository {
 
     async updateCommunicationsPreferences(type: string, value: boolean, userId: string): Promise<void> {
         return this.repository.updateCommunicationsPreferences(type, value, userId);
+    }
+
+    async saveConsultationAnalysis(analysisResult: AiEcosDiscussion): Promise<string> {
+        return this.repository.saveConsultationAnalysis(analysisResult);
     }
 }

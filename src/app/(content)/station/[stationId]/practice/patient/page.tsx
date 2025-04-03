@@ -26,7 +26,7 @@ export default async function PracticePatientPage(props: {params: Promise<{ stat
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Patient Practice</BreadcrumbPage>
+              <BreadcrumbPage>Entrainement en duo</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

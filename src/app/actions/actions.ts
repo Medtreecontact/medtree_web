@@ -15,6 +15,7 @@ import { requestAccountDataController } from "@/interface_adapters/controllers/s
 import { requestAccountDeletionController } from "@/interface_adapters/controllers/settings/request_account_deletion_controller";
 import { updateCommunicationsPreferencesController } from "@/interface_adapters/controllers/settings/update_communications_preferences_controller";
 import { updateQuizAdvancementController } from "@/interface_adapters/controllers/content/quiz/update_quizz_advancement_controller";
+import { updateStationAdvancementController } from "@/interface_adapters/controllers/content/station/update_station_advancement_controller";
 
 export async function createSession(userAccount: UserAccount) {
     return await createSessionController(userAccount);
@@ -57,6 +58,11 @@ export async function updateUserAccount(uid: string, data: any) {
 export async function updateQuizAdvancement(examId: string, quizId: string, score: number) {
     await updateQuizAdvancementController(quizId, score);
     revalidatePath(`exam/${examId}/quiz/${quizId}`);
+}
+
+export async function updateStationAdvancement(stationId: string, score: number, isSolo: boolean) {
+    await updateStationAdvancementController(stationId, score, isSolo);
+    revalidatePath(`station/${stationId}`);
 }
 
 export async function addSubstepAdvancement(examId: string, stepId:string , substepId: string) {

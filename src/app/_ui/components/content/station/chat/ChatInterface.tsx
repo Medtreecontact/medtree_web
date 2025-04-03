@@ -1,25 +1,16 @@
 'use client';
 
 import { Station } from '@/entities/models/station';
-import { sendMessageToGemini } from '@/app/actions/ia_actions';
-import { useState } from 'react';
+import { sendMessageToGemini, } from '@/app/actions/ai_actions';
+import { useState, useEffect } from 'react';
 import { DoctorInformation } from './DoctorInformation';
 import { ChatMessages } from './ChatMessages';
 import { ChatInput } from './ChatInput';
-import { CostDisplay } from './CostDisplay';
 import { AnnexModal } from './AnnexModal';
 
 interface Message {
   role: 'user' | 'model';
   content: string;
-}
-
-interface ConversationCost {
-  inputTokens: number;
-  outputTokens: number;
-  inputCost: number;
-  outputCost: number;
-  totalCost: number;
 }
 
 interface AnnexModalState {
@@ -31,28 +22,47 @@ interface AnnexModalState {
   index: number;
 }
 
-export function ChatInterface({ station }: { station: Station }) {
+export interface TimerState {
+  isActive: boolean;
+  isPaused: boolean;
+}
+
+interface ChatInterfaceProps {
+  station: Station;
+  onTimerStateChange?: (isActive: boolean, isPaused: boolean) => void;
+  onMessagesUpdate?: (messages: Message[]) => void;
+}
+
+
+export function ChatInterface({ station, onTimerStateChange, onMessagesUpdate }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isChatStarted, setIsChatStarted] = useState(false);
-  const [showCost, setShowCost] = useState(false);
-  const [conversationCost, setConversationCost] = useState<ConversationCost>({
-    inputTokens: 0,
-    outputTokens: 0,
-    inputCost: 0,
-    outputCost: 0,
-    totalCost: 0
-  });
   
-  // Modal state for annex viewing
+  const [timerState, setTimerState] = useState<TimerState>({
+    isActive: false,
+    isPaused: false
+  });
+
+  useEffect(() => {
+    if (onTimerStateChange) {
+      onTimerStateChange(timerState.isActive, timerState.isPaused);
+    }
+  }, [timerState.isActive, timerState.isPaused, onTimerStateChange]);
+  
+  useEffect(() => {
+    if (onMessagesUpdate) {
+      onMessagesUpdate(messages);
+    }
+  }, [messages, onMessagesUpdate]);
+  
   const [annexModal, setAnnexModal] = useState<AnnexModalState>({
     isOpen: false,
     type: null,
     index: -1
   });
   
-  // Open annex modal
   const openAnnexModal = (type: 'text' | 'image', index: number, content?: string, path?: string, title?: string) => {
     setAnnexModal({
       isOpen: true,
@@ -64,7 +74,6 @@ export function ChatInterface({ station }: { station: Station }) {
     });
   };
 
-  // Close annex modal
   const closeAnnexModal = () => {
     setAnnexModal({
       isOpen: false,
@@ -73,40 +82,45 @@ export function ChatInterface({ station }: { station: Station }) {
     });
   };
   
-  // Start the chat with initial message
   async function startChat() {
     if (isLoading || isChatStarted) return;
+    
+    setTimerState({
+      isActive: true,
+      isPaused: true 
+    });
     
     setIsLoading(true);
     
     try {
-      // Send empty message to get the initial response
-      const initialMessage: Message = { role: 'user', content: "Bonjour" };
+      const initialMessage: Message = { role: 'user', content: "Bonjour, bienvenue au cabinet que vous arrive t-il ?" };
+      setMessages([
+        { role: 'user', content: initialMessage.content }
+      ]);
       const response = await sendMessageToGemini([initialMessage], station);
       
-      // Add AI response to chat
-      setMessages([
-        { role: 'model', content: response.text }
+      const displayContent = response.text === "HORS CONTEXTE" 
+        ? "Ce message semble hors du contexte de la station, il à été ignoré." 
+        : response.text;
+      
+      setMessages(prev => [...prev,
+        { role: 'model', content: displayContent }
       ]);
       
       setIsChatStarted(true);
       
-      // Update cost tracking
-      setConversationCost({
-        inputTokens: response.cost.inputTokens,
-        outputTokens: response.cost.outputTokens,
-        inputCost: response.cost.inputCost,
-        outputCost: response.cost.outputCost,
-        totalCost: response.cost.totalCost
-      });
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages([{ 
+      setMessages(prev => [...prev, { 
         role: 'model', 
-        content: "Sorry, I couldn't start the conversation. Please try again." 
+        content: "Désolé, je rencontre des difficultés à répondre pour le moment. Veuillez réessayer." 
       }]);
     } finally {
       setIsLoading(false);
+      setTimerState(prev => ({
+        ...prev,
+        isPaused: false
+      }));
     }
   }
   
@@ -115,41 +129,51 @@ export function ChatInterface({ station }: { station: Station }) {
     
     if (!inputValue.trim() || isLoading) return;
     
-    // Add user message to chat
+    setTimerState(prev => ({
+      ...prev,
+      isPaused: true
+    }));
+    
     const newMessage: Message = { role: 'user', content: inputValue.trim() };
     setMessages(prev => [...prev, newMessage]);
     setInputValue('');
     setIsLoading(true);
     
     try {
-      // Send message to Gemini
       const response = await sendMessageToGemini([...messages, newMessage], station);
       
-      // Add AI response to chat
-      setMessages(prev => [...prev, { role: 'model', content: response.text }]);
+      const displayContent = response.text.trim() === "HORS CONTEXTE" 
+        ? "Ce message semble hors du contexte de la station, il à été ignoré" 
+        : response.text;
+
+      setMessages(prev => [...prev, { role: 'model', content: displayContent }]);
       
-      // Update cost tracking
-      setConversationCost(prev => ({
-        inputTokens: prev.inputTokens + response.cost.inputTokens,
-        outputTokens: prev.outputTokens + response.cost.outputTokens,
-        inputCost: prev.inputCost + response.cost.inputCost,
-        outputCost: prev.outputCost + response.cost.outputCost,
-        totalCost: prev.totalCost + response.cost.totalCost
-      }));
     } catch (error) {
       console.error('Chat error:', error);
       setMessages(prev => [...prev, { 
         role: 'model', 
-        content: "Sorry, I'm having trouble responding right now. Please try again." 
+        content: "Désolé, je rencontre des difficultés à répondre pour le moment. Veuillez réessayer." 
       }]);
     } finally {
       setIsLoading(false);
+      setTimerState(prev => ({
+        ...prev,
+        isPaused: false
+      }));
     }
   }
   
+  const handleTimerPauseToggle = (paused: boolean) => {
+    setTimerState(prev => ({
+      ...prev,
+      isPaused: paused
+    }));
+  };
+
+  
+  
   return (
     <div className="flex h-full">
-      {/* Doctor Information Sidebar */}
       <div className="w-1/3 bg-gray-50 border-r h-full overflow-hidden">
         <DoctorInformation 
           station={station} 
@@ -157,12 +181,8 @@ export function ChatInterface({ station }: { station: Station }) {
         />
       </div>
       
-      {/* Chat Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        {/* Cost display panel */}
-        <CostDisplay showCost={showCost} conversationCost={conversationCost} />
         
-        {/* Messages area */}
         <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
           <div className="max-w-3xl mx-auto h-full">
             <ChatMessages 
@@ -174,7 +194,6 @@ export function ChatInterface({ station }: { station: Station }) {
           </div>
         </div>
         
-        {/* Input area */}
         <ChatInput
           inputValue={inputValue}
           setInputValue={setInputValue}
@@ -182,12 +201,9 @@ export function ChatInterface({ station }: { station: Station }) {
           isLoading={isLoading}
           isChatStarted={isChatStarted}
           startChat={startChat}
-          showCost={showCost}
-          setShowCost={setShowCost}
         />
       </div>
       
-      {/* Annex Modal */}
       <AnnexModal
         isOpen={annexModal.isOpen}
         type={annexModal.type}

@@ -15,14 +15,14 @@ export function NotesArea({ notes, setNotes, handleSaveNotes }: NotesAreaProps) 
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Session Notes</CardTitle>
+        <CardTitle>Notes de la session</CardTitle>
         <CardDescription>
-          Take notes during your session with the patient
+          Vous pouvez écrire vos remarques ici.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
         <Textarea 
-          placeholder="Write your notes here..."
+          placeholder="Écrivez vos notes ici..."
           className="min-h-[300px] h-full resize-none"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
@@ -34,7 +34,7 @@ export function NotesArea({ notes, setNotes, handleSaveNotes }: NotesAreaProps) 
           onClick={handleSaveNotes}
         >
           <Save className="h-4 w-4" />
-          Save Notes
+          Sauvegarder
         </Button>
       </CardFooter>
     </Card>

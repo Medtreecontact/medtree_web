@@ -9,50 +9,43 @@ interface DoctorInformationProps {
 }
 
 export function DoctorInformation({ station, openAnnexModal }: DoctorInformationProps) {
-  // Helper to check if we have text annexes
   const hasTextAnnexes = station.annexes.some(annex => annex.type === "text");
   
-  // Helper to check if we have image annexes
   const hasImageAnnexes = station.annexes.some(annex => annex.type === "image");
   
   return (
     <div className="h-full overflow-y-auto p-3">
       <div className="space-y-6">
-        {/* Combined Doctor Information */}
         <div className="bg-white rounded-lg shadow-md p-4">
-          <h3 className="font-semibold text-lg mb-3 text-blue-700 border-b pb-2">Doctor Information</h3>
+          <h3 className="font-semibold text-lg mb-3 text-blue-700 border-b pb-2">Vos informations médecin</h3>
           
-          {/* Situation */}
           <div className="mb-4">
-            <h4 className="font-medium text-blue-600 mb-1">Situation</h4>
+            <h4 className="font-medium text-blue-600 mb-1">Présentation de la situation</h4>
             <div className="whitespace-pre-line text-sm bg-blue-50 p-3 rounded-md">
               {station.doctorSheet.situationPresentation}
             </div>
           </div>
           
-          {/* Patient Information */}
           <div className="mb-4">
-            <h4 className="font-medium text-blue-600 mb-1">Patient Information</h4>
+            <h4 className="font-medium text-blue-600 mb-1">Informations patient</h4>
             <div className="whitespace-pre-line text-sm bg-blue-50 p-3 rounded-md">
               {station.doctorSheet.patientInformation}
             </div>
           </div>
           
-          {/* Goals */}
           <div>
-            <h4 className="font-medium text-blue-600 mb-1">Goals</h4>
+            <h4 className="font-medium text-blue-600 mb-1">Objectifs</h4>
             <div className="whitespace-pre-line text-sm bg-blue-50 p-3 rounded-md">
               {station.doctorSheet.goals}
             </div>
           </div>
         </div>
         
-        {/* Text Annexes */}
         {hasTextAnnexes && (
           <div className="bg-white rounded-lg shadow-md p-4">
             <h3 className="font-semibold text-lg mb-3 text-blue-700 border-b pb-2 flex items-center">
               <FileText size={18} className="mr-2 text-blue-500" />
-              Text Annexes
+              Annexes textuelles
             </h3>
             
             <div className="space-y-3">
@@ -74,12 +67,11 @@ export function DoctorInformation({ station, openAnnexModal }: DoctorInformation
           </div>
         )}
         
-        {/* Image Annexes */}
         {hasImageAnnexes && (
           <div className="bg-white rounded-lg shadow-md p-4">
             <h3 className="font-semibold text-lg mb-3 text-blue-700 border-b pb-2 flex items-center">
               <ImageIcon size={18} className="mr-2 text-blue-500" />
-              Image Annexes
+              Annexes visuelles
             </h3>
             
             <div className="grid grid-cols-2 gap-3">

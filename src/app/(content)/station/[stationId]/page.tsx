@@ -40,7 +40,7 @@ export default async function StationDetailsPage(props: {params: Promise<{ stati
             </Breadcrumb>
             <h1 className="text-2xl font-bold mb-6">{station.title}</h1>
             <div className="mb-4">
-                <span className="text-sm text-gray-500">SDD Number: {station.sddNumber}</span>
+                <span className="text-sm text-gray-500">SDD numéro: {station.sddNumber}</span>
                 <div className="mt-2 flex flex-wrap gap-1">
                     {station.tags.map((tag, index) => (
                         <span key={index} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">

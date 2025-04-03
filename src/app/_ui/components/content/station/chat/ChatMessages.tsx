@@ -16,7 +16,6 @@ interface ChatMessagesProps {
 export function ChatMessages({ messages, isLoading, isChatStarted, startChat }: ChatMessagesProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  // Auto-scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -25,10 +24,10 @@ export function ChatMessages({ messages, isLoading, isChatStarted, startChat }: 
     return (
       <div className="flex flex-col items-center justify-center h-full">
         <div className="text-center mb-8 max-w-md">
-          <h3 className="text-xl font-bold mb-2">Begin Patient Interaction</h3>
+          <h3 className="text-xl font-bold mb-2">Simulation de consultation</h3>
           <p className="text-gray-600">
-            You'll interact with a virtual patient based on the medical scenario. 
-            Use the information in the left panel to guide your conversation.
+            Vous allez interagir avec un patient virtuel basé sur un scénario médical.
+            Lorsque la consultation sera terminée vous recevrez une analyse de la conversation et une note.
           </p>
         </div>
         <button
@@ -41,7 +40,7 @@ export function ChatMessages({ messages, isLoading, isChatStarted, startChat }: 
           ) : (
             <PlayCircle className="w-5 h-5" />
           )}
-          Start Discussion
+          Démarrer la consultation
         </button>
       </div>
     );

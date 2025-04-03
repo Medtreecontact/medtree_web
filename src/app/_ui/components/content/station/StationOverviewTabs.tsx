@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { Station } from "@/entities/models/station";
 import { ArrowLeft, Check, ClipboardCheck } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@/app/_ui/shadcn/components/ui/button";
+import { useRouter } from 'next/navigation';
 
 export default function StationStudyTabs({ station }: { station: Station }) {
     const [activeTab, setActiveTab] = useState("doctor");
+    const router = useRouter();
     
     const tabs = [
         { name: "Fiche Médecin", id: "doctor" },
@@ -16,13 +18,21 @@ export default function StationStudyTabs({ station }: { station: Station }) {
         { name: "Fiche d'évaluation", id: "grading" },
     ];
 
+    const handleReturnToStation = () => {
+        router.push(`/station/${station.id}`);
+      };
+
     return (
         <div className="w-full">
             <div className="mb-4">
-                <Link href={`/station/${station.id}`} className="text-blue-500 flex items-center">
-                    <ArrowLeft className="mr-2" size={16} />
-                    Back to modes
-                </Link>
+            <Button 
+                variant="outline" 
+                onClick={handleReturnToStation}
+                className="flex items-center gap-2"
+                >
+                <ArrowLeft className="h-4 w-4" />
+                Retour à la station
+            </Button>
             </div>
             
             <div>
@@ -45,20 +55,19 @@ export default function StationStudyTabs({ station }: { station: Station }) {
                 </div>
                 
                 <div className="mt-2">
-                    {/* Doctor Sheet Panel */}
                     {activeTab === "doctor" && (
                         <div className="rounded-xl bg-white p-3 shadow-md ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400">
                             <div className="space-y-4">
                                 <div>
-                                    <h3 className="text-lg font-medium">Situation Presentation</h3>
+                                    <h3 className="text-lg font-medium">Présentation de la situation</h3>
                                     <div className="mt-2 whitespace-pre-line">{station.doctorSheet.situationPresentation}</div>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-medium">Patient Information</h3>
+                                    <h3 className="text-lg font-medium">Informations patient</h3>
                                     <div className="mt-2 whitespace-pre-line">{station.doctorSheet.patientInformation}</div>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-medium">Goals</h3>
+                                    <h3 className="text-lg font-medium">Objectifs</h3>
                                     <div className="mt-2 whitespace-pre-line">{station.doctorSheet.goals}</div>
                                 </div>
                                 
@@ -66,22 +75,21 @@ export default function StationStudyTabs({ station }: { station: Station }) {
                         </div>
                     )}
                     
-                    {/* Patient Sheet Panel */}
                     {activeTab === "patient" && (
                         <div className="rounded-xl bg-white p-3 shadow-md ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400">
                             <div className="space-y-4">
                                 <div>
-                                    <h3 className="text-lg font-medium">Patient Description</h3>
+                                    <h3 className="text-lg font-medium">Personnage Patient</h3>
                                     <div className="mt-2 whitespace-pre-line">{station.patientSheet.patientPresentation}</div>
                                 </div>
                                 
                                 <div>
-                                    <h3 className="text-lg font-medium">Starting Sentence</h3>
+                                    <h3 className="text-lg font-medium">Phrase de départ</h3>
                                     <div className="mt-2 whitespace-pre-line">{station.patientSheet.startingSentence}</div>
                                 </div>
                                 
                                 <div>
-                                    <h3 className="text-lg font-medium">Patient Answers</h3>
+                                    <h3 className="text-lg font-medium">Instructions patient</h3>
                                     <div className="mt-2">
                                         {Object.entries(station.patientSheet.answers).map(([question, answer], index) => (
                                             <div key={index} className="mb-3 p-3 bg-gray-50 rounded">
@@ -95,13 +103,12 @@ export default function StationStudyTabs({ station }: { station: Station }) {
                         </div>
                     )}
                     
-                    {/* Grading Sheet Panel */}
                     {activeTab === "grading" && (
                         <div className="rounded-xl bg-white p-5 shadow-md">
                             <div>
                                 <h3 className="text-xl font-medium mb-4 flex items-center">
                                     <ClipboardCheck className="mr-2 h-5 w-5 text-blue-500" />
-                                    Points clefs de la station
+                                    Points clés de la station
                                 </h3>
                                 <div className="space-y-4">
                                     {station.gradingSheet.keyPoints.map((point, index) => (
@@ -132,7 +139,6 @@ export default function StationStudyTabs({ station }: { station: Station }) {
                         </div>
                     )}
                     
-                    {/* Annexes Panel */}
                     {activeTab === "annexes" && (
                         <div className="rounded-xl bg-white p-3 shadow-md ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400">
                             {station.annexes.length > 0 ? (
@@ -140,7 +146,7 @@ export default function StationStudyTabs({ station }: { station: Station }) {
                                     {/* Text Annexes */}
                                     {station.annexes.some(annex => annex.type === "text") && (
                                         <div>
-                                            <h3 className="text-lg font-medium mb-3">Text Resources</h3>
+                                            <h3 className="text-lg font-medium mb-3">Annexes textuelles</h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {station.annexes
                                                     .filter(annex => annex.type === "text")
@@ -153,10 +159,9 @@ export default function StationStudyTabs({ station }: { station: Station }) {
                                         </div>
                                     )}
                                     
-                                    {/* Image Annexes */}
                                     {station.annexes.some(annex => annex.type === "image") && (
                                         <div>
-                                            <h3 className="text-lg font-medium mb-3">Image Resources</h3>
+                                            <h3 className="text-lg font-medium mb-3">Annexes visuelles</h3>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                                 {station.annexes
                                                     .filter(annex => annex.type === "image")

@@ -9,7 +9,6 @@ import { TimeUpModal } from './TimeUpModal';
 import { useToast } from "@/app/_ui/shadcn/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/_ui/shadcn/components/ui/card";
 import { MessageSquare, User, Info } from 'lucide-react';
-import { Separator } from "@/app/_ui/shadcn/components/ui/separator";
 
 interface PatientPracticeClientProps {
   station: Station;
@@ -24,7 +23,6 @@ export function PatientPracticeClient({ station, stationId }: PatientPracticeCli
   const router = useRouter();
   const { toast } = useToast();
   
-  // Timer effect
   useEffect(() => {
     if (isPaused || timeLeft <= 0) return;
     
@@ -38,18 +36,14 @@ export function PatientPracticeClient({ station, stationId }: PatientPracticeCli
       });
     }, 1000);
     
-    // Cleanup
     return () => clearInterval(timerId);
   }, [timeLeft, isPaused]);
   
-  // Handle end session (used only in TimeUpModal)
   const handleEndSession = () => {
-    // Save notes to localStorage
     localStorage.setItem(`patientNotes-${stationId}`, notes);
     router.push(`/station/${stationId}`);
   };
   
-  // Load saved notes if any
   useEffect(() => {
     const savedNotes = localStorage.getItem(`patientNotes-${stationId}`);
     if (savedNotes) {
@@ -57,21 +51,18 @@ export function PatientPracticeClient({ station, stationId }: PatientPracticeCli
     }
   }, [stationId]);
   
-  // Handle save notes
   const handleSaveNotes = () => {
     localStorage.setItem(`patientNotes-${stationId}`, notes);
     toast({
-      title: "Notes saved",
-      description: "Your notes have been saved",
+      title: "Notes sauvegardées",
+      description: "Vos notes ont été sauvegardées avec succès.",
     });
   };
   
-  // Organize patient answers for display
   const patientAnswers = Object.entries(station.patientSheet.answers);
   
   return (
     <div className="container mx-auto pb-4 px-4">
-      {/* Timer and Controls */}
       <PatientTimerControls 
         title={station.title}
         timeLeft={timeLeft}
@@ -80,13 +71,11 @@ export function PatientPracticeClient({ station, stationId }: PatientPracticeCli
       />
       
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-        {/* Patient Information Section - 3 columns */}
         <div className="md:col-span-3 space-y-6">
-          {/* Patient Presentation */}
           <Card>
             <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
               <User className="h-5 w-5 text-primary" />
-              <CardTitle>Your Character</CardTitle>
+              <CardTitle>Votre Personnage</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="prose max-w-none">
@@ -97,31 +86,29 @@ export function PatientPracticeClient({ station, stationId }: PatientPracticeCli
             </CardContent>
           </Card>
           
-          {/* Starting Sentence */}
           <Card>
             <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
               <MessageSquare className="h-5 w-5 text-primary" />
-              <CardTitle>Starting Sentence</CardTitle>
+              <CardTitle>Phrase de départ</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="bg-primary/10 p-4 rounded-md italic">
                 "{station.patientSheet.startingSentence}"
               </div>
               <p className="text-sm text-muted-foreground mt-2">
-                Begin with this line when the doctor asks why you're here today.
+                Commencez par cette phrase lorsque le médecin vous demande pourquoi vous êtes ici aujourd'hui.
               </p>
             </CardContent>
           </Card>
           
-          {/* Answers to possible questions */}
           <Card>
             <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
               <Info className="h-5 w-5 text-primary" />
-              <CardTitle>Your Answers to Questions</CardTitle>
+              <CardTitle>Vos instructions patient</CardTitle>
             </CardHeader>
             <CardContent className="max-h-[500px] overflow-y-auto">
               <p className="text-sm text-muted-foreground mb-4">
-                Here are your prepared responses to questions the doctor might ask:
+                Voici les réponses que vous pouvez donner aux questions du médecin.
               </p>
               
               <div className="space-y-4">
@@ -140,7 +127,6 @@ export function PatientPracticeClient({ station, stationId }: PatientPracticeCli
           </Card>
         </div>
         
-        {/* Notes Section - 2 columns */}
         <div className="md:col-span-2">
           <NotesArea 
             notes={notes}
@@ -150,7 +136,6 @@ export function PatientPracticeClient({ station, stationId }: PatientPracticeCli
         </div>
       </div>
       
-      {/* Time's up notification */}
       {timeLeft === 0 && (
         <TimeUpModal 
           setTimeLeft={setTimeLeft}

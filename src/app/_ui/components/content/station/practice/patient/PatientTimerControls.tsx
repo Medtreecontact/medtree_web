@@ -16,7 +16,6 @@ export function PatientTimerControls({
   isPaused, 
   setIsPaused
 }: PatientTimerControlsProps) {
-  // Format time to MM:SS
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -25,7 +24,7 @@ export function PatientTimerControls({
 
   return (
     <div className="flex justify-between items-center mb-6">
-      <h1 className="text-2xl font-bold">{title} - Patient Role</h1>
+      <h1 className="text-2xl font-bold">{title} - Rôle du patient</h1>
       
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 px-4 py-2 rounded-md bg-blue-100 text-blue-700">
