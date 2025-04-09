@@ -30,7 +30,16 @@ export default async function StationHomePage({
     }
 
     return( 
-        <div className="flex flex-col justify-center items-center w-full p-8">
+        <div className="flex flex-col justify-center w-full p-8">
+            <div className="flex items-end space-x-4">
+                <p className="text-xl text-gray-500">Session d'entraînement médecin - patient</p>
+            </div>
+            
+            <div className="mt-4 mb-8">
+                <p className="text-gray-700 text-lg">
+                Les stations ECOS sont conçues pour simuler des consultations médicales réelles. Vous pouvez vous entraîner seul face à un patient virtuel ou en duo avec un partenaire.
+                </p>
+            </div>
             {!searchQuery && <StationsGrid stations={stations} paidUser={paidUser}/>}
             {/* {searchQuery && <StationSearchResultList searchResults={searchResults} paidUser={paidUser}/>} */}
         </div>

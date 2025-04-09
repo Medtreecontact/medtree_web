@@ -2,15 +2,14 @@
 
 import { Exam } from "@/entities/models/exam";
 import { Quiz } from "@/entities/models/quiz";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import QuizHeader from "./QuizHeader";
 import QuizQuestion from "./QuizQuestion";
 import QuizNavigation from "./QuizNavigation";
 import QuizSummary from "./QuizSummary";
-
-// Import the updateQuizAdvancement function
-// Assuming it's from a service file - you'll need to provide the correct import path
 import { updateQuizAdvancement } from "@/app/actions/actions";
+import { Card, CardContent } from "@/app/_ui/shadcn/components/ui/card";
+import { CheckCircle } from "lucide-react";
 
 export default function QuizContainer({ exam, quiz }: { exam: Exam; quiz: Quiz }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -86,7 +85,7 @@ export default function QuizContainer({ exam, quiz }: { exam: Exam; quiz: Quiz }
   }
   
   return (
-    <div className="flex flex-col space-y-8">
+    <div className="flex flex-col space-y-6">
       <QuizHeader 
         title={quiz.title} 
         description={quiz.description} 
@@ -94,28 +93,36 @@ export default function QuizContainer({ exam, quiz }: { exam: Exam; quiz: Quiz }
         duration={quiz.duration} 
       />
       
-      <div className="p-6 bg-white rounded-lg shadow-md">
-        <div className="mb-4 text-sm text-gray-500">
-          Question {currentQuestionIndex + 1} of {totalQuestions}
-        </div>
-        
-        <QuizQuestion 
-          question={currentQuestion} 
-          selectedAnswers={answers[currentQuestionIndex] || []} 
-          onSelectAnswers={handleAnswer}
-          showExplanation={showExplanation}
-        />
-        
-        <QuizNavigation 
-          currentIndex={currentQuestionIndex}
-          totalQuestions={totalQuestions}
-          onNext={goToNextQuestion}
-          onPrevious={goToPreviousQuestion}
-          onCheck={checkAnswer}
-          showExplanation={showExplanation}
-          hasSelectedAnswers={Boolean(answers[currentQuestionIndex]?.length)}
-        />
-      </div>
+      <Card className="border border-gray-200">
+        <CardContent className="pt-6">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex-1 mr-4">
+              <h2 className="text-xl font-medium text-gray-800">{currentQuestion.title}</h2>
+            </div>
+            <span className="text-xs text-gray-500 font-medium whitespace-nowrap">
+              Question {currentQuestionIndex + 1} sur {totalQuestions}
+            </span>
+          </div>
+          
+          <QuizQuestion 
+            question={currentQuestion} 
+            selectedAnswers={answers[currentQuestionIndex] || []} 
+            onSelectAnswers={handleAnswer}
+            showExplanation={showExplanation}
+            hideTitle={true}
+          />
+          
+          <QuizNavigation 
+            currentIndex={currentQuestionIndex}
+            totalQuestions={totalQuestions}
+            onNext={goToNextQuestion}
+            onPrevious={goToPreviousQuestion}
+            onCheck={checkAnswer}
+            showExplanation={showExplanation}
+            hasSelectedAnswers={Boolean(answers[currentQuestionIndex]?.length)}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }

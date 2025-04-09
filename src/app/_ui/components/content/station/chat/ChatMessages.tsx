@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Loader2, PlayCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface Message {
   role: 'user' | 'model';
@@ -23,17 +24,18 @@ export function ChatMessages({ messages, isLoading, isChatStarted, startChat }: 
   if (!isChatStarted) {
     return (
       <div className="flex flex-col items-center justify-center h-full">
-        <div className="text-center mb-8 max-w-md">
-          <h3 className="text-xl font-bold mb-2">Simulation de consultation</h3>
+        <div className="text-center mb-8 max-w-md p-6 bg-white/80 rounded-lg backdrop-blur-sm shadow-sm">
+          <h3 className="text-xl font-bold mb-3 text-blue-700">Simulation de consultation</h3>
           <p className="text-gray-600">
             Vous allez interagir avec un patient virtuel basé sur un scénario médical.
-            Lorsque la consultation sera terminée vous recevrez une analyse de la conversation et une note.
+            Lorsque la consultation sera terminée, vous recevrez une analyse de la conversation et une note.
           </p>
         </div>
         <button
           onClick={startChat}
           disabled={isLoading}
-          className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+          className="flex items-center gap-2 px-7 py-3.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 
+          disabled:opacity-50 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
         >
           {isLoading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -47,33 +49,44 @@ export function ChatMessages({ messages, isLoading, isChatStarted, startChat }: 
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5 px-1">
       {messages.map((message, index) => (
-        <div 
+        <motion.div 
           key={index} 
           className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
         >
           <div 
-            className={`max-w-[80%] rounded-lg p-3 ${
+            className={`max-w-[80%] rounded-lg p-4 shadow-sm ${
               message.role === 'user' 
-                ? 'bg-blue-500 text-white' 
+                ? 'bg-blue-600 text-white' 
                 : 'bg-white border border-gray-200'
             }`}
           >
-            <p className="whitespace-pre-wrap">{message.content}</p>
+            <p className="whitespace-pre-wrap text-[15px]">{message.content}</p>
           </div>
-        </div>
+        </motion.div>
       ))}
       
       {isLoading && (
-        <div className="flex justify-start">
-          <div className="max-w-[80%] rounded-lg p-3 bg-white border border-gray-200">
-            <Loader2 className="w-5 h-5 animate-spin text-gray-500" />
+        <motion.div 
+          className="flex justify-start"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="max-w-[80%] rounded-lg p-4 bg-white border border-gray-200 shadow-sm">
+            <div className="flex items-center space-x-2">
+              <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+              <span className="text-gray-500 text-sm">En cours de rédaction...</span>
+            </div>
           </div>
-        </div>
+        </motion.div>
       )}
       
-      <div ref={messagesEndRef} />
+      <div ref={messagesEndRef} className="h-4" />
     </div>
   );
 }

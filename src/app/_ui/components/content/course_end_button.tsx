@@ -35,5 +35,5 @@ export default function CourseEndButton({examId, stepId, substepId, readSubstep,
         }
     };
 
- return   <Button className="mt-8 w-36" onClick={handleOnClick} disabled={anonymousSession}>{readSubstep ? "Marquer comme non lu" : "Marquer comme lu"}</Button>
+ return   <Button className="mt-8 w-36" onClick={handleOnClick} disabled={anonymousSession}>{readSubstep ? "Cours non lu" : "Cours lu"}</Button>
 }

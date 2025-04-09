@@ -2,7 +2,7 @@
 import Link from "next/link";
 import {
     BookText,
-    Speech,
+    Users,
     Zap,
   } from "lucide-react"
 import { usePathname } from "next/navigation";
@@ -20,7 +20,7 @@ export default function NavigationLinks() {
                 <p className="font-bold text-lg">Cours</p>
             </Link>
             <Link href="/station" className={`flex items-center flex-col space-y-2 ${getFontColor('/station')}`}>
-                <Speech />
+                <Users />
                 <p className="font-bold text-lg">Stations ECOS</p>
             </Link>
             <Link href="/flashcard" className={`flex items-center flex-col space-y-2 ${getFontColor('/flashcard')}`}>

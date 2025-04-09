@@ -14,15 +14,17 @@ export default async function ResultPage(props: {params: Promise<{ stationId: st
   
   return (
     <>
-      <div className="container mx-auto p-4">
-        <Breadcrumb className="mb-6">
+      <div className="container mx-auto py-4 px-4 bg-gradient-to-b from-background to-muted/20">
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <Link href="/station">Stations</Link>
+              <Link href="/station" className="hover:text-primary">Stations</Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <Link href={`/station/${params.stationId}`}>{station.title}</Link>
+              <Link href={`/station/${params.stationId}`} className="hover:text-primary">
+                {station.title}
+              </Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

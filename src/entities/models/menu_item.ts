@@ -8,6 +8,7 @@ export const menuItemSchema = z.object({
     priority: z.number(),
     stepCount: z.number().optional(),
     synthesesCount: z.number().optional(),
+    quizzesCount: z.number().optional(),
     title: z.string(),
     update: z.date(),
     examAdvancement: z.number().optional(),

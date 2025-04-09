@@ -3,74 +3,92 @@
 import { useState } from "react";
 import { Switch } from "../../shadcn/components/ui/switch";
 import { updateCommunicationsPreferences } from "@/app/actions/actions";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_ui/shadcn/components/ui/card";
+import { Bell, Mail, ShieldAlert } from "lucide-react";
+import { toast } from "sonner";
 
 export function CommunicationsSelection({userNotifications, userEmailsCommunications}: {userNotifications: boolean, userEmailsCommunications: boolean}) {
   const [notificationSwitch, setNotificationSwitch] = useState(userNotifications);
   const [emailSwitch, setEmailSwitch] = useState(userEmailsCommunications);
 
-  const handleNotificationSwitch = (checked:boolean) => {
+  const handleNotificationSwitch = async (checked:boolean) => {
     setNotificationSwitch(checked);
-    updateCommunicationsPreferences("notifications", checked);
+    await updateCommunicationsPreferences("notifications", checked);
+    toast(checked ? "Notifications activées" : "Notifications désactivées");
   }
 
-  const handleEmailSwitch = (checked:boolean) => {
+  const handleEmailSwitch = async (checked:boolean) => {
     setEmailSwitch(checked);
-    updateCommunicationsPreferences("emailsCommunications", checked);
-
+    await updateCommunicationsPreferences("emailsCommunications", checked);
+    toast(checked ? "Emails commerciaux activés" : "Emails commerciaux désactivés");
   }
 
   return (
-    <div className="w-full space-y-4">
-      <h3 className="text-xl font-semibold">Email et Notifications</h3>
-      <div className="space-y-4">
-        <div className="flex space-x-4">
-          <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm w-1/2">
-              <div className="space-y-0.5">
-                  <p className="text-lg font-semibold">Notifications</p>
-                  <p className="text-gray-600">
-                    Recevoir des notifications concernant MedTree.
-                  </p>
+    <div className="space-y-6">
+      <div className="grid md:grid-cols-2 gap-4">
+        <Card className="border-border/50">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Bell className="h-5 w-5 text-muted-foreground" />
+                <CardTitle className="text-base">Notifications</CardTitle>
               </div>
               <Switch
-                  checked={notificationSwitch}
-                  onCheckedChange={handleNotificationSwitch}
+                checked={notificationSwitch}
+                onCheckedChange={handleNotificationSwitch}
               />
-          </div>
-          <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm w-1/2">
-              <div className="space-y-0.5">
-                  <p className="text-lg font-semibold">Emails commerciaux</p>
-                  <p className="text-gray-600">
-                    Recevez des emails promotionels concernant MedTree.
-                  </p>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <CardDescription>
+              Recevoir des notifications concernant MedTree.
+            </CardDescription>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-border/50">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Mail className="h-5 w-5 text-muted-foreground" />
+                <CardTitle className="text-base">Emails commerciaux</CardTitle>
               </div>
               <Switch
-                  checked={emailSwitch}
-                  onCheckedChange={handleEmailSwitch}
+                checked={emailSwitch}
+                onCheckedChange={handleEmailSwitch}
               />
-          </div>
-        </div>
-        <div className="flex space-x-4">
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <CardDescription>
+              Recevez des emails promotionnels concernant MedTree.
+            </CardDescription>
+          </CardContent>
+        </Card>
+      </div>
 
-          <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm w-1/2">
-              <div className="space-y-0.5">
-              <p className="text-lg font-semibold">Emails de sécurité</p>
-              <p className="text-gray-600">
-                  Recevez des emails concernant votre compte.
-              </p>
-              </div>
-              <Switch
-                  checked={true}
-                  disabled
-                  aria-readonly
-              />
+      <Card className="border-border/50">
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <ShieldAlert className="h-5 w-5 text-muted-foreground" />
+              <CardTitle className="text-base">Emails de sécurité</CardTitle>
+            </div>
+            <Switch
+              checked={true}
+              disabled
+              aria-readonly
+            />
           </div>
-          <div className="flex  w-1/2">
-              
-          </div>
-        </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <CardDescription>
+            Recevez des emails concernant la sécurité de votre compte (obligatoire).
+          </CardDescription>
+        </CardContent>
+      </Card>
     </div>
-</div>
-)
+  )
 }
 
-  
+

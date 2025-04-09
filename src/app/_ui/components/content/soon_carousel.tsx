@@ -63,7 +63,7 @@ export async function FlashcardCarousel() {
       opts={{
         align: "start",
       }}
-      className="w-[calc(100vw-16rem)]"
+      className="w-full"
     >
       <CarouselContent>
         {Array.from({ length: 5 }).map((_, index) => (

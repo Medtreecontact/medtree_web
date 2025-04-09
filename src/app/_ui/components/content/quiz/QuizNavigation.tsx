@@ -1,5 +1,6 @@
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle, Flag } from "lucide-react";
+import { Separator } from "@/app/_ui/shadcn/components/ui/separator";
 
 export default function QuizNavigation({
   currentIndex,
@@ -22,31 +23,47 @@ export default function QuizNavigation({
   const isLastQuestion = currentIndex === totalQuestions - 1;
   
   return (
-    <div className="mt-8 flex justify-between">
-      <Button
-        variant="outline"
-        onClick={onPrevious}
-        disabled={isFirstQuestion}
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" /> Previous
-      </Button>
-      
-      {!showExplanation ? (
-        <Button 
-          onClick={onCheck}
-          disabled={!hasSelectedAnswers}
-          variant="default"
+    <div className="mt-8">
+      <Separator className="mb-6" />
+      <div className="flex justify-between items-center">
+        <Button
+          variant="outline"
+          onClick={onPrevious}
+          disabled={isFirstQuestion}
+          className="px-4 border-gray-300"
         >
-          <Check className="mr-2 h-4 w-4" /> Check Answer
+          <ArrowLeft className="mr-2 h-4 w-4" /> Précédent
         </Button>
-      ) : (
-        <Button 
-          onClick={onNext}
-          variant="default"
-        >
-          {isLastQuestion ? 'Finish Quiz' : 'Next Question'} <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      )}
+        
+        <div>
+          {!showExplanation ? (
+            <Button 
+              onClick={onCheck}
+              disabled={!hasSelectedAnswers}
+              variant="default"
+              className="px-5"
+            >
+              <CheckCircle className="mr-2 h-4 w-4" /> Vérifier
+            </Button>
+          ) : (
+            <Button 
+              onClick={onNext}
+              variant="default"
+              className="px-5"
+            >
+              {isLastQuestion ? (
+                <>
+                  <Flag className="mr-2 h-4 w-4" /> Finir le Quiz
+                </>
+              ) : (
+                <>
+                  Prochaine Question <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

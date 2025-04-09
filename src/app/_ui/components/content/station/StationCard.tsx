@@ -1,8 +1,8 @@
 import { Station } from "@/entities/models/station";
 import Link from "next/link";
-import { Calendar, FileText, Lock, Users, User } from "lucide-react";
+import { Lock, Users, User } from "lucide-react";
 import { Badge } from "@/app/_ui/shadcn/components/ui/badge";
-import { Card, CardHeader, CardContent, CardFooter } from "@/app/_ui/shadcn/components/ui/card";
+import { Card, CardHeader, CardContent } from "@/app/_ui/shadcn/components/ui/card";
 
 export default function StationCard({ 
     station,
@@ -11,14 +11,7 @@ export default function StationCard({
     station: Station,
     isPaidUser: boolean
 }) {
-    const isLocked = false;
-    
-    const formatDate = (date: Date | undefined) => {
-        return date ? date.toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric'
-        }) : "Never";
-    };
+    const isLocked = station.access === "purchased" && !isPaidUser;
     
     const getScoreColor = (score: number | undefined) => {
         if (score === undefined) return "text-gray-400";
@@ -27,68 +20,82 @@ export default function StationCard({
         return "text-red-600";
     };
 
-    const soloDate = station.lastResult?.soloDate;
-    const multiDate = station.lastResult?.multiDate;
     const soloScore = station.lastResult?.soloScore;
     const multiScore = station.lastResult?.multiScore;
 
-    return (
-        <Card className="overflow-hidden h-full transition-all hover:shadow-lg relative">
-            {isLocked && (
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10 rounded-lg">
-                    <Lock className="text-white h-10 w-10" />
-                </div>
-            )}
-            
-            <Link href={isLocked ? "#" : `/station/${station.id}`} className="block h-full">
-                <CardHeader className="pb-2">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <FileText className="h-4 w-4" />
-                        <span>SDD #{station.sddNumber}</span>
+    if (isLocked) {
+        return (
+            <Card className="text-xl flex flex-col items-center justify-center border-primary/20 shadow-sm hover:shadow-md transition-all duration-200 h-full">
+                <CardHeader className="w-full bg-primary/5 pb-4 rounded-t-xl">
+                    <div className="flex items-center space-x-4">
+                        <div className="h-10 w-20 flex items-center justify-center bg-primary/10 rounded-lg">
+                            <p className="font-semibold text-primary">SDD {station.sddNumber}</p>
+                        </div>
+                        <p className="flex-1 text-center font-semibold">{station.title}</p>
                     </div>
-                    <h3 className="font-medium text-xl line-clamp-2">{station.title}</h3>
                 </CardHeader>
-                
-                <CardContent className="pb-2">
-                    <div className="flex flex-wrap gap-1 mt-1">
-                        {station.tags.slice(0, 3).map((tag, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs">
-                                {tag}
-                            </Badge>
-                        ))}
-                        {station.tags.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                                +{station.tags.length - 3} more
-                            </Badge>
-                        )}
+                <CardContent className="justify-center items-center border-t w-full py-6">
+                    <div className="space-y-6 mt-2 py-2 w-full">
+                        <div className="flex items-center justify-center text-gray-600">
+                            <Lock className="h-5 w-5 mr-2" />
+                            <p>Contenu payant</p>
+                        </div>
                     </div>
                 </CardContent>
+            </Card>
+        );
+    }
+
+    return (
+        <Card className="text-xl flex flex-col items-center justify-center border-primary/20 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-200 h-full">
+            <Link href={`/station/${station.id}`} className="block h-full w-full">
+                <CardHeader className="w-full bg-primary/5 pb-4 rounded-t-xl">
+                    <div className="flex items-center space-x-4">
+                        <div className="h-10 w-20 flex items-center justify-center bg-primary/10 rounded-lg">
+                            <p className="font-medium text-primary">SDD {station.sddNumber}</p>
+                        </div>
+                        <p className="flex-1 text-center font-semibold">{station.title}</p>
+                    </div>
+                </CardHeader>
                 
-                <CardFooter className="border-t pt-3 mt-auto flex-col">
-                    <div className="flex items-center justify-between w-full text-sm mb-2">
-                        <div className="flex items-center gap-1.5">
-                            <User className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span className="text-muted-foreground">Entrainement seul :</span>
-                            <span className="text-xs">{formatDate(soloDate)}</span>
-                        </div>
-                        
-                        <div className={`font-medium ${getScoreColor(soloScore)}`}>
-                            {soloScore !== undefined ? `${soloScore}%` : "N/A"}
-                        </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between w-full text-sm">
-                        <div className="flex items-center gap-1.5">
-                            <Users className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span className="text-muted-foreground">Entrainement en duo :</span>
-                            <span className="text-xs">{formatDate(multiDate)}</span>
-                        </div>
-                        
-                        <div className={`font-medium ${getScoreColor(multiScore)}`}>
-                            {multiScore !== undefined ? `${multiScore}%` : "N/A"}
-                        </div>
-                    </div>
-                </CardFooter>
+                <CardContent className="justify-center items-center border-t w-full py-4">
+                    <ul className="space-y-4 mt-2 w-full">
+                        <li className="flex items-center flex-wrap gap-2">
+                            {station.tags.slice(0, 3).map((tag, i) => (
+                                <Badge key={i} variant="secondary" className="text-xs bg-primary/5 text-primary">
+                                    {tag}
+                                </Badge>
+                            ))}
+                            {station.tags.length > 3 && (
+                                <Badge variant="outline" className="text-xs">
+                                    +{station.tags.length - 3} more
+                                </Badge>
+                            )}
+                        </li>
+                        <li className="flex items-center justify-between w-full">
+                            <div className="flex items-center gap-3">
+                                <User className="text-primary h-5 w-5"/>
+                                <p>Entrainement seul</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className={`font-medium ${getScoreColor(soloScore)}`}>
+                                    {soloScore !== undefined ? `${soloScore}%` : "N/A"}
+                                </span>
+                            </div>
+                        </li>
+                        <li className="flex items-center justify-between w-full">
+                            <div className="flex items-center gap-3">
+                                <Users className="text-primary h-5 w-5"/>
+                                <p>Entrainement en duo</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className={`font-medium ${getScoreColor(multiScore)}`}>
+                                    {multiScore !== undefined ? `${multiScore}%` : "N/A"}
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </CardContent>
             </Link>
         </Card>
     );

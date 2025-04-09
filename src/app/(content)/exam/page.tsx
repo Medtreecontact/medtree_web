@@ -31,7 +31,25 @@ export default async function ExamHomePage({
     }
 
     return( 
-        <div className="flex flex-col justify-center items-center w-full p-8">
+        <div className="flex flex-col justify-center w-full p-8">
+            <div className="flex items-end space-x-4">
+                {!searchQuery ? (
+                    <p className="text-xl text-gray-500">Sémiologies complètes, fiches de révisions rapides et quiz d'évaluation</p>
+                ) : (
+                    <p className="text-xl text-gray-500">Résultats de recherche pour <span className="font-semibold">"{searchQuery}"</span></p>
+                )}
+            </div>
+            <div className="mt-4 mb-8">
+                {!searchQuery ? (
+                    <p className="text-gray-700 text-lg">
+                        Chaque module est structuré avec des chapitres détaillés, des fiches synthèses pour révision rapide et des quiz d'auto-évaluation pour tester vos connaissances.
+                    </p>
+                ) : (
+                    <p className="text-gray-700 text-lg">
+                        Les résultats ci-dessous sont organisés par module. Pour chaque module, vous trouverez les fiches synthèses, quiz et chapitres détaillés correspondant à votre recherche.
+                    </p>
+                )}
+            </div>
             {!searchQuery && <ExamsGrid menuItems={menuItems} paidUser={paidUser}/>}
             {searchQuery && <SearchResultList searchResults={searchResults} paidUser={paidUser}/>}
         </div>

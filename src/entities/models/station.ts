@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const stationSchema = z.object({
     id: z.string(),
+    access: z.enum(["free", "purchased"]),
     title: z.string(),
     sddNumber: z.string(),
     tags: z.array(z.string()),

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { DollarSign, Loader2, PlayCircle, Send } from 'lucide-react';
+import { Loader2, PlayCircle, Send } from 'lucide-react';
 
 interface ChatInputProps {
   inputValue: string;
@@ -29,7 +29,7 @@ export function ChatInput({
   }, [isChatStarted, isLoading, shouldFocus]);
   
   return (
-    <div className="bg-white border-t p-4">
+    <div className="bg-white border-t p-4 shadow-sm">
       <div className="max-w-3xl mx-auto flex justify-between items-center">
         
         <form onSubmit={handleSubmit} className="flex-1 flex items-center gap-2 mx-2">
@@ -39,13 +39,15 @@ export function ChatInput({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder={isChatStarted ? "Écrivez votre message..." : "Lancez la consultation pour écrire un message..."}
-            className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 
+            focus:ring-blue-500 focus:border-transparent shadow-sm disabled:bg-gray-50 transition-all"
             disabled={isLoading || !isChatStarted}
           />
           <button
             type="submit"
             disabled={isLoading || !inputValue.trim() || !isChatStarted}
-            className="bg-blue-500 text-white p-2 rounded-lg disabled:opacity-50"
+            className="bg-blue-600 text-white p-2.5 rounded-lg disabled:opacity-50 hover:bg-blue-700 
+            transition-colors shadow-sm active:scale-95 transform"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -59,10 +61,10 @@ export function ChatInput({
           <button
             onClick={startChat}
             disabled={isLoading}
-            className="text-blue-500 flex items-center gap-1 p-2 hover:text-blue-600"
+            className="text-blue-600 flex items-center gap-1 p-2 hover:text-blue-700 transition-colors"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlayCircle size={18} />}
-            <span className="text-sm">Lancer</span>
+            <span className="text-sm font-medium">Lancer</span>
           </button>
         )}
       </div>
