@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { userAgent } from "next/server";
-import { headers } from "next/headers";
 import Image from "next/image";
 import logoNoBg from '@/public/logo_no_bg.png';
 import { Button } from "@/app/_ui/shadcn/components/ui/button";
@@ -18,20 +16,19 @@ import {
 } from "lucide-react"
 
 export default async function Home()  {
-  const headersList = await headers();
-  const { device } = userAgent({ headers: headersList });
-  const deviceType = device?.type === "mobile" ? "mobile" : "desktop";
-  
   return (
-    <>
-      {deviceType === "desktop" ? (
         <>
-          <header className="bg-white text-black p-4 flex justify-between items-center mx-8">
-            <Link className="flex items-center space-x-4" href="/">
-              <Image src={logoNoBg} alt="Company Logo" width={50} height={50} />
-              <span className="text-2xl font-bold">MedTree</span>
-            </Link>
-            <nav className="flex space-x-8">
+          <header className="bg-white text-black p-4 flex justify-between items-center sm:mx-8">
+            <div className="flex items-center justify-between w-full sm:w-auto">
+              <Link className="flex items-center space-x-4" href="/">
+                <Image src={logoNoBg} alt="Company Logo" width={50} height={50} />
+                <span className="text-2xl font-bold">MedTree</span>
+              </Link>
+              <Link href="/login" className="sm:hidden">
+                <p className="text-lg font-bold hover:text-primary transition-colors">Se connecter</p>
+              </Link>
+            </div>
+            <nav className="hidden sm:flex space-x-8">
               <Link href="/login">
                 <p className="text-lg font-bold hover:text-primary transition-colors">Se connecter</p>
               </Link>
@@ -43,12 +40,12 @@ export default async function Home()  {
 
           {/* Hero Section */}
           <section className="min-h-[80vh] relative flex items-center">
-            <div className="container mx-auto px-8 py-16 grid grid-cols-2 gap-8">
+            <div className="container mx-auto px-4 sm:px-8 py-8 sm:py-16 grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col justify-center">
-                <h1 className="text-5xl font-bold mb-6">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
                   Toute la sémiologie médicale réunie sur une plateforme
                 </h1>
-                <p className="text-xl mb-8 text-gray-700">
+                <p className="text-lg sm:text-xl mb-6 sm:mb-8 text-gray-700">
                   Plus besoin de chercher dans les collèges pour savoir comment réaliser un examen clinique.
                   MedTree regroupe tous les outils qui vous sont utiles pour votre réussite aux ECOS.
                 </p>
@@ -60,12 +57,12 @@ export default async function Home()  {
                   </Link>
                   <Link href="/home">
                     <Button size="lg" className="bg-primary hover:bg-primary/90">
-                      Essayer sans inscription <MoveRight className="ml-2" />
+                      Essayer <span className="hidden sm:inline">sans inscription</span> <MoveRight className="ml-2" />
                     </Button>
                   </Link>
                 </div>
               </div>
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center order-last mt-6 md:mt-0">
                 <Image 
                   src="/home.png" 
                   alt="Landing hero" 
@@ -256,7 +253,7 @@ export default async function Home()  {
                   </Button>
                 </Link>
                 <Link href="/home">
-                  <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+                  <Button variant="outline" size="lg" className="border-white text-primary hover:bg-white/10">
                     Essayer sans inscription
                   </Button>
                 </Link>
@@ -264,14 +261,5 @@ export default async function Home()  {
             </div>
           </section>
         </>
-      ) : (
-        <div className="flex flex-col items-center justify-center h-dvh mx-8">
-          <Image src="/no-smartphones.png" alt="No smartphone Logo" width={100} height={100} />
-          <p className="mt-4 text-center">
-            MedTree n'est pas encore disponible sur mobile. Veuillez utiliser un ordinateur pour accéder à la plateforme.
-          </p>
-        </div>
-      )}
-    </>
   );
 }

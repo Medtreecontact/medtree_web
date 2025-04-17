@@ -123,7 +123,6 @@ export class AuthenticationRepository implements IAuthenticationRepository {
         console.log('applyActionCode', oobCode);
         try {
             await firebaseApplyActionCode(firebaseAuth, oobCode);
-            console.log('applyActionCode done');
         } catch (error) {
             console.error('Error applying action code', error);
             throw error;

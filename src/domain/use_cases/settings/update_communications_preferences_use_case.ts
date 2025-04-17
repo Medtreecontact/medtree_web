@@ -17,10 +17,11 @@ export async function updateCommunicationsPreferencesUseCase(type: string, value
     const cookie = JSON.stringify(user);
 
     (await cookies()).set(SESSION_COOKIE_NAME, cookie, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24, // One day
-        path: '/',
+      httpOnly: false,
+      secure: true,
+      maxAge: 60 * 60 * 24,
+      path: '/',
+      sameSite: 'none',
     });
 
     return await firebaseReposiory.updateCommunicationsPreferences(type, value, user.uid);
