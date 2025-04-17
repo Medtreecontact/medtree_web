@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
     const redirectUrl = `${baseUrl}/verify-email?${searchParams.toString()}`;
     return NextResponse.redirect(redirectUrl, 302);
   } else {
-    console.log("mode : ", mode);
     return new Response(JSON.stringify({ error: 'Invalid mode' }), {
       headers: { "Content-Type": "application/json" },
     });

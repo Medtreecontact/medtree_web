@@ -6,7 +6,17 @@ import { SearchResult } from "@/entities/models/search_result";
 import { Separator } from "@/app/_ui/shadcn/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/app/_ui/shadcn/components/ui/card";
 import Link from "next/link";
-import { ChevronDown, ChevronUp, Lock } from "lucide-react";
+import { Badge } from "@/app/_ui/shadcn/components/ui/badge";
+import { 
+    ChevronDown, 
+    ChevronUp, 
+    Lock, 
+    Clock, 
+    FileText,
+    CheckCircle,
+    TableOfContents,
+     SquareCheckBig,
+} from "lucide-react";
 
 export default function ResultCard({ result, paidUser }: { result: SearchResult, paidUser: boolean }) {
     const canAccessContent = paidUser || result.access === "free";
@@ -37,8 +47,8 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
     }, [result]); // Re-run when result changes
         
     return (
-        <Card className="w-full overflow-hidden">
-            <CardHeader className="pb-2">
+        <Card className="w-full overflow-hidden border-primary/20 shadow-sm transition-all duration-200">
+            <CardHeader className="pb-2 bg-primary/5 rounded-t-xl">
                 <Link href={`/exam/${result.examId}`}>
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 relative rounded-md overflow-hidden flex-shrink-0">
@@ -47,15 +57,19 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                                 alt={result.title}
                                 fill
                                 sizes="48px"
-                                className="object-cover"
+                                className="object-cover p-0.5"
                             />
                         </div>
-                        <CardTitle>{result.title}</CardTitle>
-                        <p>{result.resultCount} résultat{result.resultCount > 1 ? 's' : ''}</p>
+                        <CardTitle className="font-semibold">{result.title}</CardTitle>
+                        <Badge variant="secondary" className="ml-auto">
+                            {result.resultCount} résultat{result.resultCount > 1 ? 's' : ''}
+                        </Badge>
                     </div>
                 </Link>
             </CardHeader>
+            
             <Separator />
+            
             <div 
                 className={`relative ${!expanded && needsExpansion ? 'max-h-[300px] overflow-hidden' : ''}`}
             >
@@ -70,27 +84,33 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                         <div className="space-y-6">
                             {/* Syntheses section */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-3">Synthèses</h3>
+                                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                                    <FileText className="h-5 w-5 text-primary" />
+                                    Synthèses
+                                </h3>
                                 {result.syntheseResults && result.syntheseResults.length > 0 ? (
                                     <div className="space-y-2">
                                         {result.syntheseResults.map((synthese) => (
                                             <Link 
                                                 key={synthese.id}
                                                 href={canAccessContent ? `/exam/${result.examId}/synthese/${synthese.id}` : "#"} 
-                                                className={`block p-3 rounded-md border ${canAccessContent ? 'hover:bg-accent hover:border-accent' : 'opacity-75 cursor-not-allowed'}`}
+                                                className={`block p-3 rounded-md border ${canAccessContent ? 'hover:bg-accent hover:border-primary/30' : 'opacity-75 cursor-not-allowed'}`}
                                             >
                                                 <div className="flex items-start justify-between">
                                                     <div className="font-medium">{synthese.title}</div>
                                                     {!canAccessContent && <Lock className="h-4 w-4 text-muted-foreground" />}
                                                 </div>
-                                                <div className="text-sm text-muted-foreground mt-1">
-                                                    {synthese.duration} min • Mis à jour le {new Date(synthese.update).toLocaleDateString()}
+                                                <div className="text-sm text-muted-foreground mt-1 flex gap-3">
+                                                    <span className="flex items-center gap-1">
+                                                        <Clock className="h-3.5 w-3.5" />
+                                                        {synthese.duration ?? "4"} {synthese?.duration === 1 ? " minute" : " minutes"} 
+                                                    </span>
                                                 </div>
                                             </Link>
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-muted-foreground text-sm p-3 rounded-md border border-dashed">
+                                    <p className="text-muted-foreground text-sm p-4 rounded-md border border-dashed flex items-center justify-center h-20">
                                         Aucune synthèse trouvée pour cette recherche.
                                     </p>
                                 )}
@@ -98,13 +118,16 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                             
                             {/* Quizzes section */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-3">Quiz</h3>
+                                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                                    <SquareCheckBig className="h-5 w-5 text-primary" />
+                                    Quiz
+                                </h3>
                                 {result.quizzResults && result.quizzResults.length > 0 ? (
                                     <div className="space-y-2">
                                         {result.quizzResults.map((quizz) => (
                                             <div
                                                 key={quizz}
-                                                className={`p-3 rounded-md border ${canAccessContent ? 'hover:bg-accent hover:border-accent' : 'opacity-75 cursor-not-allowed'}`}
+                                                className={`p-3 rounded-md border ${canAccessContent ? 'hover:bg-accent hover:border-primary/30' : 'opacity-75 cursor-not-allowed'}`}
                                             >
                                                 <div className="flex items-start justify-between">
                                                     <div className="font-medium">{quizz}</div>
@@ -114,7 +137,7 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-muted-foreground text-sm p-3 rounded-md border border-dashed">
+                                    <p className="text-muted-foreground text-sm p-4 rounded-md border border-dashed flex items-center justify-center h-20">
                                         Aucun quiz trouvé pour cette recherche.
                                     </p>
                                 )}
@@ -131,14 +154,17 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                         <div className="space-y-6 md:pl-6">
                             {/* Steps section with nested substeps */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-3">Chapitres détaillés</h3>
+                                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                                    <TableOfContents className="h-5 w-5 text-primary" />
+                                    Chapitres détaillés
+                                </h3>
                                 {result.stepsResults && result.stepsResults.length > 0 ? (
                                     <div className="space-y-4">
                                         {result.stepsResults.map((step) => (
                                             <div key={step.id} className="space-y-2">
                                                 <Link
                                                     href={canAccessContent ? `/exam/${result.examId}/step/${step.id}` : "#"}
-                                                    className={`block p-3 rounded-md border ${canAccessContent ? 'hover:bg-accent hover:border-accent' : 'opacity-75 cursor-not-allowed'}`}
+                                                    className={`block p-3 rounded-md border ${canAccessContent ? 'hover:bg-accent hover:border-primary/30' : 'opacity-75 cursor-not-allowed'}`}
                                                 >
                                                     <div className="flex items-start justify-between">
                                                         <div className="font-medium">{step.stepTitle}</div>
@@ -151,7 +177,7 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                                                 
                                                 {/* Nested substeps for this step */}
                                                 {step.substepsIds && step.substepsIds.length > 0 && (
-                                                    <div className="ml-4 pl-2 border-l-2 border-muted">
+                                                    <div className="ml-4 pl-2 border-l-2 border-primary/20 space-y-2">
                                                         {step.substepsIds.map(substepId => {
                                                             // Find the matching substep in substepsResults
                                                             const substep = result.substepsResults?.find(
@@ -164,22 +190,24 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                                                                 <Link
                                                                     key={substep.id}
                                                                     href={canAccessContent ? `/exam/${result.examId}/step/${step.id}/substep/${substep.id}` : "#"}
-                                                                    className={`block p-3 mb-2 rounded-md border border-dashed ${canAccessContent ? 'hover:bg-accent/50 hover:border-accent' : 'opacity-75 cursor-not-allowed'}`}
+                                                                    className={`block p-3 rounded-md border border-dashed ${canAccessContent ? 'hover:bg-accent/50 hover:border-primary/30' : 'opacity-75 cursor-not-allowed'}`}
                                                                 >
                                                                     <div className="flex items-start justify-between">
                                                                         <div className="font-medium text-sm">{substep.subTitle}</div>
                                                                         {!canAccessContent && <Lock className="h-3 w-3 text-muted-foreground" />}
                                                                     </div>
                                                                     <div className="text-xs text-muted-foreground mt-1 flex justify-between">
-                                                                        <span>{substep.category || 'Non catégorisé'}</span>
-                                                                        {substep.readSubstep && 
-                                                                            <span className="inline-flex items-center text-green-600 dark:text-green-500">
-                                                                                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-                                                                                </svg>
+                                                                        {substep.category && (
+                                                                            <Badge variant="outline" className="font-normal">
+                                                                                {substep.category}
+                                                                            </Badge>
+                                                                        )}
+                                                                        {substep.readSubstep && (
+                                                                            <span className="inline-flex items-center text-green-600 dark:text-green-500 gap-1">
+                                                                                <CheckCircle className="w-3 h-3" />
                                                                                 Lu
                                                                             </span>
-                                                                        }
+                                                                        )}
                                                                     </div>
                                                                 </Link>
                                                             );
@@ -190,7 +218,7 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-muted-foreground text-sm p-3 rounded-md border border-dashed">
+                                    <p className="text-muted-foreground text-sm p-4 rounded-md border border-dashed flex items-center justify-center h-20">
                                         Aucune étape de cours trouvée pour cette recherche.
                                     </p>
                                 )}
@@ -205,7 +233,9 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
                 <CardFooter className="pt-0 pb-3">
                     <button
                         onClick={() => setExpanded(!expanded)}
-                        className="w-full flex flex-col items-center justify-center p-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors font-medium"
+                        className="w-full flex flex-col items-center justify-center p-2 text-sm text-primary hover:text-primary-foreground hover:bg-primary/10 rounded-md transition-colors font-medium"
+                        aria-expanded={expanded}
+                        aria-controls="search-results-content"
                     >
                         {expanded ? (
                             <>
@@ -224,3 +254,4 @@ export default function ResultCard({ result, paidUser }: { result: SearchResult,
         </Card>
     );
 }
+

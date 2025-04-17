@@ -13,7 +13,7 @@ interface NotesAreaProps {
 
 export function NotesArea({ notes, setNotes, handleSaveNotes }: NotesAreaProps) {
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="flex flex-col">
       <CardHeader>
         <CardTitle>Notes de la session</CardTitle>
         <CardDescription>

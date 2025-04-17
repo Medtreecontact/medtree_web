@@ -32,9 +32,10 @@ export async function updateUserAccountUseCase(uid: string, updatedAccount: User
     const cookie = JSON.stringify(user);
     
     (await cookies()).set(SESSION_COOKIE_NAME, cookie, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24, // One day
+        httpOnly: false,
+        secure: true,
+        maxAge: 60 * 60 * 24,
         path: '/',
+        sameSite: 'none',
     });
 }

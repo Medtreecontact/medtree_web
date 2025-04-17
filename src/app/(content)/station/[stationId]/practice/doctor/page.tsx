@@ -15,7 +15,7 @@ export default async function PracticeDoctorPage(props: {params: Promise<{ stati
   return (
     <>
       <div className="container mx-auto p-4">
-        <Breadcrumb className="mb-6">
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <Link href="/station">Stations</Link>

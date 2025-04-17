@@ -19,6 +19,7 @@ export async function getMenuItemsUseCase() {
           const exam = await firebaseReposiory.getExamFromId(item.examId);
           item.stepCount = exam.stepsIds.length;
           item.synthesesCount = exam.synthesesIds.length;
+          item.quizzesCount = exam.quizzesIds.length;
           item.examAdvancement = examsAdvancement[item.examId] || 0;
           return item;
         })

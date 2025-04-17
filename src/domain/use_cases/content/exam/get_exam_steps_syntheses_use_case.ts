@@ -36,7 +36,5 @@ export async function getExamStepsSynthesesUsecase(examId: string) {
         })
     );
 
-    console.log(quizzes)
-
     return { exam, steps, syntheses, quizzes };
 }

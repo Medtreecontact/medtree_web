@@ -7,7 +7,7 @@ export const EXAM_ROUTE = '/exam';
 export const LOGIN_ROUTE = '/login';
 export const SIGNUP_ROUTE = '/sign-up';
 
-export const SESSION_COOKIE_NAME = 'user_session';
+export const SESSION_COOKIE_NAME = '__session';
 
 export const UNIVERSITIES = [
     { label: "Université d'Amiens", value: "universite-d-amiens" },

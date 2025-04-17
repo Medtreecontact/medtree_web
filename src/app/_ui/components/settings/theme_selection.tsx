@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun, Monitor } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/app/_ui/shadcn/components/ui/button"
@@ -11,38 +11,64 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/_ui/shadcn/components/ui/dropdown-menu"
+import { RadioGroup, RadioGroupItem } from "@/app/_ui/shadcn/components/ui/radio-group"
+import { Label } from "@/app/_ui/shadcn/components/ui/label"
 
 export function ThemeSelection() {
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
   return (
-    <div>
-      <h3 className="text-xl font-semibold">Thème</h3>
-      <div className="flex items-center space-x-4">
-        <p className="text-gray-600">
-          Personnalisez l'apparence de MedTree
-        </p>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-              System
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+    <div className="space-y-4">
+      <RadioGroup 
+        defaultValue={theme || "system"} 
+        onValueChange={setTheme}
+        className="grid grid-cols-3 gap-4"
+      >
+        <div>
+          <RadioGroupItem 
+            value="light" 
+            id="theme-light" 
+            className="peer sr-only" 
+          />
+          <Label 
+            htmlFor="theme-light"
+            className="flex flex-col items-center justify-between rounded-md border-2 border-muted p-4 hover:border-primary hover:bg-accent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
+          >
+            <Sun className="h-6 w-6 mb-2" />
+            <span className="text-sm font-medium">Clair</span>
+          </Label>
+        </div>
+        
+        <div>
+          <RadioGroupItem 
+            value="dark" 
+            id="theme-dark" 
+            className="peer sr-only" 
+          />
+          <Label 
+            htmlFor="theme-dark"
+            className="flex flex-col items-center justify-between rounded-md border-2 border-muted p-4 hover:border-primary hover:bg-accent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
+          >
+            <Moon className="h-6 w-6 mb-2" />
+            <span className="text-sm font-medium">Sombre</span>
+          </Label>
+        </div>
+        
+        <div>
+          <RadioGroupItem 
+            value="system" 
+            id="theme-system" 
+            className="peer sr-only" 
+          />
+          <Label 
+            htmlFor="theme-system"
+            className="flex flex-col items-center justify-between rounded-md border-2 border-muted p-4 hover:border-primary hover:bg-accent peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
+          >
+            <Monitor className="h-6 w-6 mb-2" />
+            <span className="text-sm font-medium">Système</span>
+          </Label>
+        </div>
+      </RadioGroup>
     </div>
   )
 }

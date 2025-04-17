@@ -10,7 +10,8 @@ import { TimeUpModal } from './TimeUpModal';
 import { AnnexModal } from '@/app/_ui/components/content/station/chat/AnnexModal';
 import { useToast } from "@/app/_ui/shadcn/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/_ui/shadcn/components/ui/card";
-import { Goal, FileText, User, ImageIcon, FileTextIcon, Maximize2 } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/_ui/shadcn/components/ui/tabs";
+import { Goal, FileText, User, ImageIcon, FileTextIcon, Maximize2, FileBoxIcon } from 'lucide-react';
 import Image from 'next/image';
 
 interface DoctorPracticeClientProps {
@@ -52,8 +53,8 @@ export function DoctorPracticeClient({ station, stationId }: DoctorPracticeClien
   };
   
   const hasTextAnnexes = station.annexes.some(annex => annex.type === "text");
-  
   const hasImageAnnexes = station.annexes.some(annex => annex.type === "image");
+  const hasAnnexes = hasTextAnnexes || hasImageAnnexes;
   
   useEffect(() => {
     if (isPaused || timeLeft <= 0) return;
@@ -113,116 +114,141 @@ export function DoctorPracticeClient({ station, stationId }: DoctorPracticeClien
       
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <div className="md:col-span-3 space-y-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
-              <FileText className="h-5 w-5 text-primary" />
-              <CardTitle>Présentation de la situation</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="prose max-w-none">
-                {station.doctorSheet.situationPresentation.split("\n").map((paragraph, idx) => (
-                  <p key={idx} className="mb-2">{paragraph}</p>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
-              <User className="h-5 w-5 text-primary" />
-              <CardTitle>Informations patient</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="prose max-w-none">
-                {station.doctorSheet.patientInformation.split("\n").map((paragraph, idx) => (
-                  <p key={idx} className="mb-2">{paragraph}</p>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <Tabs defaultValue="info" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="info" className="flex items-center gap-2">
+                <FileText className="h-4 w-4" /> Information
+              </TabsTrigger>
+              <TabsTrigger value="annexes" className="flex items-center gap-2" disabled={!hasAnnexes}>
+                <FileBoxIcon className="h-4 w-4" /> Annexes
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="info" className="space-y-4 mt-4">
+              <Card>
+                <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
+                  <FileText className="h-5 w-5 text-primary" />
+                  <CardTitle>Présentation de la situation</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose max-w-none">
+                    {station.doctorSheet.situationPresentation.split("\n").map((paragraph, idx) => (
+                      <p key={idx} className="mb-2">{paragraph}</p>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
+                  <User className="h-5 w-5 text-primary" />
+                  <CardTitle>Informations patient</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose max-w-none">
+                    {station.doctorSheet.patientInformation.split("\n").map((paragraph, idx) => (
+                      <p key={idx} className="mb-2">{paragraph}</p>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
-              <Goal className="h-5 w-5 text-primary" />
-              <CardTitle>Objectifs</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="prose max-w-none">
-                {station.doctorSheet.goals.split("\n").map((paragraph, idx) => (
-                  <p key={idx} className="mb-2">{paragraph}</p>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-          
-          {hasTextAnnexes && (
-            <Card>
-              <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
-                <FileTextIcon className="h-5 w-5 text-primary" />
-                <CardTitle>Annexes Textuelles</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {station.annexes
-                    .filter(annex => annex.type === "text")
-                    .map((annex, index) => (
-                      <button 
-                        key={index} 
-                        onClick={() => openAnnexModal('text', index, annex.content)}
-                        className="p-3 border border-gray-200 hover:border-primary/70 rounded w-full text-left flex items-start group transition-colors"
-                      >
-                        <div className="flex-1 text-sm line-clamp-2 whitespace-pre-line text-gray-700">
-                          {annex.content}
-                        </div>
-                        <Maximize2 size={16} className="text-gray-400 group-hover:text-primary mt-0.5 flex-shrink-0" />
-                      </button>
+              <Card>
+                <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
+                  <Goal className="h-5 w-5 text-primary" />
+                  <CardTitle>Objectifs</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose max-w-none">
+                    {station.doctorSheet.goals.split("\n").map((paragraph, idx) => (
+                      <p key={idx} className="mb-2">{paragraph}</p>
                     ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-          
-          {hasImageAnnexes && (
-            <Card>
-              <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
-                <ImageIcon className="h-5 w-5 text-primary" />
-                <CardTitle>Annexes visuelles</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {station.annexes
-                    .filter(annex => annex.type === "image")
-                    .map((annex, index) => (
-                      <button 
-                        key={index} 
-                        onClick={() => openAnnexModal('image', index, undefined, annex.path, annex.title)}
-                        className="border border-gray-200 hover:border-primary/70 rounded overflow-hidden group transition-colors"
-                      >
-                        <div className="relative h-24 flex items-center justify-center bg-gray-100 group-hover:bg-gray-50">
-                          <Image
-                            src={annex.path}
-                            alt={annex.title || `Image ${index + 1}`}
-                            width={0}
-                            height={0}
-                            sizes="100vw"
-                            className="max-h-full max-w-full object-contain"
-                            style={{ width: 'auto', height: 'auto' }}
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity">
-                            <Maximize2 size={20} className="text-transparent group-hover:text-white" />
-                          </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="annexes" className="mt-4">
+              {hasAnnexes ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-xl">Annexes</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {hasTextAnnexes && (
+                      <div>
+                        <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                          <FileTextIcon className="h-5 w-5 text-primary" />
+                          Annexes Textuelles
+                        </h3>
+                        <div className="space-y-3">
+                          {station.annexes
+                            .filter(annex => annex.type === "text")
+                            .map((annex, index) => (
+                              <button 
+                                key={index} 
+                                onClick={() => openAnnexModal('text', index, annex.content)}
+                                className="p-3 border border-gray-200 hover:border-primary/70 rounded w-full text-left flex items-start group transition-colors"
+                              >
+                                <div className="flex-1 text-sm line-clamp-2 whitespace-pre-line text-gray-700">
+                                  {annex.content}
+                                </div>
+                                <Maximize2 size={16} className="text-gray-400 group-hover:text-primary mt-0.5 flex-shrink-0" />
+                              </button>
+                            ))}
                         </div>
-                        {annex.title && (
-                          <div className="p-1 text-center text-xs font-medium text-gray-700 group-hover:text-primary truncate">
-                            {annex.title}
-                          </div>
-                        )}
-                      </button>
-                    ))}
+                      </div>
+                    )}
+                    
+                    {hasImageAnnexes && (
+                      <div>
+                        <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                          <ImageIcon className="h-5 w-5 text-primary" />
+                          Annexes visuelles
+                        </h3>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                          {station.annexes
+                            .filter(annex => annex.type === "image")
+                            .map((annex, index) => (
+                              <button 
+                                key={index} 
+                                onClick={() => openAnnexModal('image', index, undefined, annex.path, annex.title)}
+                                className="border border-gray-200 hover:border-primary/70 rounded overflow-hidden group transition-colors"
+                              >
+                                <div className="relative h-24 flex items-center justify-center bg-gray-100 group-hover:bg-gray-50">
+                                  <Image
+                                    src={annex.path}
+                                    alt={annex.title || `Image ${index + 1}`}
+                                    width={0}
+                                    height={0}
+                                    sizes="100vw"
+                                    className="max-h-full max-w-full object-contain"
+                                    style={{ width: 'auto', height: 'auto' }}
+                                  />
+                                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity">
+                                    <Maximize2 size={20} className="text-transparent group-hover:text-white" />
+                                  </div>
+                                </div>
+                                {annex.title && (
+                                  <div className="p-1 text-center text-xs font-medium text-gray-700 group-hover:text-primary truncate">
+                                    {annex.title}
+                                  </div>
+                                )}
+                              </button>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="flex flex-col items-center justify-center p-10 text-gray-500">
+                  <FileBoxIcon className="h-10 w-10 mb-2" />
+                  <p>Aucune annexe disponible pour cette station</p>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
         
         <div className="md:col-span-2">

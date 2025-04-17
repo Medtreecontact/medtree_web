@@ -1,7 +1,7 @@
 'use client';
 
 import { Station } from '@/entities/models/station';
-import { sendMessageToGemini, } from '@/app/actions/ai_actions';
+import { sendMessageToGemini } from '@/app/actions/ai_actions';
 import { useState, useEffect } from 'react';
 import { DoctorInformation } from './DoctorInformation';
 import { ChatMessages } from './ChatMessages';
@@ -32,7 +32,6 @@ interface ChatInterfaceProps {
   onTimerStateChange?: (isActive: boolean, isPaused: boolean) => void;
   onMessagesUpdate?: (messages: Message[]) => void;
 }
-
 
 export function ChatInterface({ station, onTimerStateChange, onMessagesUpdate }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -163,18 +162,9 @@ export function ChatInterface({ station, onTimerStateChange, onMessagesUpdate }:
     }
   }
   
-  const handleTimerPauseToggle = (paused: boolean) => {
-    setTimerState(prev => ({
-      ...prev,
-      isPaused: paused
-    }));
-  };
-
-  
-  
   return (
     <div className="flex h-full">
-      <div className="w-1/3 bg-gray-50 border-r h-full overflow-hidden">
+      <div className="w-1/3 bg-gray-50 border-r h-full overflow-hidden shadow-inner">
         <DoctorInformation 
           station={station} 
           openAnnexModal={openAnnexModal} 
@@ -182,8 +172,7 @@ export function ChatInterface({ station, onTimerStateChange, onMessagesUpdate }:
       </div>
       
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        
-        <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+        <div className="flex-1 overflow-y-auto p-5 bg-gray-50/70">
           <div className="max-w-3xl mx-auto h-full">
             <ChatMessages 
               messages={messages}

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { BookOpen, Users, Bot } from "lucide-react";
+import { BookOpen, Users, Bot, ArrowRight } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/app/_ui/shadcn/components/ui/card";
+import { Button } from "@/app/_ui/shadcn/components/ui/button";
 
 export default function StationModeSelector({ 
     stationId,
@@ -12,39 +13,87 @@ export default function StationModeSelector({
     paidUser: boolean
 }) {
     return (
-        <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Choisissez un mode d'entrainement</h2>
+        <div className="mt-4">
+            <h2 className="text-xl font-semibold mb-6 flex items-center">
+                Choisissez un mode d'entrainement
+            </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Link href={`/station/${stationId}/practice`} className="block">
-                    <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow flex flex-col items-center">
-                    <Users className="h-10 w-10 text-blue-500 mb-4" />
-                        <h3 className="text-lg font-medium mb-2">Entrainement en duo</h3>
-                        <p className="text-gray-500 text-center">
-                            Entrainez vous à deux dans les rôles docteur et patient
-                        </p>
-                    </div>
-                </Link>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Each card uses flex column with grow for content and auto for footer */}
+                <Card className="border-primary/20 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-200 flex flex-col h-full">
+                    <CardHeader className="pb-2">
+                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                            <Users className="h-6 w-6 text-primary" />
+                        </div>
+                        <CardTitle className="text-xl">Entrainement en duo</CardTitle>
+                        <CardDescription>Entrainez-vous à deux dans les rôles docteur et patient</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-2 flex-grow">
+                        <ul className="text-sm space-y-1 text-gray-600 list-disc pl-5">
+                            <li>Idéal pour pratiquer avec un ami</li>
+                            <li>Simulez une vraie consultation</li>
+                            <li>Recevez un feedback complet</li>
+                        </ul>
+                    </CardContent>
+                    <CardFooter className="mt-auto pt-4">
+                        <Button asChild className="w-full bg-primary hover:bg-primary/90">
+                            <Link href={`/station/${stationId}/practice`} className="flex items-center justify-center">
+                                Commencer 
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
 
-                <Link href={`/station/${stationId}/chat`} className="block">
-                    <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow flex flex-col items-center">
-                    <Bot className="h-10 w-10 text-blue-500 mb-4" />
-                        <h3 className="text-lg font-medium mb-2">Entrainement en solo</h3>
-                        <p className="text-gray-500 text-center">
-                            Entrainez vous avec une conversation réaliste grâce à notre IA
-                        </p>
-                    </div>
-                </Link>
+                <Card className="border-primary/20 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-200 flex flex-col h-full">
+                    <CardHeader className="pb-2">
+                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                            <Bot className="h-6 w-6 text-primary" />
+                        </div>
+                        <CardTitle className="text-xl">Entrainement en solo</CardTitle>
+                        <CardDescription>Entrainez-vous avec une conversation réaliste grâce à notre IA</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-2 flex-grow">
+                        <ul className="text-sm space-y-1 text-gray-600 list-disc pl-5">
+                            <li>Pratiquez à votre rythme</li>
+                            <li>Patient IA avec différents profils</li>
+                            <li>Feedback instantané sur votre performance</li>
+                        </ul>
+                    </CardContent>
+                    <CardFooter className="mt-auto pt-4">
+                        <Button asChild className="w-full bg-primary hover:bg-primary/90">
+                            <Link href={`/station/${stationId}/chat`} className="flex items-center justify-center">
+                                Commencer 
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
 
-                <Link href={`/station/${stationId}/overview`} className="block">
-                    <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow flex flex-col items-center">
-                        <BookOpen className="h-10 w-10 text-blue-500 mb-4" />
-                        <h3 className="text-lg font-medium mb-2">Lecture libre</h3>
-                        <p className="text-gray-600 text-center">
-                            Consultez librement le contenu de la station
-                        </p>
-                    </div>
-                </Link>
+                <Card className="border-primary/20 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-200 flex flex-col h-full">
+                    <CardHeader className="pb-2">
+                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                            <BookOpen className="h-6 w-6 text-primary" />
+                        </div>
+                        <CardTitle className="text-xl">Lecture libre</CardTitle>
+                        <CardDescription>Consultez librement le contenu de la station</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-2 flex-grow">
+                        <ul className="text-sm space-y-1 text-gray-600 list-disc pl-5">
+                            <li>Accédez à tous les documents</li>
+                            <li>Consultez les objectifs et critères</li>
+                            <li>Révisez les points clés</li>
+                        </ul>
+                    </CardContent>
+                    <CardFooter className="mt-auto pt-4">
+                        <Button asChild variant="outline" className="w-full hover:bg-primary/5 border-primary/20">
+                            <Link href={`/station/${stationId}/overview`} className="flex items-center justify-center">
+                                Consulter 
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
             </div>
         </div>
     );
